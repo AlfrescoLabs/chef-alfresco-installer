@@ -1,4 +1,4 @@
-alfresco_main Cookbook
+alfresco-chef Cookbook
 ======================
 This is a cookbook for installing alfresco using multiple deployement schemas and platforms
 
@@ -7,15 +7,17 @@ This is an experimental cookbook and partially implemented!!!
 
 Requirements
 ------------
-no requirements necessary, check alfresco_roles for requirements.
+java
+apt
+chef-client
 
 
 Usage
 -----
-#### alfresco_main::default
+#### alfresco-chef::default
 
 e.g.
-Just include `alfresco_java` in your node's `run_list`:
+Just include `alfresco-chef` in your node's `run_list`:
 
 ```json
 {
