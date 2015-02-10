@@ -1,0 +1,9 @@
+DEPENDENCIES
+  alfresco_java
+    path: .
+    metadata: true
+
+GRAPH
+  alfresco_java (0.1.0)
+    java (>= 0.0.0)
+  java (1.31.0)

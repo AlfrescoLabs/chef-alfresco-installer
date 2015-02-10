@@ -1,0 +1,19 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_solo
+
+platforms:
+  - name:  ubuntu/trusty64
+    driver_config:
+       box: ubuntu/trusty64
+       box_url: https://atlas.hashicorp.com/ubuntu/boxes/trusty64
+
+suites:
+  - name: default
+    data_bags_path: "/Users/p3700456/chef-repo/data_bags" 
+    run_list:
+      - recipe[alfresco_java::java8]
+    attributes:
