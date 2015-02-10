@@ -1,4 +1,4 @@
-alfresco_java Cookbook
+java-wrapper Cookbook
 ======================
 This is a wrapper cookbook for java modified to fit the alfresco internal process.
 It currently installs java from a local repository.
@@ -13,16 +13,16 @@ java cookbook 1.7.0 or higher
 
 Usage
 -----
-#### alfresco_java::java8
+#### java-wrapper::java8
 
 e.g.
-Just include `alfresco_java` in your node's `run_list`:
+Just include `java-wrapper` in your node's `run_list`:
 
 ```json
 {
   "name":"my_node",
   "run_list": [
-    "recipe[alfresco_java::java8]"
+    "recipe[java-wrapper::java8]"
   ]
 }
 ```
