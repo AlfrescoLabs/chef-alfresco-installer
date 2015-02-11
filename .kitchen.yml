@@ -6,11 +6,20 @@ provisioner:
   name: chef_solo
 
 platforms:
-  - name: ubuntu-12.04
-  - name: centos-6.4
+- name: ubuntu14
+  driver_config:
+    box: ubuntu/trusty64
+    box_url: https://atlas.hashicorp.com/ubuntu/boxes/trusty64
+    network:
+    - ["private_network", {ip: "33.33.33.10"}]
+
+- name: centos6.5
+  driver_config:
+    box: chef/centos-6.5
+    box_url: https://atlas.hashicorp.com/chef/boxes/centos-6.5
+    network:
+    - ["private_network", {ip: "33.33.33.11"}]
 
 suites:
-  - name: default
-    run_list:
-      - recipe[alfrescotest::default]
-    attributes:
+- name: default
+  run_list: ["recipe[alfresco-chef::default]"]
