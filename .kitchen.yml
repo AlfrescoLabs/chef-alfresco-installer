@@ -17,7 +17,7 @@ platforms:
     box_url: https://atlas.hashicorp.com/chef/boxes/centos-6.5
 
 suites:
-  - name: default
+  - name: java8
     data_bags_path: "/Users/p3700456/chef-repo/data_bags" 
     run_list:
     - recipe[java-wrapper::java8]

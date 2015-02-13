@@ -1,4 +1,6 @@
-require 'spec_helper'
+require 'serverspec'
+
+set :backend, :exec
 
 describe command('java -version') do
   its(:stdout) { expect contain "1.8.0_31" }
