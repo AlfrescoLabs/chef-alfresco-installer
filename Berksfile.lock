@@ -1,0 +1,9 @@
+DEPENDENCIES
+  java-wrapper
+    path: .
+    metadata: true
+
+GRAPH
+  java (1.31.0)
+  java-wrapper (0.1.0)
+    java (>= 0.0.0)
