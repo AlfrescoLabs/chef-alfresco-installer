@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
 #/
-bamboo_secret = Chef::EncryptedDataBagItem.load_secret("#{node['keypath']}")
+bamboo_secret = Chef::EncryptedDataBagItem.load_secret(node['keypath'])
 creds = Chef::EncryptedDataBagItem.load("bamboo", "pass", bamboo_secret )
 creds["pass"]
 remote_file "/opt/jdk-8u31-linux-x64.tar.gz" do
