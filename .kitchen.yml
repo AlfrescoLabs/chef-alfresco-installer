@@ -1,23 +1,19 @@
+
 ---
 driver:
-  name: vagrant
+  name: ssh
+  hostname: 172.29.100.131
+  port: 22
+  username: root
 
 provisioner:
   name: chef_zero
 
 platforms:
-- name:  ubuntu14.04
-  driver_config:
-    box: chef/ubuntu-14.04
-    box_url: https://atlas.hashicorp.com/chef/boxes/ubuntu-14.04
-
-- name: centos6.5
-  driver_config:
-    box: chef/centos-6.5
-    box_url: https://atlas.hashicorp.com/chef/boxes/centos-6.5
+- name: ubuntu1404
 
 suites:
   - name: java8
-    data_bags_path: "/Users/p3700456/chef-repo/data_bags" 
+    data_bags_path: "/etc/chef/secrets/data_bags"
     run_list:
     - recipe[java-wrapper::java8]
