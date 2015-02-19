@@ -14,6 +14,6 @@ platforms:
 
 suites:
   - name: java8
-    data_bags_path: "/etc/chef/secrets/data_bags"
     run_list:
     - recipe[java-wrapper::java8]
+    data_bags_path: ./data_bags

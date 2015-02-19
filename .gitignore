@@ -3,3 +3,11 @@ Thorfile
 Vagrantfile
 .kitchen/
 .kitchen.local.yml
+
+bamboo_key
+
+data_bags/bamboo/my_secret_key
+
+secrets.json
+
+data_bags/bamboo/pass.json
