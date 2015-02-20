@@ -1,0 +1,15 @@
+{
+  "id": "pass",
+  "bamboo_username": {
+    "encrypted_data": "GZGFiiU/ip/UWlJkxR9djaXVTuSKGXu++5ujNFirIxw=\n",
+    "iv": "LFjBvgMa90sWpx7795Az3Q==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "bamboo_password": {
+    "encrypted_data": "AjiaszSeoNfFI96avCdKAFZcAuJ29SLrxARBFmY/AEw=\n",
+    "iv": "yfED/rSmhgBJANj032HVTA==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  }
+}
