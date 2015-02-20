@@ -3,23 +3,21 @@ driver:
   name: vagrant
 
 provisioner:
-  name: chef_solo
+  name: chef_zero
 
 platforms:
-- name: ubuntu14
+- name:  ubuntu14.04
   driver_config:
-    box: ubuntu/trusty64
-    box_url: https://atlas.hashicorp.com/ubuntu/boxes/trusty64
-    network:
-    - ["private_network", {ip: "33.33.33.10"}]
+    box: chef/ubuntu-14.04
+    box_url: file:///root/boxes/ubuntu
 
 - name: centos6.5
   driver_config:
     box: chef/centos-6.5
-    box_url: https://atlas.hashicorp.com/chef/boxes/centos-6.5
-    network:
-    - ["private_network", {ip: "33.33.33.11"}]
+    box_url: file:///root/boxes/centos
 
 suites:
 - name: default
-  run_list: ["recipe[alfresco-chef::default]"]
+  run_list:
+  - recipe[alfresco-chef::default]
+  data_bags_path: ./data_bags
