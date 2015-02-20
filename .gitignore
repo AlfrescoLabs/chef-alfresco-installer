@@ -18,3 +18,5 @@ bin/*
 
 .kitchen/
 .kitchen.local.yml
+
+encrypted_data_bag_secret_key
