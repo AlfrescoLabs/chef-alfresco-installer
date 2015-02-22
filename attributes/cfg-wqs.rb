@@ -1,1 +1,1 @@
-componen-wqs.rb
+default["configure"]["component"]["wqs"]=true
