@@ -6,6 +6,7 @@
 #
 # All rights reserved - Do Not Redistribute
 #
+
 creds = Chef::EncryptedDataBagItem.load("bamboo", "pass")
 creds["pass"] # will be decrypted
 
@@ -24,6 +25,6 @@ execute "install alfresco" do
 end
 
 service "alfresco" do
-  	action [:restart, :enable]
-	supports :status => false, :restart => true
+  action [:restart, :enable]
+  supports :status => false, :restart => true
 end
