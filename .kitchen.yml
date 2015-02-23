@@ -6,14 +6,14 @@ provisioner:
   name: chef_zero
 
 platforms:
-- name:  ubuntu14.04
+- name:  ubuntu-14.04-chef
   driver_config:
-    box: chef/ubuntu-14.04
+    box: ubuntu-14.04
     box_url: file:///root/boxes/ubuntu
 
 - name: centos6.5
   driver_config:
-    box: chef/centos-6.5
+    box: centos-6.5-chef
     box_url: file:///root/boxes/centos
 
 suites:
