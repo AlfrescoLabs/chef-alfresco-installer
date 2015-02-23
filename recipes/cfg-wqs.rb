@@ -1,7 +1,7 @@
-include_recipe 'chef-alfresco::installer'
+include_recipe 'alfresco-chef::installer'
 
 template '/opt/target/alf-installation/tomcat/shared/classes/wqsapi-custom.properties' do
-	source 'wqsapi-custom.properties.erb'
+	source 'templates/wqsapi-custom.properties.erb'
 	owner 'root'
 	group 'root'
 	mode '0644'
@@ -9,7 +9,7 @@ template '/opt/target/alf-installation/tomcat/shared/classes/wqsapi-custom.prope
 end
 
 template '/opt/target/alf-installation/tomcat/shared/classes/alfresco-global.properties' do
-	source 'alfresco-global.properties'
+	source 'templates/alfresco-global.properties.erb'
 	owner 'root'
 	group 'root'
 	mode '0644'
