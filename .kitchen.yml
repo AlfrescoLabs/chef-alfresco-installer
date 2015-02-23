@@ -1,23 +1,20 @@
 ---
 driver:
   name: vagrant
-
+  customize:
+    memory: 4096
 provisioner:
   name: chef_zero
 
 platforms:
 - name:  ubuntu-14.04-chef
   driver_config:
-    box: ubuntu-14.04
-    box_url: file:///root/boxes/ubuntu
-
-- name: centos6.5
-  driver_config:
-    box: centos-6.5-chef
-    box_url: file:///root/boxes/centos
+    box: ubuntu-14.04-chef
 
 suites:
 - name: default
   run_list:
-  - recipe[alfresco-chef::default]
+  - recipe[java-wrapper::java8]
+  - recipe[alfresco-chef::installer]
+#  - recipe[alfresco-chef::cfg-wqs]
   data_bags_path: ./data_bags

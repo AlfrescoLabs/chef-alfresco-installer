@@ -1,1 +1,1 @@
-default["configure"]["component"]["wqs"]=true
+node.default["configure"]["wqs"]=true

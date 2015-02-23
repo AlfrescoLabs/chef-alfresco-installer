@@ -1,0 +1,74 @@
+###############################
+## Common Alfresco Properties #
+## Enterprise overlay         #
+###############################
+
+dir.root=/opt/target/alf-installation/alf_data
+
+alfresco.context=alfresco
+alfresco.host=<%node['fqdn']%>
+alfresco.port=8080
+alfresco.protocol=http
+
+share.context=share
+share.host=default-ubuntu-1404-chef.vagrantup.com
+share.port=8080
+share.protocol=http
+
+### database connection properties ###
+db.driver=org.postgresql.Driver
+db.username=alfresco
+db.password=admin
+#To use encrypted properties for the database uncomment the following line
+# the encrypted value is added into alfresco-encrypted.properties
+#db.password=${db.password.enc}
+#db.username=${db.username.enc}
+db.name=alfresco
+db.url=jdbc:postgresql://localhost:5432/${db.name}
+# Note: your database must also be able to accept at least this many connections.  Please see your database documentation for instructions on how to configure this.
+db.pool.max=275
+db.pool.validate.query=SELECT 1
+
+# The server mode. Set value here
+# UNKNOWN | TEST | BACKUP | PRODUCTION
+system.serverMode=UNKNOWN
+
+<%= render 'ftp-alfresco-global.erb' %>
+
+### RMI registry port for JMX ###
+alfresco.rmi.services.port=50500
+monitor.rmi.service.port=0
+
+### External executable locations ###
+ooo.exe=/opt/target/alf-installation/libreoffice/program/soffice
+ooo.enabled=false
+ooo.port=8100
+img.root=/opt/target/alf-installation/common
+img.dyn=${img.root}/lib
+img.exe=${img.root}/bin/convert
+swf.exe=/opt/target/alf-installation/common/bin/pdf2swf
+swf.languagedir=/opt/target/alf-installation/common/japanese
+
+jodconverter.enabled=true
+jodconverter.officeHome=/opt/target/alf-installation/libreoffice
+jodconverter.portNumbers=8100
+
+### Initial admin password ###
+alfresco_user_store.adminpassword=209c6174da490caeb422f3fa5a7ae634
+
+### E-mail site invitation setting ###
+notification.email.siteinvite=false
+
+### License location ###
+dir.license.external=/opt/target/alf-installation
+
+### Solr indexing ###
+index.subsystem.name=solr4
+dir.keystore=${dir.root}/keystore
+solr.port.ssl=8443
+
+### BPM Engine ###
+system.workflow.engine.jbpm.enabled=false
+
+### WQS Settings ###
+<%= render "wqs-alfresco-global.txt.erb" %>
