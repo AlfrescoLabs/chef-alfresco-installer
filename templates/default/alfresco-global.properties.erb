@@ -6,12 +6,12 @@
 dir.root=/opt/target/alf-installation/alf_data
 
 alfresco.context=alfresco
-alfresco.host=<%node['fqdn']%>
+alfresco.host=<%= node['fqdn']%>
 alfresco.port=8080
 alfresco.protocol=http
 
 share.context=share
-share.host=default-ubuntu-1404-chef.vagrantup.com
+share.host=<%= node['fqdn']%>
 share.port=8080
 share.protocol=http
 
@@ -32,8 +32,6 @@ db.pool.validate.query=SELECT 1
 # The server mode. Set value here
 # UNKNOWN | TEST | BACKUP | PRODUCTION
 system.serverMode=UNKNOWN
-
-<%= render 'ftp-alfresco-global.erb' %>
 
 ### RMI registry port for JMX ###
 alfresco.rmi.services.port=50500
@@ -69,6 +67,9 @@ solr.port.ssl=8443
 
 ### BPM Engine ###
 system.workflow.engine.jbpm.enabled=false
+
+### FTP Settings ###
+<%= render 'ftp-alfresco-global.erb' %>
 
 ### WQS Settings ###
 <%= render "wqs-alfresco-global.txt.erb" %>

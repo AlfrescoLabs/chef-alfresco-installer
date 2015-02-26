@@ -17,20 +17,21 @@ remote_file "/opt/alfresco.bin" do
    group "root"
    mode "755"
    action :create_if_missing
+   not_if { node["localPath"] == true }
 end
 
 execute "install alfresco" do
-	command "/opt/alfresco.bin --mode unattended --alfresco_admin_password admin --disable-components postgres,javaalfresco,alfrescogoogledocs --jdbc_username alfresco --jdbc_password alfresco --prefix /opt/target/alf-installation --tomcat_server_domain #{node["fqdn"]}"
+	command "/opt/alfresco.bin --mode unattended --alfresco_admin_password admin --disable-components javaalfresco,alfrescogoogledocs --jdbc_username alfresco --jdbc_password alfresco --prefix /opt/target/alf-installation"
 	creates '/opt/target/alf-installation/alfresco.sh'
 end
 
-# template '/opt/target/alf-installation/tomcat/shared/classes/alfresco-global.properties' do
-#   source 'alfresco-global.properties.erb'
-#   owner 'root'
-#   group 'root'
-#   mode '0755'
-#   :top_level
-# end
+template '/opt/target/alf-installation/tomcat/shared/classes/alfresco-global.properties' do
+  source 'alfresco-global.properties.erb'
+  owner 'root'
+  group 'root'
+  mode '0755'
+  :top_level
+end
 
 service "alfresco" do
   action [:start, :enable]
