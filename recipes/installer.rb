@@ -21,7 +21,7 @@ remote_file "/opt/alfresco.bin" do
 end
 
 execute "install alfresco" do
-	command "/opt/alfresco.bin --mode unattended --alfresco_admin_password admin --disable-components javaalfresco,alfrescogoogledocs --jdbc_username alfresco --jdbc_password alfresco --prefix /opt/target/alf-installation"
+	command "/opt/alfresco.bin --mode unattended --alfresco_admin_password admin --enable-components alfrescowcmqs --disable-components javaalfresco,alfrescosolr --jdbc_username alfresco --jdbc_password alfresco --prefix /opt/target/alf-installation"
 	creates '/opt/target/alf-installation/alfresco.sh'
 end
 
