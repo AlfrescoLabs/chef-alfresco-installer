@@ -12,9 +12,16 @@ platforms:
     box: ubuntu-14.04-chef
 
 suites:
-- name: default
+- name: cfg-wqs
   run_list:
   - recipe[java-wrapper::java8]
   - recipe[alfresco-chef::cfg-wqs]
+  data_bags_path: ./data_bags
+  encrypted_data_bag_secret_key_path: ./encrypted_data_bag_secret
+
+- name: installer
+  run_list:
+  - recipe[java-wrapper::java8]
+  - recipe[alfresco-chef::installer]
   data_bags_path: ./data_bags
   encrypted_data_bag_secret_key_path: ./encrypted_data_bag_secret
