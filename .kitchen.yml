@@ -8,13 +8,11 @@ provisioner:
 platforms:
 - name:  ubuntu-14.04-chef
   driver_config:
-    box: ubuntu-14.04
-    box_url: file:///root/boxes/ubuntu
+    box: ubuntu-14.04-chef
 
 - name: centos6.5
   driver_config:
     box: centos-6.5-chef
-    box_url: file:///root/boxes/centos
 
 suites:
 - name: java8
