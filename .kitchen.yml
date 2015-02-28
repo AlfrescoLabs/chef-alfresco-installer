@@ -19,3 +19,4 @@ suites:
   run_list:
   - recipe[java-wrapper::java8]
   data_bags_path: ./data_bags
+  encrypted_data_bag_secret_key_path: ./encrypted_data_bag_secret
