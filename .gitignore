@@ -13,3 +13,5 @@ secrets.json
 data_bags/bamboo/pass.json
 
 encrypted_data_bag_secret_key
+/.project
+/encrypted_data_bag_secret

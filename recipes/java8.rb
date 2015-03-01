@@ -19,19 +19,20 @@
 
 creds = Chef::EncryptedDataBagItem.load("bamboo", "pass")
 creds["pass"]
-remote_file "/opt/jdk-8u31-linux-x64.tar.gz" do
+remote_file "/resources/jdk-8u31-linux-x64.tar.gz" do
    source "ftp://#{creds['bamboo_username']}:#{creds['bamboo_password']}@ftp.alfresco.com/#{node['java_8_download_path']}"
    checksum 'efe015e8402064bce298160538aa1c18470b78603257784ec6cd07ddfa98e437'
    owner "root"
    group "root"
    mode "644"
    action :create
+   not_if { node["localPath"] == true }
 end
 
 node.set['java']['install_flavor'] = 'oracle'
 node.set['java']['oracle']['accept_oracle_download_terms'] = false
 node.set['java']['jdk_version'] = 8
-node.set['java']['jdk']['8']['x86_64']['url'] = 'file:///opt/jdk-8u31-linux-x64.tar.gz'
+node.set['java']['jdk']['8']['x86_64']['url'] = 'file:///resources/jdk-8u31-linux-x64.tar.gz'
 node.set['java']['jdk']['8']['x86_64']['checksum'] = 'efe015e8402064bce298160538aa1c18470b78603257784ec6cd07ddfa98e437'
 
 include_recipe "java"
