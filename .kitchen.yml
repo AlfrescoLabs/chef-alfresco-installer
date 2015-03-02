@@ -11,7 +11,7 @@ provisioner:
 platforms:
 - name:  ubuntu-14.04-chef
   driver_config:
-    box: chef/ubuntu-14.04
+    box: ubuntu-14.04-chef
 
 suites:
 - name: cfg-wqs
