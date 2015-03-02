@@ -12,9 +12,9 @@ platforms:
   driver_config:
     box: ubuntu-14.04-chef
 
-- name: centos6.5
-  driver_config:
-    box: centos-6.5-chef
+#- name: centos6.5
+#  driver_config:
+#    box: centos-6.5-chef
 
 suites:
 - name: java8
