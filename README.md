@@ -14,7 +14,7 @@ chef-client
 
 Usage
 -----
-#### alfresco-chef::default
+#### alfresco-chef::installer
 
 e.g.
 Just include `alfresco-chef` in your node's `run_list`:
@@ -23,7 +23,7 @@ Just include `alfresco-chef` in your node's `run_list`:
 {
   "name":"my_node",
   "run_list": [
-    "recipe[alfresco_main::default]"
+    "recipe[alfresco_chef::installer]"
   ]
 }
 ```
