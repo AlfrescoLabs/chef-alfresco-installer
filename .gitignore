@@ -22,3 +22,5 @@ bin/*
 encrypted_data_bag_secret_key
 
 attributes/default.rb
+/.project
+/encrypted_data_bag_secret

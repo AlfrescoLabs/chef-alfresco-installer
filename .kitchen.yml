@@ -1,6 +1,8 @@
 ---
 driver:
   name: vagrant
+  synced_folders:
+    - ["/resource", "/resource", "create: true"]
   customize:
     memory: 4096
 provisioner:
@@ -9,7 +11,7 @@ provisioner:
 platforms:
 - name:  ubuntu-14.04-chef
   driver_config:
-    box: ubuntu-14.04-chef
+    box: chef/ubuntu-14.04
 
 suites:
 - name: cfg-wqs
@@ -18,6 +20,7 @@ suites:
   - recipe[alfresco-chef::cfg-wqs]
   data_bags_path: ./data_bags
   encrypted_data_bag_secret_key_path: ./encrypted_data_bag_secret
+  attributes: { localPath: true }
 
 - name: installer
   run_list:
@@ -25,3 +28,4 @@ suites:
   - recipe[alfresco-chef::installer]
   data_bags_path: ./data_bags
   encrypted_data_bag_secret_key_path: ./encrypted_data_bag_secret
+  attributes: { localPath: true }
