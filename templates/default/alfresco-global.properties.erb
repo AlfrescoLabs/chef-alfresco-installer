@@ -15,19 +15,14 @@ share.host=<%= node['fqdn']%>
 share.port=8080
 share.protocol=http
 
+### WQS Settings ###
+<%= render "ag-wqs.erb" %>
+
+### FTP Settings ###
+<%= render 'ag-ftp.erb' %>
+
 ### database connection properties ###
-db.driver=org.postgresql.Driver
-db.username=alfresco
-db.password=admin
-#To use encrypted properties for the database uncomment the following line
-# the encrypted value is added into alfresco-encrypted.properties
-#db.password=${db.password.enc}
-#db.username=${db.username.enc}
-db.name=alfresco
-db.url=jdbc:postgresql://localhost:5432/${db.name}
-# Note: your database must also be able to accept at least this many connections.  Please see your database documentation for instructions on how to configure this.
-db.pool.max=275
-db.pool.validate.query=SELECT 1
+<%= render 'ag-database.erb' %>
 
 # The server mode. Set value here
 # UNKNOWN | TEST | BACKUP | PRODUCTION
@@ -38,18 +33,7 @@ alfresco.rmi.services.port=50500
 monitor.rmi.service.port=0
 
 ### External executable locations ###
-ooo.exe=/opt/target/alf-installation/libreoffice/program/soffice
-ooo.enabled=false
-ooo.port=8100
-img.root=/opt/target/alf-installation/common
-img.dyn=${img.root}/lib
-img.exe=${img.root}/bin/convert
-swf.exe=/opt/target/alf-installation/common/bin/pdf2swf
-swf.languagedir=/opt/target/alf-installation/common/japanese
-
-jodconverter.enabled=true
-jodconverter.officeHome=/opt/target/alf-installation/libreoffice
-jodconverter.portNumbers=8100
+<%= render 'ag-externalApps.erb' %>
 
 ### Initial admin password ###
 alfresco_user_store.adminpassword=209c6174da490caeb422f3fa5a7ae634
@@ -61,15 +45,7 @@ notification.email.siteinvite=false
 dir.license.external=/opt/target/alf-installation
 
 ### Solr indexing ###
-index.subsystem.name=solr4
-dir.keystore=${dir.root}/keystore
-solr.port.ssl=8443
+<%= render 'ag-solr.erb' %>
 
 ### BPM Engine ###
 system.workflow.engine.jbpm.enabled=false
-
-### FTP Settings ###
-<%= render 'ftp-alfresco-global.erb' %>
-
-### WQS Settings ###
-<%= render "wqs-alfresco-global.txt.erb" %>

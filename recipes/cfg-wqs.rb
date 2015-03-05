@@ -7,3 +7,5 @@ template '/opt/target/alf-installation/tomcat/shared/classes/wqsapi-custom.prope
 	mode '0644'
 	notifies :restart, 'service[alfresco]', :immediately
 end
+
+node.set["install"]["component"]["wqs"]=true

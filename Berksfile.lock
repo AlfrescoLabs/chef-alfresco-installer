@@ -3,9 +3,7 @@ DEPENDENCIES
     path: .
     metadata: true
   java-wrapper
-    git: https://github.com/AlfrescoTestAutomation/alfresco-chef.git
-    revision: 942ce0fbfeccf5dd52761d8136e481bbeb4b6772
-    branch: java-wrapper
+    path: ../java-wrapper
 
 GRAPH
   alfresco-chef (0.1.1)

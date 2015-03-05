@@ -5,6 +5,6 @@ default["alfresco_download_path"] = "qa/QA_Applications/Alfresco%205.0%20311/alf
 # installing components
 
 default["install"]["component"]["use java from installer"]=false
-default["install"]["component"]["wqs"]=true
+default["install"]["component"]["wqs"]=false
 default["install"]["component"]["solr1"]=false
 default["install"]["component"]["googleDocs"]=false

@@ -34,6 +34,6 @@ template '/opt/target/alf-installation/tomcat/shared/classes/alfresco-global.pro
 end
 
 service "alfresco" do
-  action [:start, :enable]
+  action [:restart, :enable]
   supports :status => false, :restart => true
 end
