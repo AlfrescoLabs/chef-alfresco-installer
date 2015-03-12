@@ -1,27 +1,26 @@
 ---
 driver:
-  name: vagrant
-  synced_folders:
-    - ["/resource", "/resource", "create: true"]
-  customize:
-    memory: 4096
+  name: ssh
+  hostname: 172.29.100.194
+  port: 22
+  username: root
+  password: alfresco
+  
 provisioner:
   name: chef_zero
 
 platforms:
-- name:  ubuntu-14.04-chef
-  driver_config:
-    box: ubuntu-14.04-chef
+- name:  redhat6.5x64
 
 suites:
-- name: cfg-wqs
-  run_list:
-  - recipe[java-wrapper::java8]
-  - recipe[alfresco-chef::cfg-wqs]
-  attributes: { localPath: true }
-  data_bags_path: ./data_bags
-  encrypted_data_bag_secret_key_path: ./encrypted_data_bag_secret
-  attributes: { localPath: true }
+#- name: cfg-wqs
+#  run_list:
+#  - recipe[java-wrapper::java8]
+#  - recipe[alfresco-chef::cfg-wqs]
+#  attributes: { localPath: true }
+#  data_bags_path: ./data_bags
+#  encrypted_data_bag_secret_key_path: ./encrypted_data_bag_secret
+#  attributes: { localPath: true }
 
 - name: installer
   run_list:
