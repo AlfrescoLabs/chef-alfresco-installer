@@ -4,6 +4,12 @@ DEPENDENCIES
     metadata: true
 
 GRAPH
+  aws (2.6.4)
+  chef_handler (1.1.6)
   java (1.31.0)
-  java-wrapper (0.1.0)
+  java-wrapper (0.2.0)
+    aws (>= 0.0.0)
     java (>= 0.0.0)
+    windows (>= 0.0.0)
+  windows (1.36.6)
+    chef_handler (>= 0.0.0)
