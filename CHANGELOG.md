@@ -9,4 +9,4 @@ This file is used to list changes made in each version of the alfresco-chef cook
 
 0.2.0
 -----
-- Sergiu Vidrascu - Updated recipe to install on windows, redhat and additional recipe for wqs configuration
+- Sergiu Vidrascu - Updated recipe to install on windows, redhat, suse 12, ubuntu 12.04 and additional recipe for wqs configuration
