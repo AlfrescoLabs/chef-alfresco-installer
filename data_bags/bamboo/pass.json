@@ -1,14 +1,14 @@
 {
   "id": "pass",
   "bamboo_username": {
-    "encrypted_data": "GZGFiiU/ip/UWlJkxR9djaXVTuSKGXu++5ujNFirIxw=\n",
-    "iv": "LFjBvgMa90sWpx7795Az3Q==\n",
+    "encrypted_data": "0NgoZnn9M8EEYtkfqi6/G14GqfmtUFs+dx83wA66CEk=\n",
+    "iv": "zqDPDPxb1Y5N9/4hIbTUPg==\n",
     "version": 1,
     "cipher": "aes-256-cbc"
   },
   "bamboo_password": {
-    "encrypted_data": "AjiaszSeoNfFI96avCdKAFZcAuJ29SLrxARBFmY/AEw=\n",
-    "iv": "yfED/rSmhgBJANj032HVTA==\n",
+    "encrypted_data": "8tinIR3xI6+lLT+2irIX5hOT7Bv1tiF/Rw9RvEswhUI=\n",
+    "iv": "usLuCi1fJAzJviRNRJP66Q==\n",
     "version": 1,
     "cipher": "aes-256-cbc"
   }

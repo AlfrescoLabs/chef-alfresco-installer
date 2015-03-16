@@ -1,0 +1,13 @@
+default['tomcat']['download_url']='http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.59/bin/apache-tomcat-7.0.59.tar.gz'
+default['tomcat']['package_name']='apache-tomcat-7.0.59'
+default['tomcat']['target_folder']="/opt/target"
+default['tomcat']['installation_folder']="/opt/target/alf-installation"
+default['tomcat']['tomcat_folder']="/opt/target/alf-installation/tomcat"
+default["alfresco"]["local"] = "/opt/alfresco.zip"
+default["alfresco"]["downloadpath"] = "qa/QA_Applications/chef-resources/alfresco-enterprise-5.0.2-SNAPSHOT.zip"
+default["alfresco"]["zipfolder"] = "alfresco-enterprise-5.0.2-SNAPSHOT"
+default["alfresco-global"]["directory"] = "/opt/target/alf-installation/tomcat/shared/classes/alfresco-global.properties'"
+default["url"]["imagemagick"]="qa/QA_Applications/chef-resources/ImageMagick.tar.gz"
+default["url"]["ghostscript"]="qa/QA_Applications/chef-resources/ghostscript-9.15.tar.gz"
+default["url"]["openOffice"]="qa/QA_Applications/chef-resources/Apache_OpenOffice_incubating_3.4.0_Solaris_x86_install-arc_en-US.tar.gz"
+default["url"]["swftools"]="qa/QA_Applications/chef-resources/swftools-0.9.2.tar.gz"
