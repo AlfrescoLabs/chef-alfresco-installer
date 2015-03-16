@@ -39,6 +39,36 @@ when "windows"
     action :add
   end
 
+when 'solaris','solaris2'
+  
+  directory "/resources" do
+    owner "root"
+    group "root"
+    mode "0775"
+    action :create
+  end
+
+  remote_file node["java_installer"]["local"] do
+    source "ftp://#{creds['bamboo_username']}:#{creds['bamboo_password']}@ftp.alfresco.com/#{node['java_8_download_path']}"
+    checksum node["java_installer"]["checksum"]
+    owner "root"
+    group "root"
+    mode "644"
+    action :create
+    sensitive true
+    not_if { node["localPath"] == true }
+  end
+  
+  bash 'install_java' do
+    user 'root'
+    cwd '/resources'
+    code <<-EOH
+    tar xvf #{node['java']['package_name']}
+    rm -rf /usr/java/*
+    mv #{node['java']['java_folder']}/* /usr/java/
+    EOH
+  end
+
 else
 
   directory "/resources" do
@@ -47,7 +77,7 @@ else
     mode "0775"
     action :create
   end
-  
+
   remote_file node["java_installer"]["local"] do
     source "ftp://#{creds['bamboo_username']}:#{creds['bamboo_password']}@ftp.alfresco.com/#{node['java_8_download_path']}"
     checksum node["java_installer"]["checksum"]
