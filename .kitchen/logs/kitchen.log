@@ -1,0 +1,277 @@
+I, [2015-03-16T20:20:17.276036 #7892]  INFO -- Kitchen: -----> Starting Kitchen (v1.3.1)
+E, [2015-03-16T20:20:17.397043 #7892] ERROR -- Kitchen: ------Exception-------
+E, [2015-03-16T20:20:17.397043 #7892] ERROR -- Kitchen: Class: Kitchen::ClientError
+E, [2015-03-16T20:20:17.397043 #7892] ERROR -- Kitchen: Message: Could not load the 'ssh' driver from the load path. Please ensure that your driver is installed as a gem or included in your Gemfile if using Bundler.
+E, [2015-03-16T20:20:17.397043 #7892] ERROR -- Kitchen: ---Nested Exception---
+E, [2015-03-16T20:20:17.397043 #7892] ERROR -- Kitchen: Class: LoadError
+E, [2015-03-16T20:20:17.397043 #7892] ERROR -- Kitchen: Message: cannot load such file -- kitchen/driver/ssh
+E, [2015-03-16T20:20:17.397043 #7892] ERROR -- Kitchen: ------Backtrace-------
+E, [2015-03-16T20:20:17.397043 #7892] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/driver.rb:50:in `rescue in for_plugin'
+E, [2015-03-16T20:20:17.397043 #7892] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/driver.rb:40:in `for_plugin'
+E, [2015-03-16T20:20:17.397043 #7892] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:226:in `new_driver'
+E, [2015-03-16T20:20:17.397043 #7892] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:240:in `new_instance'
+E, [2015-03-16T20:20:17.397043 #7892] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:129:in `block in build_instances'
+E, [2015-03-16T20:20:17.397043 #7892] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:128:in `map'
+E, [2015-03-16T20:20:17.397043 #7892] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:128:in `with_index'
+E, [2015-03-16T20:20:17.397043 #7892] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:128:in `build_instances'
+E, [2015-03-16T20:20:17.397043 #7892] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:104:in `instances'
+E, [2015-03-16T20:20:17.398043 #7892] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/command.rb:115:in `filtered_instances'
+E, [2015-03-16T20:20:17.398043 #7892] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/command.rb:145:in `parse_subcommand'
+E, [2015-03-16T20:20:17.398043 #7892] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/command/action.rb:38:in `block in call'
+E, [2015-03-16T20:20:17.398043 #7892] ERROR -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/2.0.0/benchmark.rb:281:in `measure'
+E, [2015-03-16T20:20:17.398043 #7892] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/command/action.rb:37:in `call'
+E, [2015-03-16T20:20:17.398043 #7892] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/cli.rb:56:in `perform'
+E, [2015-03-16T20:20:17.398043 #7892] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/cli.rb:161:in `block (2 levels) in <class:CLI>'
+E, [2015-03-16T20:20:17.398043 #7892] ERROR -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/gems/2.0.0/gems/thor-0.19.1/lib/thor/command.rb:27:in `run'
+E, [2015-03-16T20:20:17.398043 #7892] ERROR -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/gems/2.0.0/gems/thor-0.19.1/lib/thor/invocation.rb:126:in `invoke_command'
+E, [2015-03-16T20:20:17.398043 #7892] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/cli.rb:304:in `invoke_task'
+E, [2015-03-16T20:20:17.398043 #7892] ERROR -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/gems/2.0.0/gems/thor-0.19.1/lib/thor.rb:359:in `dispatch'
+E, [2015-03-16T20:20:17.398043 #7892] ERROR -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/gems/2.0.0/gems/thor-0.19.1/lib/thor/base.rb:440:in `start'
+E, [2015-03-16T20:20:17.398043 #7892] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/bin/kitchen:13:in `block in <top (required)>'
+E, [2015-03-16T20:20:17.398043 #7892] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/errors.rb:154:in `with_friendly_errors'
+E, [2015-03-16T20:20:17.398043 #7892] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/bin/kitchen:13:in `<top (required)>'
+E, [2015-03-16T20:20:17.398043 #7892] ERROR -- Kitchen: C:/opscode/chefdk/bin/kitchen:20:in `load'
+E, [2015-03-16T20:20:17.398043 #7892] ERROR -- Kitchen: C:/opscode/chefdk/bin/kitchen:20:in `<main>'
+E, [2015-03-16T20:20:17.398043 #7892] ERROR -- Kitchen: ----------------------
+I, [2015-03-16T20:21:50.329775 #5380]  INFO -- Kitchen: -----> Starting Kitchen (v1.3.1)
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: ------Exception-------
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: Class: Kitchen::ClientError
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: Message: Could not load the 'ssh' driver from the load path. Please ensure that your driver is installed as a gem or included in your Gemfile if using Bundler.
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: ---Nested Exception---
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: Class: LoadError
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: Message: cannot load such file -- kitchen/driver/ssh
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: ------Backtrace-------
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/driver.rb:50:in `rescue in for_plugin'
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/driver.rb:40:in `for_plugin'
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:226:in `new_driver'
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:240:in `new_instance'
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:129:in `block in build_instances'
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:128:in `map'
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:128:in `with_index'
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:128:in `build_instances'
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:104:in `instances'
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/command.rb:115:in `filtered_instances'
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/command.rb:145:in `parse_subcommand'
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/command/action.rb:38:in `block in call'
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/2.0.0/benchmark.rb:281:in `measure'
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/command/action.rb:37:in `call'
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/cli.rb:56:in `perform'
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/cli.rb:161:in `block (2 levels) in <class:CLI>'
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/gems/2.0.0/gems/thor-0.19.1/lib/thor/command.rb:27:in `run'
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/gems/2.0.0/gems/thor-0.19.1/lib/thor/invocation.rb:126:in `invoke_command'
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/cli.rb:304:in `invoke_task'
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/gems/2.0.0/gems/thor-0.19.1/lib/thor.rb:359:in `dispatch'
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/gems/2.0.0/gems/thor-0.19.1/lib/thor/base.rb:440:in `start'
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/bin/kitchen:13:in `block in <top (required)>'
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/errors.rb:154:in `with_friendly_errors'
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/bin/kitchen:13:in `<top (required)>'
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: C:/opscode/chefdk/bin/kitchen:20:in `load'
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: C:/opscode/chefdk/bin/kitchen:20:in `<main>'
+E, [2015-03-16T20:21:50.439775 #5380] ERROR -- Kitchen: ----------------------
+I, [2015-03-16T20:22:21.615825 #6076]  INFO -- Kitchen: -----> Starting Kitchen (v1.3.1)
+E, [2015-03-16T20:22:21.735826 #6076] ERROR -- Kitchen: ------Exception-------
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: Class: Kitchen::ClientError
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: Message: Could not load the 'ssh' driver from the load path. Please ensure that your driver is installed as a gem or included in your Gemfile if using Bundler.
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: ---Nested Exception---
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: Class: LoadError
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: Message: cannot load such file -- kitchen/driver/ssh
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: ------Backtrace-------
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/driver.rb:50:in `rescue in for_plugin'
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/driver.rb:40:in `for_plugin'
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:226:in `new_driver'
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:240:in `new_instance'
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:129:in `block in build_instances'
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:128:in `map'
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:128:in `with_index'
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:128:in `build_instances'
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:104:in `instances'
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/command.rb:115:in `filtered_instances'
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/command.rb:145:in `parse_subcommand'
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/command/action.rb:38:in `block in call'
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/2.0.0/benchmark.rb:281:in `measure'
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/command/action.rb:37:in `call'
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/cli.rb:56:in `perform'
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/cli.rb:161:in `block (2 levels) in <class:CLI>'
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/gems/2.0.0/gems/thor-0.19.1/lib/thor/command.rb:27:in `run'
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/gems/2.0.0/gems/thor-0.19.1/lib/thor/invocation.rb:126:in `invoke_command'
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/cli.rb:304:in `invoke_task'
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/gems/2.0.0/gems/thor-0.19.1/lib/thor.rb:359:in `dispatch'
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/gems/2.0.0/gems/thor-0.19.1/lib/thor/base.rb:440:in `start'
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/bin/kitchen:13:in `block in <top (required)>'
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/errors.rb:154:in `with_friendly_errors'
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/bin/kitchen:13:in `<top (required)>'
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: C:/opscode/chefdk/bin/kitchen:20:in `load'
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: C:/opscode/chefdk/bin/kitchen:20:in `<main>'
+E, [2015-03-16T20:22:21.745826 #6076] ERROR -- Kitchen: ----------------------
+E, [2015-03-16T21:26:10.209353 #6676] ERROR -- Kitchen: ------Exception-------
+E, [2015-03-16T21:26:10.212353 #6676] ERROR -- Kitchen: Class: Kitchen::ClientError
+E, [2015-03-16T21:26:10.212353 #6676] ERROR -- Kitchen: Message: Could not load the 'ssh' driver from the load path. Please ensure that your driver is installed as a gem or included in your Gemfile if using Bundler.
+E, [2015-03-16T21:26:10.212353 #6676] ERROR -- Kitchen: ---Nested Exception---
+E, [2015-03-16T21:26:10.212353 #6676] ERROR -- Kitchen: Class: LoadError
+E, [2015-03-16T21:26:10.212353 #6676] ERROR -- Kitchen: Message: cannot load such file -- kitchen/driver/ssh
+E, [2015-03-16T21:26:10.212353 #6676] ERROR -- Kitchen: ------Backtrace-------
+E, [2015-03-16T21:26:10.213353 #6676] ERROR -- Kitchen: c:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/driver.rb:50:in `rescue in for_plugin'
+E, [2015-03-16T21:26:10.213353 #6676] ERROR -- Kitchen: c:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/driver.rb:40:in `for_plugin'
+E, [2015-03-16T21:26:10.213353 #6676] ERROR -- Kitchen: c:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:226:in `new_driver'
+E, [2015-03-16T21:26:10.213353 #6676] ERROR -- Kitchen: c:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:240:in `new_instance'
+E, [2015-03-16T21:26:10.213353 #6676] ERROR -- Kitchen: c:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:129:in `block in build_instances'
+E, [2015-03-16T21:26:10.213353 #6676] ERROR -- Kitchen: c:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:128:in `map'
+E, [2015-03-16T21:26:10.213353 #6676] ERROR -- Kitchen: c:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:128:in `with_index'
+E, [2015-03-16T21:26:10.213353 #6676] ERROR -- Kitchen: c:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:128:in `build_instances'
+E, [2015-03-16T21:26:10.213353 #6676] ERROR -- Kitchen: c:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:104:in `instances'
+E, [2015-03-16T21:26:10.213353 #6676] ERROR -- Kitchen: c:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/command.rb:115:in `filtered_instances'
+E, [2015-03-16T21:26:10.213353 #6676] ERROR -- Kitchen: c:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/command.rb:145:in `parse_subcommand'
+E, [2015-03-16T21:26:10.214353 #6676] ERROR -- Kitchen: c:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/command/list.rb:32:in `call'
+E, [2015-03-16T21:26:10.214353 #6676] ERROR -- Kitchen: c:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/cli.rb:56:in `perform'
+E, [2015-03-16T21:26:10.214353 #6676] ERROR -- Kitchen: c:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/cli.rb:97:in `list'
+E, [2015-03-16T21:26:10.214353 #6676] ERROR -- Kitchen: c:/opscode/chefdk/embedded/lib/ruby/gems/2.0.0/gems/thor-0.19.1/lib/thor/command.rb:27:in `run'
+E, [2015-03-16T21:26:10.214353 #6676] ERROR -- Kitchen: c:/opscode/chefdk/embedded/lib/ruby/gems/2.0.0/gems/thor-0.19.1/lib/thor/invocation.rb:126:in `invoke_command'
+E, [2015-03-16T21:26:10.214353 #6676] ERROR -- Kitchen: c:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/cli.rb:304:in `invoke_task'
+E, [2015-03-16T21:26:10.214353 #6676] ERROR -- Kitchen: c:/opscode/chefdk/embedded/lib/ruby/gems/2.0.0/gems/thor-0.19.1/lib/thor.rb:359:in `dispatch'
+E, [2015-03-16T21:26:10.214353 #6676] ERROR -- Kitchen: c:/opscode/chefdk/embedded/lib/ruby/gems/2.0.0/gems/thor-0.19.1/lib/thor/base.rb:440:in `start'
+E, [2015-03-16T21:26:10.214353 #6676] ERROR -- Kitchen: c:/opscode/chefdk/embedded/apps/test-kitchen/bin/kitchen:13:in `block in <top (required)>'
+E, [2015-03-16T21:26:10.214353 #6676] ERROR -- Kitchen: c:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/errors.rb:154:in `with_friendly_errors'
+E, [2015-03-16T21:26:10.214353 #6676] ERROR -- Kitchen: c:/opscode/chefdk/embedded/apps/test-kitchen/bin/kitchen:13:in `<top (required)>'
+E, [2015-03-16T21:26:10.214353 #6676] ERROR -- Kitchen: c:/opscode/chefdk/bin/kitchen:20:in `load'
+E, [2015-03-16T21:26:10.214353 #6676] ERROR -- Kitchen: c:/opscode/chefdk/bin/kitchen:20:in `<main>'
+E, [2015-03-16T21:26:10.214353 #6676] ERROR -- Kitchen: ----------------------
+I, [2015-03-16T21:46:21.450632 #5068]  INFO -- Kitchen: -----> Starting Kitchen (v1.3.1)
+D, [2015-03-16T21:46:21.563639 #5068] DEBUG -- Kitchen: ------Exception-------
+D, [2015-03-16T21:46:21.564639 #5068] DEBUG -- Kitchen: Class: Kitchen::ClientError
+D, [2015-03-16T21:46:21.564639 #5068] DEBUG -- Kitchen: Message: Could not load the 'ssh' driver from the load path. Please ensure that your driver is installed as a gem or included in your Gemfile if using Bundler.
+D, [2015-03-16T21:46:21.564639 #5068] DEBUG -- Kitchen: ---Nested Exception---
+D, [2015-03-16T21:46:21.565639 #5068] DEBUG -- Kitchen: Class: LoadError
+D, [2015-03-16T21:46:21.582640 #5068] DEBUG -- Kitchen: Message: cannot load such file -- kitchen/driver/ssh
+D, [2015-03-16T21:46:21.587640 #5068] DEBUG -- Kitchen: ------Backtrace-------
+D, [2015-03-16T21:46:21.589640 #5068] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/driver.rb:50:in `rescue in for_plugin'
+D, [2015-03-16T21:46:21.592640 #5068] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/driver.rb:40:in `for_plugin'
+D, [2015-03-16T21:46:21.594640 #5068] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:226:in `new_driver'
+D, [2015-03-16T21:46:21.595640 #5068] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:240:in `new_instance'
+D, [2015-03-16T21:46:21.597640 #5068] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:129:in `block in build_instances'
+D, [2015-03-16T21:46:21.599641 #5068] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:128:in `map'
+D, [2015-03-16T21:46:21.600641 #5068] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:128:in `with_index'
+D, [2015-03-16T21:46:21.607641 #5068] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:128:in `build_instances'
+D, [2015-03-16T21:46:21.609641 #5068] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:104:in `instances'
+D, [2015-03-16T21:46:21.611641 #5068] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/command.rb:115:in `filtered_instances'
+D, [2015-03-16T21:46:21.613641 #5068] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/command.rb:145:in `parse_subcommand'
+D, [2015-03-16T21:46:21.615641 #5068] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/command/action.rb:38:in `block in call'
+D, [2015-03-16T21:46:21.617642 #5068] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/2.0.0/benchmark.rb:281:in `measure'
+D, [2015-03-16T21:46:21.618642 #5068] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/command/action.rb:37:in `call'
+D, [2015-03-16T21:46:21.620642 #5068] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/cli.rb:56:in `perform'
+D, [2015-03-16T21:46:21.621642 #5068] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/cli.rb:161:in `block (2 levels) in <class:CLI>'
+D, [2015-03-16T21:46:21.623642 #5068] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/gems/2.0.0/gems/thor-0.19.1/lib/thor/command.rb:27:in `run'
+D, [2015-03-16T21:46:21.624642 #5068] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/gems/2.0.0/gems/thor-0.19.1/lib/thor/invocation.rb:126:in `invoke_command'
+D, [2015-03-16T21:46:21.625642 #5068] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/cli.rb:304:in `invoke_task'
+D, [2015-03-16T21:46:21.628642 #5068] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/gems/2.0.0/gems/thor-0.19.1/lib/thor.rb:359:in `dispatch'
+D, [2015-03-16T21:46:21.629642 #5068] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/gems/2.0.0/gems/thor-0.19.1/lib/thor/base.rb:440:in `start'
+D, [2015-03-16T21:46:21.630642 #5068] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/bin/kitchen:13:in `block in <top (required)>'
+D, [2015-03-16T21:46:21.631642 #5068] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/errors.rb:154:in `with_friendly_errors'
+D, [2015-03-16T21:46:21.633643 #5068] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/bin/kitchen:13:in `<top (required)>'
+D, [2015-03-16T21:46:21.634643 #5068] DEBUG -- Kitchen: C:/opscode/chefdk/bin/kitchen:20:in `load'
+D, [2015-03-16T21:46:21.636643 #5068] DEBUG -- Kitchen: C:/opscode/chefdk/bin/kitchen:20:in `<main>'
+D, [2015-03-16T21:46:21.637643 #5068] DEBUG -- Kitchen: ----------------------
+I, [2015-03-16T22:10:47.577490 #1732]  INFO -- Kitchen: -----> Starting Kitchen (v1.3.1)
+D, [2015-03-16T22:10:47.703497 #1732] DEBUG -- Kitchen: ------Exception-------
+D, [2015-03-16T22:10:47.710497 #1732] DEBUG -- Kitchen: Class: Kitchen::ClientError
+D, [2015-03-16T22:10:47.712497 #1732] DEBUG -- Kitchen: Message: Could not load the 'ssh' driver from the load path. Please ensure that your driver is installed as a gem or included in your Gemfile if using Bundler.
+D, [2015-03-16T22:10:47.715498 #1732] DEBUG -- Kitchen: ---Nested Exception---
+D, [2015-03-16T22:10:47.717498 #1732] DEBUG -- Kitchen: Class: LoadError
+D, [2015-03-16T22:10:47.722498 #1732] DEBUG -- Kitchen: Message: cannot load such file -- kitchen/driver/ssh
+D, [2015-03-16T22:10:47.724498 #1732] DEBUG -- Kitchen: ------Backtrace-------
+D, [2015-03-16T22:10:47.725498 #1732] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/driver.rb:50:in `rescue in for_plugin'
+D, [2015-03-16T22:10:47.727498 #1732] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/driver.rb:40:in `for_plugin'
+D, [2015-03-16T22:10:47.729498 #1732] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:226:in `new_driver'
+D, [2015-03-16T22:10:47.731499 #1732] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:240:in `new_instance'
+D, [2015-03-16T22:10:47.733499 #1732] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:129:in `block in build_instances'
+D, [2015-03-16T22:10:47.734499 #1732] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:128:in `map'
+D, [2015-03-16T22:10:47.736499 #1732] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:128:in `with_index'
+D, [2015-03-16T22:10:47.738499 #1732] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:128:in `build_instances'
+D, [2015-03-16T22:10:47.739499 #1732] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:104:in `instances'
+D, [2015-03-16T22:10:47.741499 #1732] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/command.rb:115:in `filtered_instances'
+D, [2015-03-16T22:10:47.742499 #1732] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/command.rb:145:in `parse_subcommand'
+D, [2015-03-16T22:10:47.745499 #1732] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/command/action.rb:38:in `block in call'
+D, [2015-03-16T22:10:47.747499 #1732] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/2.0.0/benchmark.rb:281:in `measure'
+D, [2015-03-16T22:10:47.748499 #1732] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/command/action.rb:37:in `call'
+D, [2015-03-16T22:10:47.750500 #1732] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/cli.rb:56:in `perform'
+D, [2015-03-16T22:10:47.751500 #1732] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/cli.rb:161:in `block (2 levels) in <class:CLI>'
+D, [2015-03-16T22:10:47.753500 #1732] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/gems/2.0.0/gems/thor-0.19.1/lib/thor/command.rb:27:in `run'
+D, [2015-03-16T22:10:47.754500 #1732] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/gems/2.0.0/gems/thor-0.19.1/lib/thor/invocation.rb:126:in `invoke_command'
+D, [2015-03-16T22:10:47.756500 #1732] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/cli.rb:304:in `invoke_task'
+D, [2015-03-16T22:10:47.758500 #1732] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/gems/2.0.0/gems/thor-0.19.1/lib/thor.rb:359:in `dispatch'
+D, [2015-03-16T22:10:47.759500 #1732] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/gems/2.0.0/gems/thor-0.19.1/lib/thor/base.rb:440:in `start'
+D, [2015-03-16T22:10:47.762500 #1732] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/bin/kitchen:13:in `block in <top (required)>'
+D, [2015-03-16T22:10:47.763500 #1732] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/errors.rb:154:in `with_friendly_errors'
+D, [2015-03-16T22:10:47.765500 #1732] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/bin/kitchen:13:in `<top (required)>'
+D, [2015-03-16T22:10:47.766501 #1732] DEBUG -- Kitchen: C:/opscode/chefdk/bin/kitchen:20:in `load'
+D, [2015-03-16T22:10:47.768501 #1732] DEBUG -- Kitchen: C:/opscode/chefdk/bin/kitchen:20:in `<main>'
+D, [2015-03-16T22:10:47.770501 #1732] DEBUG -- Kitchen: ----------------------
+I, [2015-03-16T22:18:40.430535 #3276]  INFO -- Kitchen: -----> Starting Kitchen (v1.3.1)
+E, [2015-03-16T22:18:40.558543 #3276] ERROR -- Kitchen: ------Exception-------
+E, [2015-03-16T22:18:40.559543 #3276] ERROR -- Kitchen: Class: Kitchen::ClientError
+E, [2015-03-16T22:18:40.559543 #3276] ERROR -- Kitchen: Message: Could not load the 'ssh' driver from the load path. Please ensure that your driver is installed as a gem or included in your Gemfile if using Bundler.
+E, [2015-03-16T22:18:40.559543 #3276] ERROR -- Kitchen: ---Nested Exception---
+E, [2015-03-16T22:18:40.559543 #3276] ERROR -- Kitchen: Class: LoadError
+E, [2015-03-16T22:18:40.559543 #3276] ERROR -- Kitchen: Message: cannot load such file -- kitchen/driver/ssh
+E, [2015-03-16T22:18:40.560543 #3276] ERROR -- Kitchen: ------Backtrace-------
+E, [2015-03-16T22:18:40.560543 #3276] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/driver.rb:50:in `rescue in for_plugin'
+E, [2015-03-16T22:18:40.560543 #3276] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/driver.rb:40:in `for_plugin'
+E, [2015-03-16T22:18:40.560543 #3276] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:226:in `new_driver'
+E, [2015-03-16T22:18:40.560543 #3276] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:240:in `new_instance'
+E, [2015-03-16T22:18:40.560543 #3276] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:129:in `block in build_instances'
+E, [2015-03-16T22:18:40.560543 #3276] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:128:in `map'
+E, [2015-03-16T22:18:40.560543 #3276] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:128:in `with_index'
+E, [2015-03-16T22:18:40.560543 #3276] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:128:in `build_instances'
+E, [2015-03-16T22:18:40.560543 #3276] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:104:in `instances'
+E, [2015-03-16T22:18:40.560543 #3276] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/command.rb:115:in `filtered_instances'
+E, [2015-03-16T22:18:40.560543 #3276] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/command.rb:145:in `parse_subcommand'
+E, [2015-03-16T22:18:40.560543 #3276] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/command/action.rb:38:in `block in call'
+E, [2015-03-16T22:18:40.560543 #3276] ERROR -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/2.0.0/benchmark.rb:281:in `measure'
+E, [2015-03-16T22:18:40.560543 #3276] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/command/action.rb:37:in `call'
+E, [2015-03-16T22:18:40.560543 #3276] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/cli.rb:56:in `perform'
+E, [2015-03-16T22:18:40.560543 #3276] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/cli.rb:161:in `block (2 levels) in <class:CLI>'
+E, [2015-03-16T22:18:40.560543 #3276] ERROR -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/gems/2.0.0/gems/thor-0.19.1/lib/thor/command.rb:27:in `run'
+E, [2015-03-16T22:18:40.560543 #3276] ERROR -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/gems/2.0.0/gems/thor-0.19.1/lib/thor/invocation.rb:126:in `invoke_command'
+E, [2015-03-16T22:18:40.561543 #3276] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/cli.rb:304:in `invoke_task'
+E, [2015-03-16T22:18:40.561543 #3276] ERROR -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/gems/2.0.0/gems/thor-0.19.1/lib/thor.rb:359:in `dispatch'
+E, [2015-03-16T22:18:40.561543 #3276] ERROR -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/gems/2.0.0/gems/thor-0.19.1/lib/thor/base.rb:440:in `start'
+E, [2015-03-16T22:18:40.561543 #3276] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/bin/kitchen:13:in `block in <top (required)>'
+E, [2015-03-16T22:18:40.561543 #3276] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/errors.rb:154:in `with_friendly_errors'
+E, [2015-03-16T22:18:40.561543 #3276] ERROR -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/bin/kitchen:13:in `<top (required)>'
+E, [2015-03-16T22:18:40.561543 #3276] ERROR -- Kitchen: C:/opscode/chefdk/bin/kitchen:20:in `load'
+E, [2015-03-16T22:18:40.561543 #3276] ERROR -- Kitchen: C:/opscode/chefdk/bin/kitchen:20:in `<main>'
+E, [2015-03-16T22:18:40.561543 #3276] ERROR -- Kitchen: ----------------------
+I, [2015-03-16T22:19:01.564744 #7116]  INFO -- Kitchen: -----> Starting Kitchen (v1.3.1)
+D, [2015-03-16T22:19:01.690751 #7116] DEBUG -- Kitchen: ------Exception-------
+D, [2015-03-16T22:19:01.691751 #7116] DEBUG -- Kitchen: Class: Kitchen::ClientError
+D, [2015-03-16T22:19:01.692751 #7116] DEBUG -- Kitchen: Message: Could not load the 'ssh' driver from the load path. Please ensure that your driver is installed as a gem or included in your Gemfile if using Bundler.
+D, [2015-03-16T22:19:01.694752 #7116] DEBUG -- Kitchen: ---Nested Exception---
+D, [2015-03-16T22:19:01.695752 #7116] DEBUG -- Kitchen: Class: LoadError
+D, [2015-03-16T22:19:01.698752 #7116] DEBUG -- Kitchen: Message: cannot load such file -- kitchen/driver/ssh
+D, [2015-03-16T22:19:01.699752 #7116] DEBUG -- Kitchen: ------Backtrace-------
+D, [2015-03-16T22:19:01.706752 #7116] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/driver.rb:50:in `rescue in for_plugin'
+D, [2015-03-16T22:19:01.708752 #7116] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/driver.rb:40:in `for_plugin'
+D, [2015-03-16T22:19:01.710753 #7116] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:226:in `new_driver'
+D, [2015-03-16T22:19:01.711753 #7116] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:240:in `new_instance'
+D, [2015-03-16T22:19:01.713753 #7116] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:129:in `block in build_instances'
+D, [2015-03-16T22:19:01.714753 #7116] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:128:in `map'
+D, [2015-03-16T22:19:01.715753 #7116] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:128:in `with_index'
+D, [2015-03-16T22:19:01.717753 #7116] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:128:in `build_instances'
+D, [2015-03-16T22:19:01.719753 #7116] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/config.rb:104:in `instances'
+D, [2015-03-16T22:19:01.720753 #7116] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/command.rb:115:in `filtered_instances'
+D, [2015-03-16T22:19:01.721753 #7116] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/command.rb:145:in `parse_subcommand'
+D, [2015-03-16T22:19:01.722753 #7116] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/command/action.rb:38:in `block in call'
+D, [2015-03-16T22:19:01.723753 #7116] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/2.0.0/benchmark.rb:281:in `measure'
+D, [2015-03-16T22:19:01.725753 #7116] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/command/action.rb:37:in `call'
+D, [2015-03-16T22:19:01.726753 #7116] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/cli.rb:56:in `perform'
+D, [2015-03-16T22:19:01.727753 #7116] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/cli.rb:161:in `block (2 levels) in <class:CLI>'
+D, [2015-03-16T22:19:01.728754 #7116] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/gems/2.0.0/gems/thor-0.19.1/lib/thor/command.rb:27:in `run'
+D, [2015-03-16T22:19:01.730754 #7116] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/gems/2.0.0/gems/thor-0.19.1/lib/thor/invocation.rb:126:in `invoke_command'
+D, [2015-03-16T22:19:01.731754 #7116] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/cli.rb:304:in `invoke_task'
+D, [2015-03-16T22:19:01.732754 #7116] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/gems/2.0.0/gems/thor-0.19.1/lib/thor.rb:359:in `dispatch'
+D, [2015-03-16T22:19:01.733754 #7116] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/lib/ruby/gems/2.0.0/gems/thor-0.19.1/lib/thor/base.rb:440:in `start'
+D, [2015-03-16T22:19:01.734754 #7116] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/bin/kitchen:13:in `block in <top (required)>'
+D, [2015-03-16T22:19:01.735754 #7116] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/lib/kitchen/errors.rb:154:in `with_friendly_errors'
+D, [2015-03-16T22:19:01.736754 #7116] DEBUG -- Kitchen: C:/opscode/chefdk/embedded/apps/test-kitchen/bin/kitchen:13:in `<top (required)>'
+D, [2015-03-16T22:19:01.738754 #7116] DEBUG -- Kitchen: C:/opscode/chefdk/bin/kitchen:20:in `load'
+D, [2015-03-16T22:19:01.739754 #7116] DEBUG -- Kitchen: C:/opscode/chefdk/bin/kitchen:20:in `<main>'
+D, [2015-03-16T22:19:01.740754 #7116] DEBUG -- Kitchen: ----------------------
