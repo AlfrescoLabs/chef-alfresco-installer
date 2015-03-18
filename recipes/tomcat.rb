@@ -45,14 +45,14 @@ when 'solaris','solaris2'
   end
 
   template "#{node['tomcat']['tomcat_folder']}/conf/server.xml" do
-    source 'catalina.properties.erb'
+    source 'server.xml.erb'
     owner 'root'
     group 'root'
     mode '0644'
   end
 
   template "#{node['tomcat']['tomcat_folder']}/conf/context.xml" do
-    source 'catalina.properties.erb'
+    source 'context.xml.erb'
     owner 'root'
     group 'root'
     mode '0644'
