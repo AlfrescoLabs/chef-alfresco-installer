@@ -1,16 +1,16 @@
 ---
 driver:
   name: ssh
-  hostname: 172.29.100.194
+  hostname: 172.29.100.169
   port: 22
   username: root
-  password: alfresco
+  password: alfresco1
   
 provisioner:
   name: chef_zero
 
 platforms:
-- name:  redhat6.5x64
+- name:  solaris112
 
 suites:
 #- name: cfg-wqs
@@ -25,8 +25,8 @@ suites:
 - name: installer
   run_list:
   - recipe[java-wrapper::java8]
-  - recipe[alfresco-chef::installer]
+  - recipe[alfresco-chef::tomcat]
   attributes: { localPath: true }
   data_bags_path: ./data_bags
-  encrypted_data_bag_secret_key_path: ./encrypted_data_bag_secret
+  encrypted_data_bag_secret_key_path: ./encrypted_data_bag_secret_key
   attributes: { localPath: true }
