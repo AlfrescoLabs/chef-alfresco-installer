@@ -67,6 +67,7 @@ when 'solaris','solaris2'
     rm -rf /usr/java/*
     mv #{node['java']['java_folder']}/* /usr/java/
     EOH
+    not_if { ::File.directory?("/usr/java/") }
   end
 
 else
