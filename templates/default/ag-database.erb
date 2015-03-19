@@ -1,12 +1,12 @@
-db.driver=org.postgresql.Driver
-db.username=alfresco
-db.password=admin
+db.driver=<%= node['db.driver']%>
+db.username=<%= node['db.username']%>
+db.password=<%= node['db.password']%>
 #To use encrypted properties for the database uncomment the following line
 # the encrypted value is added into alfresco-encrypted.properties
 #db.password=${db.password.enc}
 #db.username=${db.username.enc}
-db.name=alfresco
-db.url=jdbc:postgresql://localhost:5432/${db.name}
+db.name=<%= node['db.name']%>
+db.url=<%= node['db.url']%>
 # Note: your database must also be able to accept at least this many connections.  Please see your database documentation for instructions on how to configure this.
-db.pool.max=275
-db.pool.validate.query=SELECT 1
+db.pool.max=<%= node['db.pool.max']%>
+db.pool.validate.query=<%= node['db.pool.validate.query']%>

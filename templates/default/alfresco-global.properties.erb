@@ -3,7 +3,7 @@
 ## Enterprise overlay         #
 ###############################
 
-dir.root=/opt/target/alf-installation/alf_data
+dir.root=<%= node["installer"]["directory"]%>/alf_data
 
 alfresco.context=alfresco
 alfresco.host=<%= node['fqdn']%>
