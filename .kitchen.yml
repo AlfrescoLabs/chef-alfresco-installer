@@ -8,6 +8,7 @@ driver_config:
     vsphere_username: <%= ENV['VUSER'] %>
     vsphere_password: <%= ENV['VPASS'] %>
     vsphere_server: <%= ENV['VHOST'] %>
+    vsphere_expected_pubkey_hash: <%= ENV['VHASH'] %>
   
 provisioner:
   name: chef_zero
