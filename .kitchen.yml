@@ -14,21 +14,33 @@ provisioner:
   name: chef_zero
 
 platforms:
-- name:  ubuntu
+- name:  ubuntu1204
   driver_config:
+    username: root
+      password: alfresco
+    authentication:
+      vsphere_username: <%= ENV['VUSER'] %>
+      vsphere_password: <%= ENV['VPASS'] %>
+      vsphere_server: <%= ENV['VHOST'] %>
+      vsphere_expected_pubkey_hash: <%= ENV['VHASH'] %>
     server_create:
       datacenter: QALab
-      template_path: QALab/1.BaseOSTemplates/QATMP-UBUNTU-12.04x64
+      template_path: QATMP-UBUNTU-12.04x64
+- name:  redhat65
+  driver_config:
+    username: root
+    password: alfresco
+    authentication:
+      vsphere_username: <%= ENV['VUSER'] %>
+      vsphere_password: <%= ENV['VPASS'] %>
+      vsphere_server: <%= ENV['VHOST'] %>
+      vsphere_expected_pubkey_hash: <%= ENV['VHASH'] %>
+    server_create:
+      datacenter: QALab
+      template_path: QATMP-RHEL6.5X64
+
 
 suites:
-#- name: cfg-wqs
-#  run_list:
-#  - recipe[java-wrapper::java8]
-#  - recipe[alfresco-chef::cfg-wqs]
-#  attributes: { localPath: true }
-#  data_bags_path: ./data_bags
-#  encrypted_data_bag_secret_key_path: ./encrypted_data_bag_secret
-#  attributes: { localPath: true }
 
 - name: installer
   run_list:
