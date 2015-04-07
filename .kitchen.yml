@@ -15,6 +15,7 @@ platforms:
       vsphere_password: <%= ENV['VPASS'] %>
       vsphere_server: <%= ENV['VHOST'] %>
       vsphere_expected_pubkey_hash: <%= ENV['VHASH'] %>
+    server_name: jk-Alf-ubuntu1204
     server_create:
       datacenter: QALab
       template_path: QATMP-UBUNTU-12.04x64
@@ -27,9 +28,36 @@ platforms:
       vsphere_password: <%= ENV['VPASS'] %>
       vsphere_server: <%= ENV['VHOST'] %>
       vsphere_expected_pubkey_hash: <%= ENV['VHASH'] %>
+    server_name: jk-Alf-redhat65
     server_create:
       datacenter: QALab
       template_path: QATMP-RHEL6.5X64
+- name:  suse12
+  driver_config:
+    username: root
+    password: alfresco
+    authentication:
+      vsphere_username: <%= ENV['VUSER'] %>
+      vsphere_password: <%= ENV['VPASS'] %>
+      vsphere_server: <%= ENV['VHOST'] %>
+      vsphere_expected_pubkey_hash: <%= ENV['VHASH'] %>
+    server_name: jk-Alf-suse12
+    server_create:
+      datacenter: QALab
+      template_path: QATMP-SUSE12x64
+- name:  win2012r2
+  driver_config:
+    username: root
+    password: alfresco
+    authentication:
+      vsphere_username: <%= ENV['VUSER'] %>
+      vsphere_password: <%= ENV['VPASS'] %>
+      vsphere_server: <%= ENV['VHOST'] %>
+      vsphere_expected_pubkey_hash: <%= ENV['VHASH'] %>
+    server_name: jk-Alf-win2012r2
+    server_create:
+      datacenter: QALab
+      template_path: QATMP-Windows2012R2-x64
 
 suites:
 
