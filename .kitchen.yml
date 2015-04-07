@@ -18,7 +18,7 @@ platforms:
   driver_config:
     server_create:
       datacenter: QALab
-      template_path: 1.BaseOSTemplates/QATMP-UBUNTU-12.04x64
+      template_path: QALab/1.BaseOSTemplates/QATMP-UBUNTU-12.04x64
 
 suites:
 #- name: cfg-wqs
