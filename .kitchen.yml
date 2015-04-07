@@ -1,14 +1,6 @@
 ---
 driver:
 driver_plugin: vsphere
-driver_config:
-  username: root
-  password: alfresco
-  authentication:
-    vsphere_username: <%= ENV['VUSER'] %>
-    vsphere_password: <%= ENV['VPASS'] %>
-    vsphere_server: <%= ENV['VHOST'] %>
-    vsphere_expected_pubkey_hash: <%= ENV['VHASH'] %>
   
 provisioner:
   name: chef_zero
@@ -17,7 +9,7 @@ platforms:
 - name:  ubuntu1204
   driver_config:
     username: root
-      password: alfresco
+    password: alfresco
     authentication:
       vsphere_username: <%= ENV['VUSER'] %>
       vsphere_password: <%= ENV['VPASS'] %>
@@ -38,7 +30,6 @@ platforms:
     server_create:
       datacenter: QALab
       template_path: QATMP-RHEL6.5X64
-
 
 suites:
 
