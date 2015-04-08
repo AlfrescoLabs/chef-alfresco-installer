@@ -13,18 +13,18 @@ platforms:
   driver_config:
     username: root
     hostname: 172.29.101.46
-# - name:  redhat65
-#   driver_config:
-#     username: root
-#     hostname: 172.29.101.52
-# - name:  suse12
-#   driver_config:
-#     username: root
-#     hostname: 172.29.101.50
-# - name:  win2012r2
-#   driver_config:
-#     username: Administrator
-#     hostname: 172.29.101.51
+- name:  redhat65
+  driver_config:
+    username: root
+    hostname: 172.29.101.52
+- name:  suse12
+  driver_config:
+    username: root
+    hostname: 172.29.101.50
+- name:  win2012r2
+  driver_config:
+    username: Administrator
+    hostname: 172.29.101.51
 
 suites:
 - name: installer
