@@ -1,7 +1,13 @@
 ---
 driver:
 driver_plugin: vsphere
-  
+driver_config:
+  password: <%= ENV['MPASS'] %>
+  authentication:
+    vsphere_username: <%= ENV['VUSER'] %>
+    vsphere_password: <%= ENV['VPASS'] %>
+    vsphere_server: <%= ENV['VHOST'] %>
+    vsphere_expected_pubkey_hash: <%= ENV['VHASH'] %>
 provisioner:
   name: chef_zero
 
@@ -9,12 +15,6 @@ platforms:
 - name:  ubuntu1204
   driver_config:
     username: root
-    password: alfresco
-    authentication:
-      vsphere_username: <%= ENV['VUSER'] %>
-      vsphere_password: <%= ENV['VPASS'] %>
-      vsphere_server: <%= ENV['VHOST'] %>
-      vsphere_expected_pubkey_hash: <%= ENV['VHASH'] %>
     server_name: jk-Alf-ubuntu1204
     server_create:
       datacenter: QALab
@@ -22,12 +22,6 @@ platforms:
 - name:  redhat65
   driver_config:
     username: root
-    password: alfresco
-    authentication:
-      vsphere_username: <%= ENV['VUSER'] %>
-      vsphere_password: <%= ENV['VPASS'] %>
-      vsphere_server: <%= ENV['VHOST'] %>
-      vsphere_expected_pubkey_hash: <%= ENV['VHASH'] %>
     server_name: jk-Alf-redhat65
     server_create:
       datacenter: QALab
@@ -35,32 +29,19 @@ platforms:
 - name:  suse12
   driver_config:
     username: root
-    password: alfresco
-    authentication:
-      vsphere_username: <%= ENV['VUSER'] %>
-      vsphere_password: <%= ENV['VPASS'] %>
-      vsphere_server: <%= ENV['VHOST'] %>
-      vsphere_expected_pubkey_hash: <%= ENV['VHASH'] %>
     server_name: jk-Alf-suse12
     server_create:
       datacenter: QALab
       template_path: QATMP-SUSE12x64
 - name:  win2012r2
   driver_config:
-    username: root
-    password: alfresco
-    authentication:
-      vsphere_username: <%= ENV['VUSER'] %>
-      vsphere_password: <%= ENV['VPASS'] %>
-      vsphere_server: <%= ENV['VHOST'] %>
-      vsphere_expected_pubkey_hash: <%= ENV['VHASH'] %>
+    username: Administrator
     server_name: jk-Alf-win2012r2
     server_create:
       datacenter: QALab
       template_path: QATMP-Windows2012R2-x64
 
 suites:
-
 - name: installer
   run_list:
   - recipe[java-wrapper::java8]
