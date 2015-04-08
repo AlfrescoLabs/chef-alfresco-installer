@@ -4,7 +4,7 @@ DEPENDENCIES
     metadata: true
 
 GRAPH
-  aws (2.6.4)
+  aws (2.7.0)
   chef_handler (1.1.6)
   java (1.31.0)
   java-wrapper (0.2.5)
