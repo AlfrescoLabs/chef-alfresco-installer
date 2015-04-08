@@ -28,10 +28,10 @@ when 'solaris','solaris2'
   default['java']['java_folder'] = "jdk1.8.0_40"
   default['java']['package_name'] = "jdk-8u40-solaris-x64.tar.gz"
   default['java_8_download_path'] = "qa/QA_Applications/chef-resources/jdk-8u40-solaris-x64.tar.gz"
-  default["java_installer"]["local"] = "/resources/jdk-8u40-solaris-x64.tar.gz"
+  default["java_installer"]["local"] = "resources/jdk-8u40-solaris-x64.tar.gz"
   default["java_installer"]["checksum"] = '8d880e24a12197b8349493f15092a6b19468f8dfe22466325961bbfc2020d7f4'
 else
   default['java_8_download_path'] = "qa/QA_Applications/chef-resources/jdk-8u31-linux-x64.tar.gz"
-  default["java_installer"]["local"] = "/resources/jdk-8u31-linux-x64.tar.gz"
+  default["java_installer"]["local"] = "resources/jdk-8u31-linux-x64.tar.gz"
   default["java_installer"]["checksum"] = 'efe015e8402064bce298160538aa1c18470b78603257784ec6cd07ddfa98e437'
 end
