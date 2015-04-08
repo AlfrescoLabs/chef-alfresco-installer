@@ -13,25 +13,25 @@ platforms:
   driver_config:
     username: root
     hostname: 172.29.101.46
-- name:  redhat65
-  driver_config:
-    username: root
-    hostname: 172.29.101.52
-- name:  suse12
-  driver_config:
-    username: root
-    hostname: 172.29.101.50
-- name:  win2012r2
-  driver_config:
-    username: Administrator
-    hostname: 172.29.101.51
+# - name:  redhat65
+#   driver_config:
+#     username: root
+#     hostname: 172.29.101.52
+# - name:  suse12
+#   driver_config:
+#     username: root
+#     hostname: 172.29.101.50
+# - name:  win2012r2
+#   driver_config:
+#     username: Administrator
+#     hostname: 172.29.101.51
 
 suites:
 - name: installer
   run_list:
   - recipe[java-wrapper::java8]
   - recipe[alfresco-chef::installer]
-  attributes: { localPath: true }
+  attributes: { localPath: false }
   data_bags_path: ./data_bags
   encrypted_data_bag_secret_key_path: ./encrypted_data_bag_secret_key
-  attributes: { localPath: true }
+

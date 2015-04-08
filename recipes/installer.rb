@@ -32,7 +32,7 @@ when 'windows'
   end
 
   windows_package "Alfresco One" do
-    source "ftp://#{creds["bamboo_username"]}:#{creds["bamboo_password"]}@ftp.alfresco.com/#{node["installer"]["downloadpath"]}"
+    source node["installer"]["downloadpath"]
     checksum checksum node["installer"]["checksum"]
     action :install
     installer_type :custom
@@ -69,7 +69,7 @@ else
   end
 
   remote_file node["installer"]["local"] do
-    source "ftp://#{creds['bamboo_username']}:#{creds['bamboo_password']}@ftp.alfresco.com/#{node["installer"]["downloadpath"]}"
+    source node["installer"]["downloadpath"]
     checksum node["installer"]["checksum"]
     owner "root"
     group "root"
