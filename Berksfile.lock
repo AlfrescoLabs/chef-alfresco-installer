@@ -4,14 +4,14 @@ DEPENDENCIES
     metadata: true
   java-wrapper
     git: https://github.com/AlfrescoTestAutomation/alfresco-chef.git
-    revision: ad96018dea92ed25a99ecd4e34d0183ac4375165
+    revision: cd11177159f768be0bc31e0fd168754c5b2d673e
     branch: java-wrapper
 
 GRAPH
   alfresco-chef (0.2.0)
     apt (>= 0.0.0)
     chef-client (>= 0.0.0)
-  apt (2.6.1)
+  apt (2.7.0)
   aws (2.7.0)
   chef-client (4.2.4)
     cron (>= 1.2.0)
@@ -24,6 +24,6 @@ GRAPH
     aws (>= 0.0.0)
     java (>= 0.0.0)
     windows (>= 0.0.0)
-  logrotate (1.8.0)
+  logrotate (1.9.1)
   windows (1.36.6)
     chef_handler (>= 0.0.0)
