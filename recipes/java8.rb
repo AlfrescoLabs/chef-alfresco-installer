@@ -24,7 +24,7 @@ case node["platform"]
 when "windows"
 
   windows_package "Java SE Development Kit 8 Update 40 (64-bit)" do
-    source "ftp://#{creds['bamboo_username']}:#{creds['bamboo_password']}@ftp.alfresco.com/#{node['java_8_download_path']}"
+    source node['java_8_download_path']
     checksum node["java_installer"]["checksum"]
     action :install
     installer_type :custom
@@ -49,7 +49,7 @@ when 'solaris','solaris2'
   end
 
   remote_file node["java_installer"]["local"] do
-    source "ftp://#{creds['bamboo_username']}:#{creds['bamboo_password']}@ftp.alfresco.com/#{node['java_8_download_path']}"
+    source node['java_8_download_path']
     checksum node["java_installer"]["checksum"]
     owner "root"
     group "root"
@@ -80,7 +80,7 @@ else
   end
 
   remote_file node["java_installer"]["local"] do
-    source "ftp://#{creds['bamboo_username']}:#{creds['bamboo_password']}@ftp.alfresco.com/#{node['java_8_download_path']}"
+    source node['java_8_download_path']
     checksum node["java_installer"]["checksum"]
     owner "root"
     group "root"

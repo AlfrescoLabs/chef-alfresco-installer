@@ -20,7 +20,7 @@
 creds = Chef::EncryptedDataBagItem.load("bamboo", "pass")
 creds["pass"]
 remote_file "/opt/jdk-7u75-linux-x64.tar.gz" do
-   source "ftp://#{creds['bamboo_username']}:#{creds['bamboo_password']}@ftp.alfresco.com/#{node['java_7_download_path']}"
+   source node['java_7_download_path']
    checksum '460959219b534dc23e34d77abc306e180b364069b9fc2b2265d964fa2c281610'
    owner "root"
    group "root"
