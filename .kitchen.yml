@@ -21,10 +21,6 @@ platforms:
   driver_config:
     username: root
     hostname: 172.29.101.50
-- name:  win2012r2
-  driver_config:
-    username: Administrator
-    hostname: 172.29.101.51
 
 suites:
 - name: installer
