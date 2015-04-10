@@ -16,33 +16,28 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
 #/
+
 require 'spec_helper'
 
 describe port(8080) do
 context 'When we check the status of alfresco port it' do
-  it { should be_listening }
+  it { should be_listening.on('172.29.101.51').with('tcp') }
 end
 end
 
 describe port(5432) do
 context 'When we check the status of Database port it' do
-  it { should be_listening }
+  it { should be_listening.on('172.29.101.51').with('tcp') }
 end
 end
 
 describe port(8443) do
 context 'When we check the status of SOLR port it' do
-  it { should be_listening }
+  it { should be_listening.on('172.29.101.51').with('tcp') }
 end
 end
 
-describe service('alfresco') do
-context 'When alfresco is set to start at boot then the service' do
-  it { should be_enabled }
-end
-end
-
-connection = Faraday.new(:url => "http://localhost:8080",
+connection = Faraday.new(:url => "http://172.29.101.51:8080",
 	:headers => {'Host' => host_inventory['hostname']}) do |faraday|
         faraday.adapter Faraday.default_adapter
       end
@@ -71,7 +66,7 @@ context 'When we are on the alfresco main page, the body' do
 end
 end
 
-connection2 = Faraday.new(:url => "http://admin:admin@localhost:8080",
+connection2 = Faraday.new(:url => "http://admin:admin@172.29.101.51:8080",
 	:headers => {'Host' => host_inventory['hostname']}) do |faraday|
         faraday.adapter Faraday.default_adapter
       end
