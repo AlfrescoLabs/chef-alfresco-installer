@@ -19,46 +19,36 @@
 
 require 'spec_helper'
 
-describe port(8080) do
-context 'When we check the status of alfresco port it' do
-  it { should be_listening.on('172.29.101.51').with('tcp') }
-end
+describe 'When we check the status of alfresco port it' do
+  it { expect(port(8080)).to be_listening.on('172.29.101.51').with('tcp') }
 end
 
-describe port(5432) do
-context 'When we check the status of Database port it' do
-  it { should be_listening.on('172.29.101.51').with('tcp') }
-end
+describe 'When we check the status of Database port it' do
+  it { expect(port(5432)).to be_listening.on('172.29.101.51').with('tcp') }
 end
 
-describe port(8443) do
-context 'When we check the status of SOLR port it' do
-  it { should be_listening.on('172.29.101.51').with('tcp') }
-end
+describe 'When we check the status of SOLR port it' do
+  it { expect(port(8443)).to be_listening.on('172.29.101.51').with('tcp') }
 end
 
 connection = Faraday.new(:url => "http://172.29.101.51:8080",
 	:headers => {'Host' => host_inventory['hostname']}) do |faraday|
         faraday.adapter Faraday.default_adapter
       end
-describe 'When we are on the root of the server,' do
-  it "the body should include Welcome to Alfresco!" do
-  expect(connection.get('').body).to include("Welcome to Alfresco!")
-  end
+     
+describe 'When we are on the root of the server, the body' do
+  it { expect(connection.get('').body).to include("Welcome to Alfresco!") }
 end
 
 describe 'When share is up the http status' do
   it { expect(connection.get('/share/page').status).to eq 200 }
 end
 
-
-describe connection.get('/alfresco/').status do
-context 'When alfresco is up the http status' do
-  it { should eq 200 }
-end
+describe 'When alfresco is up the http status' do
+  it { expect(connection.get('/alfresco/').status).to eq 200 }
 end
 
-describe 'When we are on the alfresco main page, the body should include Alfresco WebScripts Home' do
+describe 'When we are on the alfresco main page, the body' do
   it { expect(connection.get('/alfresco/').body).to include("Alfresco WebScripts Home") }
 end
 
@@ -67,37 +57,31 @@ connection2 = Faraday.new(:url => "http://admin:admin@172.29.101.51:8080",
         faraday.adapter Faraday.default_adapter
       end
 
-describe connection2.get('/alfresco/s/index').status do
-context 'When WebScripts page is up the http status' do
-  it { should eq 200 }
-end
+describe 'When WebScripts page is up the http status' do
+  it { expect(connection2.get('/alfresco/s/index').status).to eq 200 }
 end
 
-describe 'When we are on the Web Scripts main page, the body should include 505 Web Scripts'  do
+describe 'When we are on the Web Scripts main page, the body'  do
   it { expect(connection2.get('/alfresco/s/index').body).to include("505 Web Scripts") }
 end
 
-describe connection2.get('/alfresco/webdav').status do
-context 'When webdav is up the http status' do
-  it { should eq 200 }
-end
+describe 'When webdav is up the http response status' do
+  it { expect(connection2.get('/alfresco/webdav').status).to eq 200 }
 end
 
-describe 'When we are on the webdav main page, the body should include Data Dictionary' do
+describe 'When we are on the webdav main page, the body' do
   it { expect(connection2.get('/alfresco/webdav').body).to include("Data Dictionary") }
 end
 
-describe 'When we are on the webdav main page, the body should include Directory listing for /' do
+describe 'When we are on the webdav main page, the body' do
   it { expect(connection2.get('/alfresco/webdav').body).to include("Directory listing for /") }
 end
 
-describe connection2.get('/alfresco/s/enterprise/admin/admin-systemsummary').status do
-context 'When admin console is up the http status' do
-  it { should eq 200 }
-end
+describe 'When admin console is up the http status' do
+  it { expect(connection2.get('/alfresco/s/enterprise/admin/admin-systemsummary').status).to eq 200 }
 end
 
-describe 'When we are on the admin console main page the body should include System Summary' do
+describe 'When we are on the admin console main page the body' do
   it { expect(connection2.get('/alfresco/s/enterprise/admin/admin-systemsummary').body).to include("System Summary") }
 end
 
@@ -105,8 +89,6 @@ describe 'When we have solr4 enabled on the admin console page the body' do
   it { expect(connection2.get('/alfresco/s/enterprise/admin/admin-systemsummary').body).to match(">Solr\ 4.*\n.*\n.*Enabled") }
 end
 
-describe connection2.get('/alfresco/s/api/solrstats').status do
-context 'When solr is started correctly, the http status of solrstats' do
-  it { should eq 200 }
-end
+describe 'When solr is started correctly, the http status of solrstats' do
+  it { expect(connection2.get('/alfresco/s/api/solrstats').status).to eq 200 }
 end 
