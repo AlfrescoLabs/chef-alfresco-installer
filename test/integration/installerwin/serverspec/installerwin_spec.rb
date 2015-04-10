@@ -19,18 +19,6 @@
 
 require 'spec_helper'
 
-describe 'When we check the status of alfresco port it' do
-  it { expect(port(8080)).to be_listening.on('172.29.101.51') }
-end
-
-describe 'When we check the status of Database port it' do
-  it { expect(port(5432)).to be_listening.on('172.29.101.51') }
-end
-
-describe 'When we check the status of SOLR port it' do
-  it { expect(port(8443)).to be_listening.on('172.29.101.51') }
-end
-
 connection = Faraday.new(:url => "http://172.29.101.51:8080",
 	:headers => {'Host' => host_inventory['hostname']}) do |faraday|
         faraday.adapter Faraday.default_adapter
