@@ -46,9 +46,9 @@ connection = Faraday.new(:url => "http://localhost:8080",
 	:headers => {'Host' => host_inventory['hostname']}) do |faraday|
         faraday.adapter Faraday.default_adapter
       end
-
-describe connection.get('').body do
+      
 context 'When we are on the root of the server, the body' do
+describe connection.get('').body do
   it { should include("Welcome to Alfresco!") }
 end
 end
