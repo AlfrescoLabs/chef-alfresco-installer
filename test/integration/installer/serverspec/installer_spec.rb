@@ -48,16 +48,15 @@ connection = Faraday.new(:url => "http://localhost:8080",
       end
       
 describe 'When we are on the root of the server,' do
-  it "the body whould include Welcome to Alfresco!" do
+  it "the body should include Welcome to Alfresco!" do
 	expect(connection.get('').body).to include("Welcome to Alfresco!")
   end
 end
 
-describe connection.get('/share/page').status do
-context 'When share is up the http status' do
-  it { should eq 200 }
+describe 'When share is up the http status' do
+  it { expect(connection.get('/share/page').status).to eq 200 }
 end
-end
+
 
 describe connection.get('/alfresco/').status do
 context 'When alfresco is up the http status' do
@@ -65,10 +64,8 @@ context 'When alfresco is up the http status' do
 end
 end
 
-describe connection.get('/alfresco/').body do
-context 'When we are on the alfresco main page, the body' do
-  it { should include("Alfresco WebScripts Home") }
-end
+describe 'When we are on the alfresco main page, the body should include Alfresco WebScripts Home' do
+  it { expect(connection.get('/alfresco/').body).to include("Alfresco WebScripts Home") }
 end
 
 connection2 = Faraday.new(:url => "http://admin:admin@localhost:8080",
@@ -82,10 +79,8 @@ context 'When WebScripts page is up the http status' do
 end
 end
 
-describe connection2.get('/alfresco/s/index').body do
-context 'When we are on the Web Scripts main page, the body' do
-  it { should include("505 Web Scripts") }
-end
+describe 'When we are on the Web Scripts main page, the body should include 505 Web Scripts'  do
+  it { expect(connection2.get('/alfresco/s/index').body).to include("505 Web Scripts") }
 end
 
 describe connection2.get('/alfresco/webdav').status do
@@ -94,16 +89,12 @@ context 'When webdav is up the http status' do
 end
 end
 
-describe connection2.get('/alfresco/webdav').body do
-context 'When we are on the webdav main page, the body' do
-  it { should include("Data Dictionary") }
-end
+describe 'When we are on the webdav main page, the body should include Data Dictionary' do
+  it { expect(connection2.get('/alfresco/webdav').body).to include("Data Dictionary") }
 end
 
-describe connection2.get('/alfresco/webdav').body do
-context 'When we are on the webdav main page, the body' do
-  it { should include("Directory listing for /") }
-end
+describe 'When we are on the webdav main page, the body should include Directory listing for /' do
+  it { expect(connection2.get('/alfresco/webdav').body).to include("Directory listing for /") }
 end
 
 describe connection2.get('/alfresco/s/enterprise/admin/admin-systemsummary').status do
@@ -112,16 +103,12 @@ context 'When admin console is up the http status' do
 end
 end
 
-describe connection2.get('/alfresco/s/enterprise/admin/admin-systemsummary').body do
-context 'When we are on the admin console main page the body' do
-  it { should include("System Summary") }
-end
+describe 'When we are on the admin console main page the body should include System Summary' do
+  it { expect(connection2.get('/alfresco/s/enterprise/admin/admin-systemsummary').body).to include("System Summary") }
 end
 
-describe connection2.get('/alfresco/s/enterprise/admin/admin-systemsummary').body do
-context 'When we have solr4 enabled on the admin console page the body' do
-  it { should match(">Solr\ 4.*\n.*\n.*Enabled") }
-end
+describe 'When we have solr4 enabled on the admin console page the body' do
+  it { expect(connection2.get('/alfresco/s/enterprise/admin/admin-systemsummary').body).to match(">Solr\ 4.*\n.*\n.*Enabled") }
 end
 
 describe connection2.get('/alfresco/s/api/solrstats').status do
