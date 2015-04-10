@@ -49,7 +49,7 @@ connection = Faraday.new(:url => "http://localhost:8080",
       
 describe 'When we are on the root of the server, the body' do
 context connection.get('').body do
-  should include("Welcome to Alfresco!")
+  it { should include("Welcome to Alfresco!") }
   end
 end
 
