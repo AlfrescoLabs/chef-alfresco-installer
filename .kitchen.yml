@@ -1,7 +1,7 @@
 ---
 driver:
   name: ssh
-  hostname: 172.29.100.169
+  hostname: 172.29.101.64
   port: 22
   username: root
   password: alfresco1
@@ -26,7 +26,4 @@ suites:
   run_list:
   - recipe[java-wrapper::java8]
   - recipe[alfresco-chef::tomcat]
-  attributes: { localPath: true }
-  data_bags_path: ./data_bags
-  encrypted_data_bag_secret_key_path: ./encrypted_data_bag_secret_key
-  attributes: { localPath: true }
+  attributes: { localPath: false }

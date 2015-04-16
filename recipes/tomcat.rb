@@ -1,9 +1,6 @@
 case node['platform_family']
 when 'solaris','solaris2'
 
-  creds = Chef::EncryptedDataBagItem.load("bamboo", "pass")
-  creds["pass"] # will be decrypted
-
   %w[ /opt/target
       /opt/target/alf-installation
       /opt/target/alf-installation/tomcat
@@ -17,6 +14,18 @@ when 'solaris','solaris2'
       mode '0775'
       action :create
     end
+  end
+
+  bash 'Install opencsw' do
+    user 'root'
+    cwd '/opt'
+    code <<-EOH
+    pkgadd -d http://get.opencsw.org/now
+    all
+    y
+    /opt/csw/bin/pkgutil -U
+    EOH
+    not_if { File.exists?("/opt/csw/bin/pkgutil") }
   end
 
   remote_file "/opt/tomcat.tar.gz" do
@@ -81,27 +90,6 @@ when 'solaris','solaris2'
     not_if { File.exists?("/usr/local/bin/freetype-config") }
   end
 
-
-  remote_file "giflib" do
-    source  node["url"]["giflib"]
-    owner "root"
-    group "root"
-    mode "775"
-    action :create_if_missing
-    sensitive true
-  end
-
-    bash 'Install giflib' do
-    user 'root'
-    cwd '/opt'
-    code <<-EOH
-    tar xvf giflib
-    cd giflib-5.1.1 && ./configure && gmake && gmake install
-    EOH
-    not_if { File.exists?("/usr/local/bin/giftool") }
-  end
-  
-
 remote_file "jpegsrc.v9.tar.gz" do
     source  node["url"]["jpegsrc"]
     owner "root"
@@ -148,7 +136,6 @@ bash 'Install jpegsrc' do
     crle -u -l /usr/local/lib
     cd swftools-0.9.2 && ./configure && gmake && gmake install
     EOH
-    returns [0,2]
     not_if { File.exists?("/usr/local/bin/png2swf") }
   end
 
@@ -172,22 +159,12 @@ bash 'Install jpegsrc' do
     not_if { File.exists?("/usr/local/bin/gs") }
   end
 
-  remote_file "/opt/ImageMagick.tar.gz" do
-    source  node["url"]["imagemagick"]
-   owner "root"
-    group "root"
-    mode "775"
-    action :create_if_missing
-    sensitive true
-  end
 
   bash 'Install ImageMagick' do
     user 'root'
     cwd '/opt'
     code <<-EOH
-    tar xvf ImageMagick.tar.gz
-    cd ImageMagick-6.9.0-10
-    ./configure && make && make install
+    /opt/csw/bin/pkgutil -y -i imagemagick
     EOH
     not_if { ::File.directory?("/opt/ImageMagick-6.9.0-10") }
   end
@@ -213,7 +190,7 @@ bash 'Install jpegsrc' do
   end
 
   remote_file node["alfresco"]["local"] do
-    source "ftp://#{creds['bamboo_username']}:#{creds['bamboo_password']}@ftp.alfresco.com/#{node["alfresco"]["downloadpath"]}"
+    source node["alfresco"]["downloadpath"]
     owner "root"
     group "root"
     mode "775"
@@ -242,3 +219,17 @@ end
   end
 
 end
+
+
+# set variables
+set prompt1 all
+set prompt2 y
+spawn pkgadd -d http://get.opencsw.org/now
+# Look for first prompt
+expect "?,??,q]:"
+# Send password aka $password
+send "$prompt1\r"
+# Look for second prompt
+expect "y,n,?]"
+# Send password aka $password
+send "$prompt2\r"
