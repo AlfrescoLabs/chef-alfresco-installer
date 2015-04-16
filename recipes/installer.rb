@@ -59,6 +59,10 @@ when 'windows'
     supports :status => true, :restart => true, :stop => true , :start => true
   end
 
+when 'solaris','solaris2'
+  
+  include recipe "tomcat"
+  
 else
 
   directory "/resources" do

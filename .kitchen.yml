@@ -1,5 +1,4 @@
 ---
-driver:
 driver_plugin: ssh
 driver_config:
   port: 22
@@ -21,19 +20,30 @@ platforms:
   driver_config:
     username: root
     hostname: 172.29.101.50
+- name:  solaris112
+  driver_config:
+    hostname: 172.29.101.64
+    username: root
+    password: alfresco1
 
 suites:
 - name: installer
+  excludes:
+    - solaris112
   run_list:
   - recipe[java-wrapper::java8]
   - recipe[alfresco-chef::installer]
   attributes: { localPath: false }
-  data_bags_path: ./data_bags
-  encrypted_data_bag_secret_key_path: ./encrypted_data_bag_secret_key
 - name: installerwin
   excludes:
     - suse12
     - redhat65
+    - solaris112
   attributes: { localPath: false }
-  data_bags_path: ./data_bags
-  encrypted_data_bag_secret_key_path: ./encrypted_data_bag_secret_key
+- name: solaris112
+  excludes:
+    - suse12
+    - redhat65
+    - ubuntu1204
+  - recipe[alfresco-chef::tomcat]
+  attributes: { localPath: false }
