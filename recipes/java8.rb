@@ -17,9 +17,6 @@
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
 #/
 
-creds = Chef::EncryptedDataBagItem.load("bamboo", "pass")
-creds["pass"]
-
 case node["platform"]
 when "windows"
 

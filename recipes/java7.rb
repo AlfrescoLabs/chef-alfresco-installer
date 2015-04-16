@@ -17,8 +17,6 @@
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
 #/
 
-creds = Chef::EncryptedDataBagItem.load("bamboo", "pass")
-creds["pass"]
 remote_file "/opt/jdk-7u75-linux-x64.tar.gz" do
    source node['java_7_download_path']
    checksum '460959219b534dc23e34d77abc306e180b364069b9fc2b2265d964fa2c281610'
