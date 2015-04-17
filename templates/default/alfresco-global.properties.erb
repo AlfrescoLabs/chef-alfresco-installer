@@ -6,13 +6,13 @@
 dir.root=<%= node["installer"]["directory"]%>/alf_data
 
 alfresco.context=alfresco
-alfresco.host=<%= node['fqdn']%>
-alfresco.port=8080
+alfresco.host=<%= node['ipaddress']%>
+alfresco.port=<%= node['alfresco.port']%>
 alfresco.protocol=http
 
 share.context=share
-share.host=<%= node['fqdn']%>
-share.port=8080
+share.host=<%= node['ipaddress']%>
+share.port=<%= node['share.port']%>
 share.protocol=http
 
 ### WQS Settings ###
@@ -49,3 +49,4 @@ dir.license.external=/opt/target/alf-installation
 
 ### BPM Engine ###
 system.workflow.engine.jbpm.enabled=false
+

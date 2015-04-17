@@ -27,6 +27,14 @@ platforms:
     password: alfresco1
 
 suites:
+- name: tomcat
+  excludes:
+    - suse12
+    - redhat65
+    - ubuntu1204
+  run_list:
+  - recipe[alfresco-chef::tomcat]
+  attributes: { localPath: false }
 - name: installer
   excludes:
     - solaris112
@@ -39,11 +47,4 @@ suites:
     - suse12
     - redhat65
     - solaris112
-  attributes: { localPath: false }
-- name: solaris112
-  excludes:
-    - suse12
-    - redhat65
-    - ubuntu1204
-  - recipe[alfresco-chef::tomcat]
   attributes: { localPath: false }

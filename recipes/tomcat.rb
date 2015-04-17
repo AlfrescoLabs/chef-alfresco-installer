@@ -7,6 +7,9 @@ when 'solaris','solaris2'
       /opt/target/alf-installation/tomcat/shared
       /opt/target/alf-installation/tomcat/shared/classes
       /opt/target/alf-installation/tomcat/shared/lib 
+      /opt/target/alf-installation/tomcat/conf
+      /opt/target/alf-installation/tomcat/conf/Catalina
+      /opt/target/alf-installation/tomcat/conf/Catalina/localhost
      ].each do |path|
     directory path do
       owner 'root'
@@ -16,14 +19,18 @@ when 'solaris','solaris2'
     end
   end
 
+  file "/opt/opencsw.sh" do
+  	  owner 'root'
+	  group 'root'
+	  mode '0755'
+	  action :create
+  end
+
   bash 'Install opencsw' do
     user 'root'
     cwd '/opt'
     code <<-EOH
-    pkgadd -d http://get.opencsw.org/now
-    all
-    y
-    /opt/csw/bin/pkgutil -U
+    expect opencsw.sh
     EOH
     not_if { File.exists?("/opt/csw/bin/pkgutil") }
   end
@@ -43,7 +50,7 @@ when 'solaris','solaris2'
     tar xvf tomcat.tar.gz
     mv #{node['tomcat']['package_name']}/* #{node['tomcat']['tomcat_folder']}
     EOH
-    not_if { ::File.directory?(node['tomcat']['tomcat_folder']) }
+    not_if { ::File.directory?("#{node['tomcat']['tomcat_folder']}/conf") }
   end
 
   template "#{node['tomcat']['tomcat_folder']}/conf/catalina.properties" do
@@ -166,8 +173,9 @@ bash 'Install jpegsrc' do
     code <<-EOH
     /opt/csw/bin/pkgutil -y -i imagemagick
     EOH
-    not_if { ::File.directory?("/opt/ImageMagick-6.9.0-10") }
+    not_if { File.exists?("/opt/csw/bin/convert") }
   end
+
 
   remote_file "/opt/openOffice.tar.gz" do
     source  node["url"]["openOffice"]
@@ -198,19 +206,19 @@ bash 'Install jpegsrc' do
     sensitive true
   end
 
-bash 'place alfresco in tomcat folder' do
-  user 'root'
-  cwd '/opt'
-  code <<-EOH
-  unzip alfresco.zip
-  cp -rf #{node["alfresco"]["zipfolder"]}/* #{node['tomcat']['installation_folder']}/
-  cp -rf  #{node['tomcat']['installation_folder']}/web-server/* #{node['tomcat']['tomcat_folder']}/
-  rm -rf #{node['tomcat']['installation_folder']}/web-server
-  EOH
-  not_if { File.exists?("#{node['tomcat']['installation_folder']}/web-server/shared/classes/alfresco-global.properties.sample") }
-end
+	bash 'place alfresco in tomcat folder' do
+	  user 'root'
+	  cwd '/opt'
+	  code <<-EOH
+	  unzip alfresco.zip
+	  cp -rf #{node["alfresco"]["zipfolder"]}/* #{node['tomcat']['installation_folder']}/
+	  cp -rf  #{node['tomcat']['installation_folder']}/web-server/* #{node['tomcat']['tomcat_folder']}/
+	  rm -rf #{node['tomcat']['installation_folder']}/web-server
+	  EOH
+	  not_if { File.exists?("#{node['tomcat']['installation_folder']}/web-server/shared/classes/alfresco-global.properties.sample") }
+	end
 
-  template node["alfresco-global"]["directory"] do
+  template "#{node['tomcat']['tomcat_folder']}/shared/classes/alfresco-global.properties" do
     source 'alfresco-global.properties.erb'
     owner 'root'
     group 'root'
@@ -218,18 +226,65 @@ end
     :top_level
   end
 
+  template "#{node['tomcat']['tomcat_folder']}/conf/catalina.properties" do
+    source 'catalina.properties.erb'
+    owner 'root'
+    group 'root'
+    mode '0755'
+    :top_level
+  end
+
+    template "#{node['tomcat']['tomcat_folder']}/conf/server.xml" do
+    source 'server.xml.erb'
+    owner 'root'
+    group 'root'
+    mode '0755'
+    :top_level
+  end
+
+  template "#{node['tomcat']['tomcat_folder']}/conf/context.xml" do
+    source 'context.xml.erb'
+    owner 'root'
+    group 'root'
+    mode '0755'
+    :top_level
+  end
+
+  template "#{node['tomcat']['tomcat_folder']}/conf/Catalina/localhost/solr4.xml" do
+    source 'solr4.xml.erb'
+    owner 'root'
+    group 'root'
+    mode '0755'
+    :top_level
+  end
+
+  template "#{node['tomcat']['tomcat_folder']}/conf/tomcat-users.xml" do
+    source 'tomcat-users.xml.erb'
+    owner 'root'
+    group 'root'
+    mode '0755'
+    :top_level
+  end
+
+  bash 'start_tomcat' do
+    user 'root'
+    cwd "#{node['tomcat']['tomcat_folder']}/bin"
+    code <<-EOH
+    ./startup.sh
+    touch running.tmp
+    EOH
+    environment = {"JAVA_OPTS" => "-XX:+DisableExplicitGC -Djava.awt.headless=true -Dalfresco.home=#{node['tomcat']['installation_folder']} -Dcom.sun.management.jmxremote -XX:ReservedCodeCacheSize=128m -XX:MaxPermSize=256M -Xms512M -Xmx2048M" }
+    not_if { File.exists?("#{node['tomcat']['tomcat_folder']}/bin/running.tmp") }
+  end
+
+  bash 'stop_tomcat' do
+    user 'root'
+    cwd "#{node['tomcat']['tomcat_folder']}/bin"
+    code <<-EOH
+    ./shutdown.sh
+    rm running.tmp
+    EOH
+    action :nothing
+  end
+
 end
-
-
-# set variables
-set prompt1 all
-set prompt2 y
-spawn pkgadd -d http://get.opencsw.org/now
-# Look for first prompt
-expect "?,??,q]:"
-# Send password aka $password
-send "$prompt1\r"
-# Look for second prompt
-expect "y,n,?]"
-# Send password aka $password
-send "$prompt2\r"

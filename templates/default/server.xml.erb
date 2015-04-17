@@ -19,8 +19,7 @@
      define subcomponents such as "Valves" at this level.
      Documentation at /docs/config/server.html
  -->
-<Server port="8005" shutdown="SHUTDOWN">
-  <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
+<Server port="<%=node['shutdown.port']%>" shutdown="SHUTDOWN">
   <!-- Security listener. Documentation at /docs/config/listeners.html
   <Listener className="org.apache.catalina.security.SecurityListener" />
   -->
@@ -29,9 +28,9 @@
   <!--Initialize Jasper prior to webapps are loaded. Documentation at /docs/jasper-howto.html -->
   <Listener className="org.apache.catalina.core.JasperListener" />
   <!-- Prevent memory leaks due to use of particular java/javax APIs-->
-  <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
+  <!-- Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" /-->
   <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
-  <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
+  <!-- Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" /-->
 
   <!-- Global JNDI resources
        Documentation at /docs/jndi-resources-howto.html
@@ -68,29 +67,33 @@
          APR (HTTP/AJP) Connector: /docs/apr.html
          Define a non-SSL HTTP/1.1 Connector on port 8080
     -->
-    <Connector port="8080" protocol="HTTP/1.1" URIEncoding="UTF-8"
+    <Connector port="<%=node['share.port']%>" URIEncoding="UTF-8" protocol="HTTP/1.1"
                connectionTimeout="20000"
-               redirectPort="8443" maxHttpHeaderSize="32768"/>
+               redirectPort="<%=node['solr.port.ssl']%>" maxHttpHeaderSize="32768" />
     <!-- A "Connector" using the shared thread pool-->
     <!--
-    <Connector executor="tomcatThreadPool"
-               port="8080" protocol="HTTP/1.1"
+    <Connector executor="tomcatThreadPool" 
+               port="8080" URIEncoding="UTF-8" protocol="HTTP/1.1"
                connectionTimeout="20000"
-               redirectPort="8443" />
+               redirectPort="8443" maxHttpHeaderSize="32768" />
     -->
     <!-- Define a SSL HTTP/1.1 Connector on port 8443
-         This connector uses the BIO implementation that requires the JSSE
-         style configuration. When using the APR/native implementation, the
-         OpenSSL style configuration is required as described in the APR/native
-         documentation -->
+         This connector uses the JSSE configuration, when using APR, the
+         connector should be using the OpenSSL style configuration
+         described in the APR documentation -->
     <!--
-    <Connector port="8443" protocol="org.apache.coyote.http11.Http11Protocol"
-               maxThreads="150" SSLEnabled="true" scheme="https" secure="true"
-               clientAuth="false" sslProtocol="TLS" />
+    <Connector port="8443" URIEncoding="UTF-8" protocol="HTTP/1.1" SSLEnabled="true"
+               maxThreads="150" scheme="https" secure="true"
+               clientAuth="false" sslProtocol="TLS" maxHttpHeaderSize="32768" />
     -->
 
     <!-- Define an AJP 1.3 Connector on port 8009 -->
-    <Connector port="8009" protocol="AJP/1.3" redirectPort="8443" />
+    <Connector port="<%=node['ajp.port']%>" URIEncoding="UTF-8" protocol="AJP/1.3" redirectPort="<%=node['solr.port.ssl']%>" />
+
+    <Connector port="<%=node['solr.port.ssl']%>" URIEncoding="UTF-8" protocol="org.apache.coyote.http11.Http11Protocol" SSLEnabled="true"
+               maxThreads="150" scheme="https" keystoreFile="<%=node['tomcat']['installation_folder']%>/alf_data/keystore/ssl.keystore" keystorePass="kT9X6oe68t" keystoreType="JCEKS"
+ secure="true" connectionTimeout="240000" truststoreFile="<%=node['tomcat']['installation_folder']%>/alf_data/keystore/ssl.truststore" truststorePass="kT9X6oe68t" truststoreType="JCEKS"
+               clientAuth="want" sslProtocol="TLS" allowUnsafeLegacyRenegotiation="true" maxHttpHeaderSize="32768" />  
 
 
     <!-- An Engine represents the entry point (within Catalina) that processes

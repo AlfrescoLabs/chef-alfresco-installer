@@ -73,7 +73,7 @@ server.loader=
 #     "foo/bar.jar": Add bar.jar as a class repository
 # Please note that for single jars, e.g. bar.jar, you need the URL form
 # starting with file:.
-shared.loader=
+shared.loader=${catalina.base}/shared/classes,${catalina.base}/shared/lib/*.jar
 
 # List of JAR files that should not be scanned using the JarScanner
 # functionality. This is typically used to scan JARs for configuration
@@ -131,5 +131,3 @@ tomcat.util.buf.StringCache.byte.enabled=true
 #tomcat.util.buf.StringCache.char.enabled=true
 #tomcat.util.buf.StringCache.trainThreshold=500000
 #tomcat.util.buf.StringCache.cacheSize=5000
-
-shared.loader=${catalina.base}/shared/classes,${catalina.base}/shared/lib/*.jar
