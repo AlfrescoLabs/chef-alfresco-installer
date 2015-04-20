@@ -65,7 +65,7 @@ describe 'When WebScripts page is up the http status' do
 end
 
 describe 'When we are on the Web Scripts main page, the body'  do
-  it { expect(connection2.get('/alfresco/s/index').body).to include("505 Web Scripts") }
+  it { expect(connection2.get('/alfresco/s/index').body).to include("Browse all Web Scripts") }
 end
 
 describe 'When webdav is up the http response status' do

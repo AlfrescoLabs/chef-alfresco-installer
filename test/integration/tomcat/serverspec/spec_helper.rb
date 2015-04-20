@@ -9,6 +9,6 @@ require 'faraday'
 set :backend, :exec
 
 RSpec.configure do |c|
-  c.output_stream = File.open('/resources/serverspec-result1.xml', 'w')
+  c.output_stream = File.open('/resources/serverspec-result2.xml', 'w')
   c.formatter = 'JUnit'
 end

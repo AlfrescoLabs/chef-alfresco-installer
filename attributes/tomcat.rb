@@ -1,3 +1,7 @@
+default[:install_alfresco]=true
+default[:install_share]=true
+default[:install_solr4]=true
+
 #tomcat
 default['tomcat']['download_url']='http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.53/bin/apache-tomcat-7.0.53.tar.gz'
 default['tomcat']['package_name']='apache-tomcat-7.0.53'

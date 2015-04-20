@@ -1,24 +1,6 @@
 case node['platform_family']
 when 'solaris','solaris2'
 
-  %w[ /opt/target
-      /opt/target/alf-installation
-      /opt/target/alf-installation/tomcat
-      /opt/target/alf-installation/tomcat/shared
-      /opt/target/alf-installation/tomcat/shared/classes
-      /opt/target/alf-installation/tomcat/shared/lib 
-      /opt/target/alf-installation/tomcat/conf
-      /opt/target/alf-installation/tomcat/conf/Catalina
-      /opt/target/alf-installation/tomcat/conf/Catalina/localhost
-     ].each do |path|
-    directory path do
-      owner 'root'
-      group 'root'
-      mode '0775'
-      action :create
-    end
-  end
-
   file "/opt/opencsw.sh" do
   	  owner 'root'
 	  group 'root'
@@ -33,45 +15,6 @@ when 'solaris','solaris2'
     expect opencsw.sh
     EOH
     not_if { File.exists?("/opt/csw/bin/pkgutil") }
-  end
-
-  remote_file "/opt/tomcat.tar.gz" do
-    source node['tomcat']['download_url']
-    owner "root"
-    group "root"
-    mode "775"
-    action :create_if_missing
-  end
-
-  bash 'unzip tomcat' do
-    user 'root'
-    cwd '/opt'
-    code <<-EOH
-    tar xvf tomcat.tar.gz
-    mv #{node['tomcat']['package_name']}/* #{node['tomcat']['tomcat_folder']}
-    EOH
-    not_if { ::File.directory?("#{node['tomcat']['tomcat_folder']}/conf") }
-  end
-
-  template "#{node['tomcat']['tomcat_folder']}/conf/catalina.properties" do
-    source 'catalina.properties.erb'
-    owner 'root'
-    group 'root'
-    mode '0644'
-  end
-
-  template "#{node['tomcat']['tomcat_folder']}/conf/server.xml" do
-    source 'server.xml.erb'
-    owner 'root'
-    group 'root'
-    mode '0644'
-  end
-
-  template "#{node['tomcat']['tomcat_folder']}/conf/context.xml" do
-    source 'context.xml.erb'
-    owner 'root'
-    group 'root'
-    mode '0644'
   end
 
   package 'gcc-45' do
@@ -197,6 +140,66 @@ bash 'Install jpegsrc' do
     not_if { File.exists?("/opt/openOffice/openoffice.org3/program/soffice") }
   end
 
+end
+
+
+  %w[ /opt/target
+      /opt/target/alf-installation
+      /opt/target/alf-installation/tomcat
+      /opt/target/alf-installation/tomcat/shared
+      /opt/target/alf-installation/tomcat/shared/classes
+      /opt/target/alf-installation/tomcat/shared/lib 
+      /opt/target/alf-installation/tomcat/conf
+      /opt/target/alf-installation/tomcat/conf/Catalina
+      /opt/target/alf-installation/tomcat/conf/Catalina/localhost
+     ].each do |path|
+    directory path do
+      owner 'root'
+      group 'root'
+      mode '0775'
+      action :create
+    end
+  end
+
+  remote_file "/opt/tomcat.tar.gz" do
+    source node['tomcat']['download_url']
+    owner "root"
+    group "root"
+    mode "775"
+    action :create_if_missing
+  end
+
+  bash 'unzip tomcat' do
+    user 'root'
+    cwd '/opt'
+    code <<-EOH
+    tar xvf tomcat.tar.gz
+    mv #{node['tomcat']['package_name']}/* #{node['tomcat']['tomcat_folder']}
+    EOH
+    not_if { ::File.directory?("#{node['tomcat']['tomcat_folder']}/conf") }
+  end
+
+  template "#{node['tomcat']['tomcat_folder']}/conf/catalina.properties" do
+    source 'catalina.properties.erb'
+    owner 'root'
+    group 'root'
+    mode '0644'
+  end
+
+  template "#{node['tomcat']['tomcat_folder']}/conf/server.xml" do
+    source 'server.xml.erb'
+    owner 'root'
+    group 'root'
+    mode '0644'
+  end
+
+  template "#{node['tomcat']['tomcat_folder']}/conf/context.xml" do
+    source 'context.xml.erb'
+    owner 'root'
+    group 'root'
+    mode '0644'
+  end
+
   remote_file node["alfresco"]["local"] do
     source node["alfresco"]["downloadpath"]
     owner "root"
@@ -206,17 +209,17 @@ bash 'Install jpegsrc' do
     sensitive true
   end
 
-	bash 'place alfresco in tomcat folder' do
-	  user 'root'
-	  cwd '/opt'
-	  code <<-EOH
-	  unzip alfresco.zip
-	  cp -rf #{node["alfresco"]["zipfolder"]}/* #{node['tomcat']['installation_folder']}/
-	  cp -rf  #{node['tomcat']['installation_folder']}/web-server/* #{node['tomcat']['tomcat_folder']}/
-	  rm -rf #{node['tomcat']['installation_folder']}/web-server
-	  EOH
-	  not_if { File.exists?("#{node['tomcat']['installation_folder']}/web-server/shared/classes/alfresco-global.properties.sample") }
-	end
+  bash 'place alfresco in tomcat folder' do
+    user 'root'
+    cwd '/opt'
+    code <<-EOH
+    unzip alfresco.zip
+    cp -rf #{node["alfresco"]["zipfolder"]}/* #{node['tomcat']['installation_folder']}/
+    cp -rf  #{node['tomcat']['installation_folder']}/web-server/* #{node['tomcat']['tomcat_folder']}/
+    rm -rf #{node['tomcat']['installation_folder']}/web-server
+    EOH
+    not_if { File.exists?("#{node['tomcat']['installation_folder']}/web-server/shared/classes/alfresco-global.properties.sample") }
+  end
 
   template "#{node['tomcat']['tomcat_folder']}/shared/classes/alfresco-global.properties" do
     source 'alfresco-global.properties.erb'
@@ -266,25 +269,27 @@ bash 'Install jpegsrc' do
     :top_level
   end
 
-  bash 'start_tomcat' do
-    user 'root'
-    cwd "#{node['tomcat']['tomcat_folder']}/bin"
-    code <<-EOH
-    ./startup.sh
-    touch running.tmp
-    EOH
-    environment = {"JAVA_OPTS" => "-XX:+DisableExplicitGC -Djava.awt.headless=true -Dalfresco.home=#{node['tomcat']['installation_folder']} -Dcom.sun.management.jmxremote -XX:ReservedCodeCacheSize=128m -XX:MaxPermSize=256M -Xms512M -Xmx2048M" }
-    not_if { File.exists?("#{node['tomcat']['tomcat_folder']}/bin/running.tmp") }
-  end
+case node['platform_family']
+when 'solaris','solaris2'
 
-  bash 'stop_tomcat' do
-    user 'root'
-    cwd "#{node['tomcat']['tomcat_folder']}/bin"
-    code <<-EOH
-    ./shutdown.sh
-    rm running.tmp
-    EOH
+  service "application/tomcat" do
+    supports :restart => true, :disable => true
     action :nothing
   end
+
+  template "#{node['tomcat']['installation_folder']}/tomcat.xml" do
+    source 'solaris-tomcat-service.xml.erb'
+    owner 'root'
+    group 'root'
+    mode '0755'
+    :top_level
+  end
+
+  execute 'Import solaris tomcat service' do
+    user 'root'
+    command "svccfg import #{node['tomcat']['installation_folder']}/tomcat.xml"
+    notifies :enable, 'service[application/tomcat]'
+  end
+
 
 end
