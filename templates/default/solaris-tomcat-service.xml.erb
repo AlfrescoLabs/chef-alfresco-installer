@@ -8,8 +8,8 @@
    <exec_method
       type='method'
       name='start'
-      exec='<%=node['tomcat']['tomcat_folder']%>/bin/catalina.sh start'
-      timeout_seconds='30' >
+      exec='<%=node['tomcat']['tomcat_folder']%>/bin/startup.sh'
+      timeout_seconds='60' >
    <method_context>
       <method_environment>
          <envvar name="JAVA_OPTS" value="-XX:+DisableExplicitGC -Djava.awt.headless=true -Dalfresco.home=<%=node['tomcat']['installation_folder']%> -Dcom.sun.management.jmxremote -XX:ReservedCodeCacheSize=128m -XX:MaxPermSize=256M -Xms512M -Xmx2048M" />
@@ -20,7 +20,7 @@
    <exec_method
       type='method'
       name='stop'
-      exec='<%=node['tomcat']['tomcat_folder']%>/bin/catalina.sh stop'
+      exec='<%=node['tomcat']['tomcat_folder']%>/bin/shutdown.sh'
       timeout_seconds='60' />
 
    <instance name='default' enabled='false' />

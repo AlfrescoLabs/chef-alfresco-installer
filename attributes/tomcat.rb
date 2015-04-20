@@ -1,6 +1,6 @@
-default[:install_alfresco]=true
-default[:install_share]=true
-default[:install_solr4]=true
+default['install_alfresco']=true
+default['install_share']=true
+default['install_solr4']=true
 
 #tomcat
 default['tomcat']['download_url']='ftp://172.29.103.222/tomcat/apache-tomcat-7.0.53.tar.gz'

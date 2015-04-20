@@ -1,10 +1,17 @@
 case node['platform_family']
 when 'solaris','solaris2'
 
+  template "/opt/opencsw.sh" do
+    source 'opencsw.sh.erb'
+    owner 'root'
+    group 'root'
+    mode 00755
+  end
+
   file "/opt/opencsw.sh" do
-  	  owner 'root'
+  	owner 'root'
 	  group 'root'
-	  mode '0755'
+	  mode 00755
 	  action :create
   end
 
@@ -25,7 +32,7 @@ when 'solaris','solaris2'
     source  node["url"]["freetype"]
     owner "root"
     group "root"
-    mode "775"
+    mode 00775
     action :create_if_missing
     sensitive true
   end
@@ -44,7 +51,7 @@ remote_file "/opt/jpegsrc.v9.tar.gz" do
     source  node["url"]["jpegsrc"]
     owner "root"
     group "root"
-    mode "775"
+    mode 00775
     action :create_if_missing
     sensitive true
   end
@@ -63,16 +70,16 @@ bash 'Install jpegsrc' do
     source  node["url"]["xpdf"]
     owner "root"
     group "root"
-    mode "775"
+    mode 00775
     action :create_if_missing
     sensitive true
   end
 
   remote_file "/opt/swftools-0.9.2.tar.gz" do
-    source  node["url"]["xpdf"]
+    source  node["url"]["swftools"]
     owner "root"
     group "root"
-    mode "775"
+    mode 00775
     action :create_if_missing
     sensitive true
   end
@@ -93,7 +100,7 @@ bash 'Install jpegsrc' do
     source  node["url"]["ghostscript"]
     owner "root"
     group "root"
-    mode "775"
+    mode 00775
     action :create_if_missing
     sensitive true
   end
@@ -142,6 +149,8 @@ bash 'Install jpegsrc' do
 
 end
 
+installation_root = node['tomcat']['installation_folder']
+tomcat_root = node['tomcat']['tomcat_folder']
 
   %w[ /opt/target
       /opt/target/alf-installation
@@ -156,7 +165,7 @@ end
     directory path do
       owner 'root'
       group 'root'
-      mode '0775'
+      mode 00775
       action :create
     end
   end
@@ -165,7 +174,7 @@ end
     source node['tomcat']['download_url']
     owner "root"
     group "root"
-    mode "775"
+    mode 00775
     action :create_if_missing
   end
 
@@ -174,37 +183,51 @@ end
     cwd '/opt'
     code <<-EOH
     tar xvf tomcat.tar.gz
-    mv #{node['tomcat']['package_name']}/* #{node['tomcat']['tomcat_folder']}
+    mv -rf #{node['tomcat']['package_name']}/* #{tomcat_root}
     EOH
-    not_if { ::File.directory?("#{node['tomcat']['tomcat_folder']}/conf") }
+    not_if { ::File.directory?("#{tomcat_root}/bin") }
   end
 
-  template "#{node['tomcat']['tomcat_folder']}/conf/catalina.properties" do
+  template "#{tomcat_root}/conf/catalina.properties" do
     source 'catalina.properties.erb'
     owner 'root'
     group 'root'
-    mode '0644'
+    mode 00755
   end
 
-  template "#{node['tomcat']['tomcat_folder']}/conf/server.xml" do
+  template "#{tomcat_root}/conf/server.xml" do
     source 'server.xml.erb'
     owner 'root'
     group 'root'
-    mode '0644'
+    mode 00755
   end
 
-  template "#{node['tomcat']['tomcat_folder']}/conf/context.xml" do
+  template "#{tomcat_root}/conf/context.xml" do
     source 'context.xml.erb'
     owner 'root'
     group 'root'
-    mode '0644'
+    mode 00755
+  end
+
+  template "#{tomcat_root}/conf/Catalina/localhost/solr4.xml" do
+    source 'solr4.xml.erb'
+    owner 'root'
+    group 'root'
+    mode 00755
+  end
+
+  template "#{tomcat_root}/conf/tomcat-users.xml" do
+    source 'tomcat-users.xml.erb'
+    owner 'root'
+    group 'root'
+    mode 00755
   end
 
   remote_file node["alfresco"]["local"] do
     source node["alfresco"]["downloadpath"]
     owner "root"
     group "root"
-    mode "775"
+    mode 00775
     action :create_if_missing
     sensitive true
   end
@@ -214,60 +237,22 @@ end
     cwd '/opt'
     code <<-EOH
     unzip alfresco.zip
-    cp -rf #{node["alfresco"]["zipfolder"]}/* #{node['tomcat']['installation_folder']}/
-    cp -rf  #{node['tomcat']['installation_folder']}/web-server/* #{node['tomcat']['tomcat_folder']}/
-    rm -rf #{node['tomcat']['installation_folder']}/web-server
+    cp -rf #{node["alfresco"]["zipfolder"]}/* #{installation_root}/
+    cp -rf  #{installation_root}/web-server/* #{tomcat_root}/
+    rm -rf #{installation_root}/web-server
     EOH
-    not_if { File.exists?("#{node['tomcat']['installation_folder']}/web-server/shared/classes/alfresco-global.properties.sample") }
+    not_if { File.exists?("#{installation_root}/web-server/shared/classes/alfresco-global.properties.sample") }
   end
 
-  template "#{node['tomcat']['tomcat_folder']}/shared/classes/alfresco-global.properties" do
+  template "#{tomcat_root}/shared/classes/alfresco-global.properties" do
     source 'alfresco-global.properties.erb'
     owner 'root'
     group 'root'
-    mode '0755'
+    mode 00755
     :top_level
   end
 
-  template "#{node['tomcat']['tomcat_folder']}/conf/catalina.properties" do
-    source 'catalina.properties.erb'
-    owner 'root'
-    group 'root'
-    mode '0755'
-    :top_level
-  end
 
-    template "#{node['tomcat']['tomcat_folder']}/conf/server.xml" do
-    source 'server.xml.erb'
-    owner 'root'
-    group 'root'
-    mode '0755'
-    :top_level
-  end
-
-  template "#{node['tomcat']['tomcat_folder']}/conf/context.xml" do
-    source 'context.xml.erb'
-    owner 'root'
-    group 'root'
-    mode '0755'
-    :top_level
-  end
-
-  template "#{node['tomcat']['tomcat_folder']}/conf/Catalina/localhost/solr4.xml" do
-    source 'solr4.xml.erb'
-    owner 'root'
-    group 'root'
-    mode '0755'
-    :top_level
-  end
-
-  template "#{node['tomcat']['tomcat_folder']}/conf/tomcat-users.xml" do
-    source 'tomcat-users.xml.erb'
-    owner 'root'
-    group 'root'
-    mode '0755'
-    :top_level
-  end
 
 case node['platform_family']
 when 'solaris','solaris2'
@@ -277,19 +262,17 @@ when 'solaris','solaris2'
     action :nothing
   end
 
-  template "#{node['tomcat']['installation_folder']}/tomcat.xml" do
+  template "#{installation_root}/tomcat.xml" do
     source 'solaris-tomcat-service.xml.erb'
     owner 'root'
     group 'root'
-    mode '0755'
-    :top_level
+    mode 00755
   end
 
   execute 'Import solaris tomcat service' do
     user 'root'
-    command "svccfg import #{node['tomcat']['installation_folder']}/tomcat.xml"
+    command "svccfg import #{installation_root}/tomcat.xml"
     notifies :enable, 'service[application/tomcat]'
   end
-
 
 end
