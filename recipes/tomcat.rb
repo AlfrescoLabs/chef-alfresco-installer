@@ -40,7 +40,7 @@ when 'solaris','solaris2'
     not_if { File.exists?("/usr/local/bin/freetype-config") }
   end
 
-remote_file "jpegsrc.v9.tar.gz" do
+remote_file "/opt/jpegsrc.v9.tar.gz" do
     source  node["url"]["jpegsrc"]
     owner "root"
     group "root"
@@ -59,7 +59,7 @@ bash 'Install jpegsrc' do
     not_if { File.exists?("/usr/local/bin/jpeg2swf") }
   end
 
-  remote_file "xpdf-3.04.tar.gz" do
+  remote_file "/opt/xpdf-3.04.tar.gz" do
     source  node["url"]["xpdf"]
     owner "root"
     group "root"
@@ -68,7 +68,7 @@ bash 'Install jpegsrc' do
     sensitive true
   end
 
-  remote_file "swftools-0.9.2.tar.gz" do
+  remote_file "/opt/swftools-0.9.2.tar.gz" do
     source  node["url"]["xpdf"]
     owner "root"
     group "root"

@@ -3,7 +3,7 @@ default[:install_share]=true
 default[:install_solr4]=true
 
 #tomcat
-default['tomcat']['download_url']='http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.53/bin/apache-tomcat-7.0.53.tar.gz'
+default['tomcat']['download_url']='ftp://172.29.103.222/tomcat/apache-tomcat-7.0.53.tar.gz'
 default['tomcat']['package_name']='apache-tomcat-7.0.53'
 default['tomcat']['target_folder']="/opt/target"
 default['tomcat']['installation_folder']="/opt/target/alf-installation"
@@ -15,12 +15,12 @@ default["alfresco"]["downloadpath"] = "ftp://172.29.103.222/chef-resources/alfre
 default["alfresco"]["zipfolder"] = "alfresco-enterprise-5.0.2-SNAPSHOT"
 
 #external apps
-default["url"]["freetype"]="http://download.savannah.gnu.org/releases/freetype/freetype-2.5.5.tar.gz"
-default["url"]["jpegsrc"]="http://www.ijg.org/files/jpegsrc.v9.tar.gz"
-default["url"]["ghostscript"]="http://downloads.ghostscript.com/public/ghostscript-9.15.tar.gz"
-default["url"]["openOffice"]="http://adfinis-sygroup.ch/file-exchange-public/tag-AOO340-x86/Apache_OpenOffice_incubating_3.4.0_Solaris_x86_install-arc_en-US.tar.gz"
-default["url"]["xpdf"]="ftp://ftp.foolabs.com/pub/xpdf/xpdf-3.04.tar.gz"
-default["url"]["swftools"]="http://www.swftools.org/swftools-0.9.2.tar.gz"
+default["url"]["freetype"]="ftp://172.29.103.222/external_apps/freetype-2.5.5.tar.gz"
+default["url"]["jpegsrc"]="ftp://172.29.103.222/external_apps/jpegsrc.v9.tar.gz"
+default["url"]["ghostscript"]="ftp://172.29.103.222/external_apps/ghostscript-9.15.tar.gz"
+default["url"]["openOffice"]="ftp://172.29.103.222/external_apps/Apache_OpenOffice_incubating_3.4.0_Solaris_x86_install-arc_en-US.tar.gz"
+default["url"]["xpdf"]="ftp://172.29.103.222/external_apps/xpdf-3.04.tar.gz"
+default["url"]["swftools"]="ftp://172.29.103.222/external_apps/swftools-0.9.2.tar.gz"
 
 
 #alfresco global properties
