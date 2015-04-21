@@ -33,6 +33,7 @@ suites:
     - redhat65
     - ubuntu1204
   run_list:
+  - recipe[java-wrapper::java8]
   - recipe[alfresco-chef::tomcat]
   attributes: { localPath: false }
 - name: installer
