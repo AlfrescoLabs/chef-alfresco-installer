@@ -35,13 +35,14 @@ default['ajp.port']="8009"
 default['db.driver']="org.postgresql.Driver"
 default['db.username']="alfresco"
 default['db.password']="admin"
-default['db.name']="alf_new"
+default['db.name']="alf_solaris"
 default['db.url']="jdbc:postgresql://172.29.100.200:5432/${db.name}"
 default['db.pool.max']="275"
 default['db.pool.validate.query']="SELECT 1"
 
 #external apps
-
+case node['platform_family']
+when 'solaris2'
 default['ooo.exe']="/opt/openOffice/openoffice.org3/program/soffice"
 default['ooo.enabled']="true"
 default['ooo.port']="8100"
@@ -52,6 +53,8 @@ default['swf.languagedir']=""
 default['jodconverter.enabled']="false"
 default['jodconverter.officeHome']=""
 default['jodconverter.portNumbers']=""
+else
+end
 
 #ftp
 default['ftp.port']="21"

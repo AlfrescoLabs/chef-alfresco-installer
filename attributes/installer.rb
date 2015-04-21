@@ -33,7 +33,6 @@ when 'windows'
   default["installer"]["checksum"] = 'b635de4849eb9c3c508fcf7492ed1a286c6d231d88318abdfb97242581270d45'
   default["alfresco-global"]["directory"] = "C:\\alf-installation\\tomcat\\shared\\classes\\alfresco-global.properties'"
   default["installer"]["directory"] = "C:\\alf-installation"
-when 'solaris'
 else
   default["installer"]["local"] = "/resources/alfresco.bin"
   default["installer"]["downloadpath"] = "ftp://172.29.103.222/chef-resources/alfresco-enterprise-5.0-installer-linux-x64.bin"

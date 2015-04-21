@@ -53,7 +53,6 @@ remote_file "/opt/jpegsrc.v9.tar.gz" do
     group "root"
     mode 00775
     action :create_if_missing
-    sensitive true
   end
 
 bash 'Install jpegsrc' do
@@ -72,7 +71,6 @@ bash 'Install jpegsrc' do
     group "root"
     mode 00775
     action :create_if_missing
-    sensitive true
   end
 
   remote_file "/opt/swftools-0.9.2.tar.gz" do
@@ -81,7 +79,6 @@ bash 'Install jpegsrc' do
     group "root"
     mode 00775
     action :create_if_missing
-    sensitive true
   end
 
   bash 'Install swftools' do
@@ -102,7 +99,6 @@ bash 'Install jpegsrc' do
     group "root"
     mode 00775
     action :create_if_missing
-    sensitive true
   end
 
   bash 'Install ghostscript' do
@@ -133,7 +129,6 @@ bash 'Install jpegsrc' do
     group "root"
     mode "775"
     action :create_if_missing
-    sensitive true
   end
 
   bash 'Install openOffice' do
@@ -152,15 +147,16 @@ end
 installation_root = node['tomcat']['installation_folder']
 tomcat_root = node['tomcat']['tomcat_folder']
 
+  directory "/resources" do
+    owner "root"
+    group "root"
+    mode "0775"
+    action :create
+  end
+
   %w[ /opt/target
       /opt/target/alf-installation
       /opt/target/alf-installation/tomcat
-      /opt/target/alf-installation/tomcat/shared
-      /opt/target/alf-installation/tomcat/shared/classes
-      /opt/target/alf-installation/tomcat/shared/lib 
-      /opt/target/alf-installation/tomcat/conf
-      /opt/target/alf-installation/tomcat/conf/Catalina
-      /opt/target/alf-installation/tomcat/conf/Catalina/localhost
      ].each do |path|
     directory path do
       owner 'root'
@@ -183,9 +179,23 @@ tomcat_root = node['tomcat']['tomcat_folder']
     cwd '/opt'
     code <<-EOH
     tar xvf tomcat.tar.gz
-    mv -rf #{node['tomcat']['package_name']}/* #{tomcat_root}
+    mv #{node['tomcat']['package_name']}/* #{tomcat_root}
     EOH
     not_if { ::File.directory?("#{tomcat_root}/bin") }
+  end
+
+  %w[ /opt/target/alf-installation/tomcat/shared
+      /opt/target/alf-installation/tomcat/shared/classes
+      /opt/target/alf-installation/tomcat/shared/lib
+      /opt/target/alf-installation/tomcat/conf/Catalina
+      /opt/target/alf-installation/tomcat/conf/Catalina/localhost
+     ].each do |path|
+    directory path do
+      owner 'root'
+      group 'root'
+      mode 00775
+      action :create
+    end
   end
 
   template "#{tomcat_root}/conf/catalina.properties" do
@@ -193,6 +203,7 @@ tomcat_root = node['tomcat']['tomcat_folder']
     owner 'root'
     group 'root'
     mode 00755
+    :top_level
   end
 
   template "#{tomcat_root}/conf/server.xml" do
@@ -200,6 +211,7 @@ tomcat_root = node['tomcat']['tomcat_folder']
     owner 'root'
     group 'root'
     mode 00755
+    :top_level
   end
 
   template "#{tomcat_root}/conf/context.xml" do
@@ -207,6 +219,7 @@ tomcat_root = node['tomcat']['tomcat_folder']
     owner 'root'
     group 'root'
     mode 00755
+    :top_level
   end
 
   template "#{tomcat_root}/conf/Catalina/localhost/solr4.xml" do
@@ -214,6 +227,7 @@ tomcat_root = node['tomcat']['tomcat_folder']
     owner 'root'
     group 'root'
     mode 00755
+    :top_level
   end
 
   template "#{tomcat_root}/conf/tomcat-users.xml" do
@@ -221,6 +235,7 @@ tomcat_root = node['tomcat']['tomcat_folder']
     owner 'root'
     group 'root'
     mode 00755
+    :top_level
   end
 
   remote_file node["alfresco"]["local"] do
@@ -252,13 +267,17 @@ tomcat_root = node['tomcat']['tomcat_folder']
     :top_level
   end
 
-
-
 case node['platform_family']
 when 'solaris','solaris2'
 
   service "application/tomcat" do
-    supports :restart => true, :disable => true
+    supports :restart => true, :disable => true, :enable => true
+    action :nothing
+    notifies :run, 'execute[wait for tomcat]', :immediately
+  end
+
+  execute 'wait for tomcat' do
+    command 'sleep 100'
     action :nothing
   end
 
@@ -272,7 +291,7 @@ when 'solaris','solaris2'
   execute 'Import solaris tomcat service' do
     user 'root'
     command "svccfg import #{installation_root}/tomcat.xml"
-    notifies :enable, 'service[application/tomcat]'
+    notifies :restart, 'service[application/tomcat]'
   end
 
 end
