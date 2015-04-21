@@ -31,7 +31,18 @@ default['share.port']="8080"
 default['shutdown.port']="8005"
 default['ajp.port']="8009"
 
+#ftp
+default['ftp.port']="21"
+
+#solr
+default['index.subsystem.name']="solr4"
+default['dir.keystore']="${dir.root}/keystore"
+default['solr.port.ssl']="8443"
+
+case node['platform_family']
+when 'solaris2'
 #db prop
+
 default['db.driver']="org.postgresql.Driver"
 default['db.username']="alfresco"
 default['db.password']="admin"
@@ -41,8 +52,6 @@ default['db.pool.max']="275"
 default['db.pool.validate.query']="SELECT 1"
 
 #external apps
-case node['platform_family']
-when 'solaris2'
 default['ooo.exe']="/opt/openOffice/openoffice.org3/program/soffice"
 default['ooo.enabled']="true"
 default['ooo.port']="8100"
@@ -53,13 +62,27 @@ default['swf.languagedir']=""
 default['jodconverter.enabled']="false"
 default['jodconverter.officeHome']=""
 default['jodconverter.portNumbers']=""
+
 else
+
+default['db.driver']="org.postgresql.Driver"
+default['db.username']="alfresco"
+default['db.password']="admin"
+default['db.name']="alfresco"
+default['db.url']="jdbc:postgresql://localhost:5432/${db.name}"
+default['db.pool.max']="275"
+default['db.pool.validate.query']="SELECT 1"
+
+#external apps
+default['ooo.exe']="/opt/target/alf-installation/libreoffice/program/soffice"
+default['ooo.enabled']="false"
+default['ooo.port']="8100"
+default['img.dyn']="/opt/target/alf-installation/common/lib"
+default['img.exe']="/opt/target/alf-installation/common/bin/convert"
+default['swf.exe']="/opt/target/alf-installation/common/bin/pdf2swf"
+default['swf.languagedir']="/opt/target/alf-installation/common/japanese"
+default['jodconverter.enabled']="true"
+default['jodconverter.officeHome']="/opt/target/alf-installation/libreoffice/"
+default['jodconverter.portNumbers']="8100"
+
 end
-
-#ftp
-default['ftp.port']="21"
-
-#solr
-default['index.subsystem.name']="solr4"
-default['dir.keystore']="${dir.root}/keystore"
-default['solr.port.ssl']="8443"
