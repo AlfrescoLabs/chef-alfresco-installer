@@ -19,6 +19,7 @@ share.protocol=http
 <%= render "ag-wqs.erb" %>
 
 ### FTP Settings ###
+ftp.enabled=true
 <%= render 'ag-ftp.erb' %>
 
 ### database connection properties ###
@@ -49,4 +50,71 @@ dir.license.external=/opt/target/alf-installation
 
 ### BPM Engine ###
 system.workflow.engine.jbpm.enabled=false
+
+### E-mail site invitation setting ###
+notification.email.siteinvite=true
+
+#CIFS config
+cifs.enabled=true
+cifs.serverName=${localname}A
+cifs.hostannounce=true
+cifs.domain=
+#SMB/CIFS
+cifs.tcpipSMB.port=4445
+cifs.netBIOSSMB.namePort=4137
+cifs.netBIOSSMB.datagramPort=4138
+cifs.netBIOSSMB.sessionPort=4139
+
+#NFS config
+nfs.enabled=true
+nfs.mountServerPort=2250
+nfs.nfsServerPort=2249
+nfs.rpcRegisterPort=0
+nfs.portMapperPort=1111
+nfs.portMapperEnabled=true
+nfs.sessionDebug=ERROR
+nfs.mountServerDebug=true
+nfs.user.mappings=admin
+nfs.user.mappings.value.admin.uid=0
+nfs.user.mappings.value.admin.gid=0
+nfs.user.mappings.value.corinaz.uid=1200
+nfs.user.mappings.value.corinaz.gid=1200
+
+# Mail config
+mail.host=172.29.100.164
+mail.port=587
+mail.transport.protocol=smtp
+mail.username=qalabtest@alfness.com
+mail.password=Alf1234
+mail.smtp.auth=true
+
+email.inbound.enabled=true
+email.server.allowed.senders=.*
+email.server.blocked.senders=
+email.server.enabled=true
+email.server.port=5025
+email.server.domain=alfness.com
+email.inbound.unknownUser=anonymous
+
+imap.server.enabled=true
+imap.server.host=<%= node['ipaddress']%>
+imap.server.port=143
+
+### Cluster configuration ###
+#alfresco.cluster.enabled=true
+#alfresco.cluster.name=alfRH104
+#alfresco.hazelcast.tcp.config=<members>172.29.100.102,172.29.100.105</members>
+#alfresco.hazelcast.specify.interface=true
+#alfresco.hazelcast.bind.interface=172.29.100.*
+#alfresco.hazelcast.port=5701
+#alfresco.hazelcast.autoinc.port=false
+#alfresco.hazelcast.mancenter.enabled=true
+##alfresco.hazelcast.mancenter.url=http://172.30.40.186:8080/mancenter-2.5
+
+### Replication ###
+#replication.enabled=true
+#dir.remote=/opt/Replicate
+#dir.contentstore=${dir.remote}/contentstore
+#dir.contentstore.deleted=${dir.remote}/contentstore.deleted
+#dir.auditcontentstore=${dir.remote}/audit.contentstore
 
