@@ -63,8 +63,8 @@ when 'solaris','solaris2'
     tar xvf #{node['java']['package_name']}
     rm -rf /usr/java/*
     mv #{node['java']['java_folder']}/* /usr/java/
+    export PATH=/usr/java/bin:$PATH
     EOH
-    not_if { ::File.directory?("/usr/java/") }
   end
 
 else
