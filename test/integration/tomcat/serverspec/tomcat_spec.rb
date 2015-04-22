@@ -34,10 +34,6 @@ connection = Faraday.new(:url => "http://localhost:8080",
 	:headers => {'Host' => 'localhost'}) do |faraday|
         faraday.adapter Faraday.default_adapter
       end
-      
-describe 'When we are on the root of the server, the body' do
-	it { expect(connection.get('').body).to include("Welcome to Alfresco!") }
-end
 
 describe 'When share is up the http status' do
   it { expect(connection.get('/share/page').status).to eq 200 }
