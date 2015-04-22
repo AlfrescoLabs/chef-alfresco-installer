@@ -82,7 +82,7 @@ default['img.exe']="/opt/target/alf-installation/common/bin/convert"
 default['swf.exe']="/opt/target/alf-installation/common/bin/pdf2swf"
 default['swf.languagedir']="/opt/target/alf-installation/common/japanese"
 default['jodconverter.enabled']="true"
-default['jodconverter.officeHome']="/opt/target/alf-installation/libreoffice/"
+default['jodconverter.officeHome']="/opt/target/alf-installation/libreoffice"
 default['jodconverter.portNumbers']="8100"
 
 end
