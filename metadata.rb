@@ -1,0 +1,7 @@
+name             'alfresco-dbwrapper'
+maintainer       'YOUR_NAME'
+maintainer_email 'YOUR_EMAIL'
+license          'All rights reserved'
+description      'Installs/Configures alfresco-dbwrapper'
+long_description 'Installs/Configures alfresco-dbwrapper'
+version          '0.1.0'
