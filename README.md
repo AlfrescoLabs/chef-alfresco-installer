@@ -1,42 +1,27 @@
 # alfresco-dbwrapper-cookbook
 
-TODO: Enter the cookbook description here.
+Autodeploys postgresql 9.3.5
 
 ## Supported Platforms
 
-TODO: List your supported platforms.
+Redhat 6.5
 
 ## Attributes
 
-<table>
-  <tr>
-    <th>Key</th>
-    <th>Type</th>
-    <th>Description</th>
-    <th>Default</th>
-  </tr>
-  <tr>
-    <td><tt>['alfresco-dbwrapper']['bacon']</tt></td>
-    <td>Boolean</td>
-    <td>whether to include bacon</td>
-    <td><tt>true</tt></td>
-  </tr>
-</table>
-
 ## Usage
 
-### alfresco-dbwrapper::default
+### alfresco-dbwrapper::postgresql
 
 Include `alfresco-dbwrapper` in your node's `run_list`:
 
 ```json
 {
   "run_list": [
-    "recipe[alfresco-dbwrapper::default]"
+    "recipe[alfresco-dbwrapper::postgresql]"
   ]
 }
 ```
 
 ## License and Authors
 
-Author:: YOUR_NAME (<YOUR_EMAIL>)
+Author:: Sergiu Vidrascu (vsergiu@hotmail.com)
