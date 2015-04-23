@@ -14,5 +14,6 @@ gem 'berkshelf'
 #   gem "vagrant-omnibus", github: "schisamo/vagrant-omnibus"
 # end
 
-gem "test-kitchen"
-gem "kitchen-vagrant"
+    gem 'test-kitchen', :group => :integration
+    gem 'cucumber', :group => :integration
+    gem 'rspec-expectations', :group => :integration
