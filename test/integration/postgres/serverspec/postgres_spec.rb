@@ -18,32 +18,36 @@
 #/
 require 'spec_helper'
 
-describe 'When we check the status postgres 5432 port it' do
+describe 'Validate postgres Installation' do
+
+context 'When we check the status postgres 5432 port it' do
   it { expect(port(5432)).to be_listening }
 end
 
-describe 'when we verify if psql executable in the default path' do
+context 'When we verify if psql executable in the default path' do
   it { expect(file('/usr/local/pgsql/bin/psql')).to be_file }
 end
 
-describe 'when we run ps -u postgres -f | grep postgres: to check if postgres is running the exit status  ' do
+context 'When we run ps -u postgres -f | grep postgres: to check if postgres is running the exit status  ' do
   it { expect(command("ps -u postgres -f | grep postgres:").exit_status).to eq 0 }
 end
 
-describe 'When we login as postgres user then whoami' do
+context 'When we login as postgres user then whoami' do
   it { expect(command("su - postgres -c 'whoami'").stdout).to match /postgres/ }
 end
 
-describe 'when we check the list of databases on the server it' do
+context 'When we check the list of databases on the server it' do
   it { expect(command("su - postgres -c /usr/local/pgsql/bin/psql << EOF
 		\\list
 		\\q 
 		EOF").stdout).to include("alfresco") }
 end
 
-describe 'when we check the list of users on the server it' do
+context 'When we check the list of users on the server it' do
   it { expect(command("su - postgres -c /usr/local/pgsql/bin/psql << EOF
 		\\du
 		\\q 
 		EOF").stdout).to include("alfresco") }
+end
+
 end
