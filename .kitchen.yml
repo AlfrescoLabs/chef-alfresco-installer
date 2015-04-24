@@ -7,13 +7,23 @@ provisioner:
 platforms:
 - name:  redhat65
   driver_config:
-    port: 22
     username: root
     password: alfresco
     hostname: 172.29.101.52
+- name:  solaris112
+  driver_config:
+    hostname: 172.29.101.64
+    username: root
+    password: alfresco1
 
 suites:
 - name: postgres
+  excludes:
+    - solaris112
   run_list:
   - recipe[alfresco-dbwrapper::postgres]
-  attributes: { localPath: false }
+- name: oracle
+  excludes:
+    - redhat65
+  run_list:
+  - recipe[alfresco-dbwrapper::oracle]
