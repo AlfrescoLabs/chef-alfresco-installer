@@ -16,12 +16,19 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
 #/
+
+environment_setup = {'ORACLE_UNQNAME'=>"alfresco",
+			'ORACLE_BASE'=>node['oracle']['base'],
+			'ORACLE_HOME'=>node['oracle']['home'],
+			'ORACLE_SID'=>"alfresco",
+			'PATH'=>"#{node['oracle']['home']}/bin:#{ENV["PATH"]}"}
+
 remote_file '/opt/oracle1.zip' do
   owner 'root'
   group 'root'
   mode '0644'
   source node['url']['oracle1']
-  not_if { File.exists?("/opt/oracle1.zip") }
+  :create_if_missing
 end
 
 remote_file '/opt/oracle2.zip' do
@@ -29,7 +36,7 @@ remote_file '/opt/oracle2.zip' do
   group 'root'
   mode '0644'
   source node['url']['oracle2']
-  not_if { File.exists?("/opt/oracle2.zip") }
+  :create_if_missing
 end
 
 bash 'Unzip Oracle' do
@@ -166,6 +173,7 @@ execute 'Run oracle installer' do
 	command "su oracle -c 'ulimit -n 65536 && ulimit -s 32768 && ./runInstaller -showProgress -silent -waitforcompletion -ignoreSysPrereqs -responseFile #{node['oracle']['downloaddir']}/db_install.rsp'"
 	returns 6
 	only_if { node['oracle']['installoracle'] == true }
+	not_if { File.exists?("#{node['oracle']['home']}/bin/sqlplus") }
 end
 
 bash 'postinstall scripts' do
@@ -188,6 +196,8 @@ export ORACLE_HOME=#{node['oracle']['home']}
 export ORACLE_SID=#{node['oracle']['SID']}
 export PATH=#{node['oracle']['home']}/bin:$PATH" >> /export/home/oracle/.profile
 	EOH
+	not_if 'cat /root/.profile | grep ORACLE_HOME'
+	not_if 'cat /export/home/oracle/.profile | grep ORACLE_HOME'
 	only_if { node['oracle']['installoracle'] == true }
 end
 
@@ -208,15 +218,10 @@ bash 'Create default alfresco database' do
 	-characterSet AL32UTF8 \
 	-totalMemory 1024'
 	EOH
-	environment ({
-			'ORACLE_UNQNAME'=>"alfresco",
-			'ORACLE_BASE'=>node['oracle']['base'],
-			'ORACLE_HOME'=>node['oracle']['home'],
-			'ORACLE_SID'=>"alfresco",
-			'PATH'=>"#{node['oracle']['home']}/bin:#{ENV["PATH"]}"
-		})
+	environment (environment_setup)
 	notifies :run, 'execute[Restart the database]', :immediately
 	only_if { node['oracle']['installoracle'] == true }
+	not_if { ::File.directory?("#{node['oracle']['base']}/oradata/alfresco") }
 end
 
 execute 'Stop the database' do
@@ -225,13 +230,7 @@ execute 'Stop the database' do
 	command 'lsnrctl stop'
 	not_if 'lsnrctl status'
 	action :nothing
-	environment ({
-			'ORACLE_UNQNAME'=>"alfresco",
-			'ORACLE_BASE'=>node['oracle']['base'],
-			'ORACLE_HOME'=>node['oracle']['home'],
-			'ORACLE_SID'=>"alfresco",
-			'PATH'=>"#{node['oracle']['home']}/bin:#{ENV["PATH"]}"
-		})
+	environment (environment_setup)
 end
 
 
@@ -240,13 +239,7 @@ execute 'Start the database' do
 	cwd "#{node['oracle']['home']}/bin"
 	command 'ulimit -n 65536 && ulimit -s 32768 && lsnrctl start && sleep 50'
 	action :nothing
-	environment ({
-			'ORACLE_UNQNAME'=>"alfresco",
-			'ORACLE_BASE'=>node['oracle']['base'],
-			'ORACLE_HOME'=>node['oracle']['home'],
-			'ORACLE_SID'=>"alfresco",
-			'PATH'=>"#{node['oracle']['home']}/bin:#{ENV["PATH"]}"
-		})
+	environment (environment_setup)
 end
 
 execute 'Restart the database' do
@@ -254,13 +247,7 @@ execute 'Restart the database' do
 	cwd "#{node['oracle']['home']}/bin"
 	command 'ulimit -n 65536 && ulimit -s 32768 && lsnrctl stop && sleep 2 && lsnrctl start && sleep 50'
 	action :nothing
-	environment ({
-			'ORACLE_UNQNAME'=>"alfresco",
-			'ORACLE_BASE'=>node['oracle']['base'],
-			'ORACLE_HOME'=>node['oracle']['home'],
-			'ORACLE_SID'=>"alfresco",
-			'PATH'=>"#{node['oracle']['home']}/bin:#{ENV["PATH"]}"
-		})
+	environment (environment_setup)
 end
 
 bash 'Create new schema' do
@@ -282,13 +269,7 @@ bash 'Create new schema' do
 	exit
 	!
 	EOH
-	environment ({
-			'ORACLE_UNQNAME'=>"alfresco",
-			'ORACLE_BASE'=>node['oracle']['base'],
-			'ORACLE_HOME'=>node['oracle']['home'],
-			'ORACLE_SID'=>"alfresco",
-			'PATH'=>"#{node['oracle']['home']}/bin:#{ENV["PATH"]}"
-		})
+	environment (environment_setup)
 	only_if { node['oracle']['createschema'] == true }
 end
 
@@ -302,12 +283,6 @@ bash 'Drop existent schema' do
 	quit
 	EOF
 	EOH
-	environment ({
-			'ORACLE_UNQNAME'=>"alfresco",
-			'ORACLE_BASE'=>node['oracle']['base'],
-			'ORACLE_HOME'=>node['oracle']['home'],
-			'ORACLE_SID'=>"alfresco",
-			'PATH'=>"#{node['oracle']['home']}/bin:#{ENV["PATH"]}"
-		})
+	environment (environment_setup)
 	only_if { node['oracle']['dropschema'] == true }
 end
