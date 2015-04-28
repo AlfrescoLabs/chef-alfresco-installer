@@ -1,7 +1,4 @@
 require 'busser/rubygems'
-Busser::RubyGems.install_gem('yarjuf', '~> 2.0.0')
-Busser::RubyGems.install_gem('faraday', '~> 0.9.1')
-
 require 'serverspec'
 require 'yarjuf'
 require 'faraday'
@@ -9,6 +6,6 @@ require 'faraday'
 set :backend, :exec
 
 RSpec.configure do |c|
-  c.output_stream = File.open('/resources/serverspec-result2.xml', 'w')
-  c.formatter = 'JUnit'
+  c.output_stream = File.open('/opt/serverspec.html', 'w')
+  c.formatter = 'html'
 end
