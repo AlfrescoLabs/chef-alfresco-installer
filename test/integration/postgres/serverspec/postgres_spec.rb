@@ -34,6 +34,20 @@ describe 'When we login as postgres user then whoami' do
   it { expect(command("su - postgres -c 'whoami'").stdout).to match /postgres/ }
 end
 
+describe 'When we check if we can create a database the psql stdout' do
+	  it { expect(command("su - postgres -c /usr/local/pgsql/bin/psql << EOF
+		create database test;
+		\\q
+		EOF").stdout).to include("\nCREATE DATABASE\n") }
+end
+
+describe 'When we check if we can drop a database the psql stdout' do
+	  it { expect(command("su - postgres -c /usr/local/pgsql/bin/psql << EOF
+		drop database test;
+		\\q
+		EOF").stdout).to include("\nDROP DATABASE\n") }	
+end
+
 describe 'When we check the list of databases on the server it' do
   it { expect(command("su - postgres -c /usr/local/pgsql/bin/psql << EOF
 		\\list
