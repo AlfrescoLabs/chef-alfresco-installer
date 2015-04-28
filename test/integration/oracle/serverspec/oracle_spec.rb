@@ -32,7 +32,7 @@ describe 'When we verify if sqlplus executable is in the installation path' do
   it { expect(file('/opt/oracle/app/oracle/product/12.1.0.2/db_1/bin/sqlplus')).to be_file }
 end
 
-describe 'When we run ps -ef | grep LISTENER to check if oracle listener is starter  ' do
+describe 'When we run ps -ef | grep LISTENER to check if oracle listener is started its exit_status' do
   it { expect(command("ps -ef | grep LISTENER").exit_status).to eq 0 }
 end
 
@@ -40,13 +40,13 @@ describe 'When we login as oracle user then whoami' do
   it { expect(command("su - oracle -c 'whoami'").stdout).to match /oracle/ }
 end
 
-describe 'When we check if we can connect to oracle with default alfresco/alfresco user' do
+describe 'When we check if we can connect to oracle with default alfresco/alfresco user sqlplus stdout' do
   it { expect(command("sqlplus alfresco/alfresco << EOF 
   	quit
   	EOF").stdout).to include("Connected to:") }
 end
 
-describe 'When we check if we can create a table' do
+describe 'When we check if we can create a table sqlplus stdout' do
   it { expect(command("sqlplus alfresco/alfresco << EOF
   	CREATE TABLE \"ALFRESCO\".\"ALF_SERVER_TEST\" (	
 		\"ID\" NUMBER(19,0) NOT NULL ENABLE, 
@@ -57,21 +57,21 @@ describe 'When we check if we can create a table' do
 	EOF").stdout).to include("Table created.") }
 end
 
-describe 'When we check if we can drop a table' do
+describe 'When we check if we can drop a table sqlplus stdout' do
   it { expect(command("sqlplus alfresco/alfresco << EOF
   	DROP TABLE \"ALFRESCO\".\"ALF_SERVER_TEST\";
   	quit
 		EOF").stdout).to include("Table dropped.") }
 end
 
-describe 'When we check if we can create a sequence' do
+describe 'When we check if we can create a sequence sqlplus stdout' do
   it { expect(command("sqlplus alfresco/alfresco << EOF
 		CREATE SEQUENCE  \"ALFRESCO\".\"ALF_TEST_SEQ\"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 41 CACHE 20 ORDER  NOCYCLE;
 		quit
 		EOF").stdout).to include("Sequence created.") }
 end
 
-describe 'When we check if we can drop a sequence' do
+describe 'When we check if we can drop a sequence sqlplus stdout' do
   it { expect(command("sqlplus alfresco/alfresco << EOF
 		DROP SEQUENCE \"ALFRESCO\".\"ALF_TEST_SEQ\";
 		quit
