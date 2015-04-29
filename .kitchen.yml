@@ -22,6 +22,11 @@ suites:
     - solaris112
   run_list:
   - recipe[alfresco-dbwrapper::postgres]
+- name: mysql
+  excludes:
+    - solaris112
+  run_list:
+  - recipe[alfresco-dbwrapper::mysql]
 - name: oracle
   excludes:
     - redhat65
