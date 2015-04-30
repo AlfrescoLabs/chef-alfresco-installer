@@ -16,14 +16,14 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
 #/
-default['mysql']['yum']['version']="5.6.17-4.el6"
-default['mysql']['yum']['repository']="http://dev.mysql.com/get/mysql-community-release-el6-5.noarch.rpm"
+default["mariadb"]["downloadpath"] = "ftp://172.29.103.222/databases/mariadb-10.0.14-winx64.msi"
+default["mariadb"]["localpath"] = "C:\\mariadb.msi"
 
-default['mysql']['install']=true
-default['mysql']['createuser']=true
-default['mysql']['createdb']=true
-default['mysql']['dropdb']=false
+default['mariadb']['install']=true
+default['mariadb']['createuser']=true
+default['mariadb']['createdb']=true
+default['mariadb']['dropdb']=false
 
-default['mysql']['user']="alfresco"
-default['mysql']['password']="alfresco"
-default['mysql']['dbname']="alfresco"
+default['mariadb']['user']="alfresco"
+default['mariadb']['password']="alfresco"
+default['mariadb']['dbname']="alfresco"
