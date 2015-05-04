@@ -4,11 +4,11 @@ DEPENDENCIES
     metadata: true
   java-wrapper
     git: https://github.com/AlfrescoTestAutomation/alfresco-chef.git
-    revision: 1c205082081a09afe32fc15c843ee05fd6cab460
+    revision: d610b920d9cffaacecf117ca93506ef66d707400
     branch: java-wrapper
 
 GRAPH
-  alfresco-chef (0.2.0)
+  alfresco-chef (0.3.0)
     apt (>= 0.0.0)
     chef-client (>= 0.0.0)
   apt (2.7.0)
