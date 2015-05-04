@@ -20,7 +20,7 @@
 case node["platform"]
 when "windows"
 
-  windows_package "Java SE Development Kit 8 Update 40 (64-bit)" do
+  windows_package "Java SE Development Kit 8 Update 25 (64-bit)" do
     source node['java_8_download_path']
     checksum node["java_installer"]["checksum"]
     action :install
