@@ -29,37 +29,33 @@ context 'When we verify if the service is enabled' do
 end
 
 context 'When we check if we can connect to mysql with default alfresco/alfresco user the mysql stdout' do
-  it { expect(command("C:\\mariadb\\bin\\mysql.exe -h172.29.101.51 -ualfresco -palfresco alfresco -e \"show processlist;\"")
-  	.stdout).to match /alfresco.*172.29.101.51.*alfresco/ }
+  it { expect(command("C:\\mariadb\\bin\\mysql.exe --host=172.29.101.51 --user=alfresco --password=alfresco --database=alfresco -e \"show processlist;\"")
+  	.stdout).to match /alfresco.*alfresco/ }
 end
 
 context 'When we check if the alfresco database exists the mysql stdout' do
-  it { expect(command("C:\\mariadb\\bin\\mysql.exe -h172.29.101.51 -ualfresco -palfresco alfresco -e \"show databases;\"")
-  	.stdout).to match /| alfresco |/ }
+  it { expect(command("C:\\mariadb\\bin\\mysql.exe --host=172.29.101.51 --user=alfresco --password=alfresco --database=alfresco -e \"show databases;\"")
+  	.stdout).to include("alfresco") }
 end
 
 context 'When we check if we can create a table the mysql stdout' do
-  it { expect(command("C:\\mariadb\\bin\\mysql.exe -h172.29.101.51 -ualfresco -palfresco alfresco -e \"create table test(col1 varchar(10));\"")
-  	.stdout).not_to include("ERROR") }
+  it { expect(command("C:\\mariadb\\bin\\mysql.exe --host=172.29.101.51 --user=alfresco --password=alfresco --database=alfresco -e \"create table test(col1 varchar(10));\"")
+  	.stderr).not_to include("ERROR") }
 end
 
 context 'When we check if we can insert row "magic" in the table the mysql stdout' do
-  it { expect(command("C:\\mariadb\\bin\\mysql.exe -h172.29.101.51 -ualfresco -palfresco alfresco -e \"insert into test values ('magic');\"")
-  	.stdout).not_to include("ERROR") }
+  it { expect(command("C:\\mariadb\\bin\\mysql.exe --host=172.29.101.51 --user=alfresco --password=alfresco --database=alfresco -e \"insert into test values ('magic');\"")
+  	.stderr).not_to include("ERROR") }
 end
 
 context 'When we check if we can select from table the mysql stdout' do
-  it { expect(command("C:\\mariadb\\bin\\mysql.exe -h172.29.101.51 -ualfresco -palfresco alfresco << EOF 
-  	select * from test;
-  	exit
-  	EOF").stdout).to match /| magic |/ }
+  it { expect(command("C:\\mariadb\\bin\\mysql.exe --host=172.29.101.51 --user=alfresco --password=alfresco --database=alfresco -e \"select * from test;\"")
+    .stdout).to include("magic")}
 end
 
 context 'When we check if we can drop a table the mysql stdout' do
-  it { expect(command("C:\\mariadb\\bin\\mysql.exe -h172.29.101.51 -ualfresco -palfresco alfresco << EOF 
-  	drop table test;
-  	exit
-  	EOF").stdout).not_to include("ERROR") }
+  it { expect(command("C:\\mariadb\\bin\\mysql.exe --host=172.29.101.51 --user=alfresco --password=alfresco --database=alfresco -e \"drop table test;\"")
+    .stderr).not_to include("ERROR") }
 end
 
 end
