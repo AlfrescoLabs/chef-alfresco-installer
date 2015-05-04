@@ -33,13 +33,11 @@
   	:create_if_missing
   end
 
-  package "mariadb" do
+  windows_package "MariaDB 10.0 (x64)" do
     source node["mariadb"]["localpath"]
     action :install
     installer_type :msi
     options " INSTALLDIR=C:\\mariadb SERVICENAME=mariadb /qn"
-    version "10.0.14.0"
-    package_name "MariaDB 10.0 (x64)"
   end
 
   service 'mariadb' do
