@@ -1,0 +1,17 @@
+---
+driver_plugin: ssh
+
+provisioner:
+  name: chef_zero
+
+platforms:
+- name:  provisioner
+  driver_config:
+    hostname: 172.29.101.46
+    username: root
+    password: alfresco
+
+suites:
+- name: simple
+  run_list:
+  - recipe[alfresco-metal::simple]

@@ -1,1 +1,3 @@
 /encrypted_data_bag_secret_key
+.kitchen/
+.kitchen.local.yml
