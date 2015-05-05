@@ -7,11 +7,11 @@ provisioner:
 platforms:
 - name:  provisioner
   driver_config:
-    hostname: 172.29.101.46
+    hostname: 172.29.101.100
     username: root
     password: alfresco
 
 suites:
-- name: simple
+- name: 50XS1
   run_list:
-  - recipe[alfresco-metal::simple]
+  - recipe[alfresco-metal::50XS1]
