@@ -1,3 +1,0 @@
-I, [2015-05-05T18:47:19.575567 #14560]  INFO -- Kitchen: -----> Starting Kitchen (v1.4.0)
-I, [2015-05-05T18:47:19.930866 #14560]  INFO -- Kitchen: -----> Converging <50XS1-provisioner>...
-E, [2015-05-05T18:48:46.566374 #14560] ERROR -- Kitchen: Converge failed on instance <50XS1-provisioner>.

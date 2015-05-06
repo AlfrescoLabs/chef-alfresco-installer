@@ -5,16 +5,11 @@ end
 require 'chef/provisioning/ssh_driver/driver'
 
     with_driver 'ssh'
-
 	# with_chef_server "https://chef-node-3/organizations/alfchef",
- #                     :client_name => 'provisioning',
- #                     :signing_key_filename => '/etc/chef/client.pem'
-#  with_chef_server "chefzero://172.29.101.100:8889", {
-# :client_name => Chef::Config[:node_name],
-# :signing_key_filename => Chef::Config[:client_key]
-# }
- # with_chef_local_server chef_repo_path: '/tmp/kitchen'
-
+	#                     :client_name => 'bamboo1',
+	#                     :signing_key_filename => '/opt/.chef/bamboo1.pem'
+	# with_chef_server "http://172.29.101.100:4000"
+ 	with_chef_local_server :chef_repo_path => '/tmp/kitchen/cache', :cookbook_path => '/tmp/kitchen/cache/cookbooks'
 
     machine "node1" do
       action [:ready, :setup]
@@ -55,10 +50,15 @@ require 'chef/provisioning/ssh_driver/driver'
         converge false
     end
 
-machine_batch do
-  %w(node1 node2 LB).each do |name|
-    machine name do        
-    	action :converge
-    end
-  end
-end
+	machine_batch do
+	  %w(node1 node2 LB).each do |name|
+	    machine name do        
+	    	action :converge
+	    end
+	  end
+	end
+
+
+
+
+
