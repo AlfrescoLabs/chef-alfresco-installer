@@ -45,3 +45,5 @@ default["install"]["component"]["use java from installer"]=false
 default["install"]["component"]["wqs"]=false
 default["install"]["component"]["solr1"]=false
 default["install"]["component"]["googleDocs"]=false
+
+default["installer"]["nodename"]="alf1"
