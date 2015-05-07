@@ -1,3 +1,4 @@
+include_recipe 'nfs::default'
 
 directory node['dir_remote'] do
   owner 'root'
