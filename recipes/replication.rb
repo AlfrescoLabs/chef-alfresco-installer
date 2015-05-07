@@ -15,7 +15,7 @@ nfs_export node['dir_remote'] do
 end
 
 mount node['dir_remote'] do
-	device "#{node['ipaddress']}:/opt/Replicate"
+	device "#{node['replication_remote_ip']}:/opt/Replicate"
 	fstype 'nfs'
 	only_if { node["NFS_client"] == true }
 end
