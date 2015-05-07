@@ -21,8 +21,8 @@ default["don't use installer"] = false
 default["localPath"] = false
 
 default["installer"]["alfresco_admin_password"]= "admin"
-default["installer"]["enable-components"] = "alfrescowcmqs"
-default["installer"]["disable-components"] = "javaalfresco"
+default["installer"]["enable-components"] = "alfrescowcmqs,alfrescogoogledocs,libreofficecomponent"
+default["installer"]["disable-components"] = "javaalfresco,postgres"
 default["installer"]["jdbc_username"] = "alfresco"
 default["installer"]["jdbc_password"] = "alfresco"
 
@@ -47,3 +47,9 @@ default["install"]["component"]["solr1"]=false
 default["install"]["component"]["googleDocs"]=false
 
 default["installer"]["nodename"]="alf1"
+
+default['install_alfresco_war']=true
+default['install_share_war']=true
+default['install_solr4_war']=true
+
+

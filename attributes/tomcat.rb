@@ -16,9 +16,6 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
 #/
-default['install_alfresco']=true
-default['install_share']=true
-default['install_solr4']=true
 
 #tomcat
 default['tomcat']['download_url']='ftp://172.29.103.222/tomcat/apache-tomcat-7.0.53.tar.gz'
@@ -85,7 +82,7 @@ else
 
 default['db.driver']="org.postgresql.Driver"
 default['db.username']="alfresco"
-default['db.password']="admin"
+default['db.password']="alfresco"
 default['db.name']="alfresco"
 default['db.url']="jdbc:postgresql://localhost:5432/${db.name}"
 default['db.pool.max']="275"

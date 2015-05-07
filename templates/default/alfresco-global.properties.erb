@@ -117,10 +117,7 @@ imap.server.port=143
 #alfresco.hazelcast.mancenter.enabled=true
 ##alfresco.hazelcast.mancenter.url=http://172.30.40.186:8080/mancenter-2.5
 
+
 ### Replication ###
-#replication.enabled=true
-#dir.remote=/opt/Replicate
-#dir.contentstore=${dir.remote}/contentstore
-#dir.contentstore.deleted=${dir.remote}/contentstore.deleted
-#dir.auditcontentstore=${dir.remote}/audit.contentstore
+<%= render 'ag-replication.erb' %>
 

@@ -8,4 +8,6 @@ version          '0.3.0'
 
 depends "chef-client"
 depends "apt"
+depends 'nfs'
+depends 'line'
 suggests "windows"
