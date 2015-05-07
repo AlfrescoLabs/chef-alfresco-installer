@@ -46,15 +46,28 @@ when 'windows'
     :top_level
   end
 
-  service "alfrescoPostgreSQL" do
-    action [:start, :enable]
-    supports :status => false, :restart => true, :stop => true , :start => true
+  case node['alfresco.cluster.enabled']
+    when "false"
+    service "alfrescoPostgreSQL" do
+      action [:start, :enable]
+      supports :status => false, :restart => true, :stop => true , :start => true
+    end
+    service "alfrescoTomcat" do
+      action [:start, :enable]
+      supports :status => true, :restart => true, :stop => true , :start => true
+    end
+  else
+    service "alfrescoPostgreSQL" do
+      action :enable
+      supports :status => false, :restart => true, :stop => true , :start => true
+    end
+    service "alfrescoTomcat" do
+      action :enable
+      supports :status => true, :restart => true, :stop => true , :start => true
+    end
   end
 
-  service "alfrescoTomcat" do
-    action [:start, :enable]
-    supports :status => true, :restart => true, :stop => true , :start => true
-  end
+
 
 when 'solaris','solaris2'
   
@@ -101,9 +114,17 @@ else
     :top_level
   end
 
-  service "alfresco" do
-    action [:restart, :enable]
-    supports :status => false, :restart => true
+  case node['alfresco.cluster.enabled']
+  when "false"
+    service "alfresco" do
+      action [:restart, :enable]
+      supports :status => false, :restart => true
+    end
+  else
+    service "alfresco" do
+      action :enable
+      supports :status => false, :restart => true
+    end
   end
 
 end

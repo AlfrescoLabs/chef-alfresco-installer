@@ -106,17 +106,8 @@ imap.server.enabled=true
 imap.server.host=<%= node['ipaddress']%>
 imap.server.port=143
 
-### Cluster configuration ###
-#alfresco.cluster.enabled=true
-#alfresco.cluster.name=alfRH104
-#alfresco.hazelcast.tcp.config=<members>172.29.100.102,172.29.100.105</members>
-#alfresco.hazelcast.specify.interface=true
-#alfresco.hazelcast.bind.interface=172.29.100.*
-#alfresco.hazelcast.port=5701
-#alfresco.hazelcast.autoinc.port=false
-#alfresco.hazelcast.mancenter.enabled=true
-##alfresco.hazelcast.mancenter.url=http://172.30.40.186:8080/mancenter-2.5
-
+#### Cluster configuration ###
+<%= render 'ag-hazelcast.erb' %>
 
 ### Replication ###
 <%= render 'ag-replication.erb' %>
