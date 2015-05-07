@@ -22,7 +22,7 @@ require 'chef/provisioning/ssh_driver/driver'
       }
         run_list ['recipe[java-wrapper::java8]','recipe[alfresco-chef::installer]']
         converge false
-        attributes (installer: { nodename: "node1"})
+        attributes "installer" => { "nodename" => "node1"}
     end
 
     machine "node2" do
@@ -36,7 +36,7 @@ require 'chef/provisioning/ssh_driver/driver'
       }	
         run_list ['recipe[java-wrapper::java8]','recipe[alfresco-chef::installer]']
         converge false
-        attributes (installer: { nodename: "node2"})
+        attributes "installer" => { "nodename" => "node2"}
     end
 
     machine "LB" do
@@ -50,26 +50,25 @@ require 'chef/provisioning/ssh_driver/driver'
       }
         run_list ['recipe[java-wrapper::java8]','recipe[alfresco-chef::loadbalancer]']
         converge false
-        attributes (
-        	lb: {
-        		ips_and_nodenames: [
+        attributes "lb" => {
+        		"ips_and_nodenames" => [
         			{
-        				:ip=>"172.29.101.97", 
-        				:nodename=>"node2"
+        				"ip" => "172.29.101.97", 
+        				"nodename" => "node2"
         			},
         			{
-        				:ip=>"172.29.101.99", 
-        				:nodename=>"node1"
+        				"ip" => "172.29.101.99", 
+        				"nodename" => "node1"
         			}
         				]
         		}
-        	)
     end
 
 	machine_batch do
 	  %w(node1 node2 LB).each do |name|
 	    machine name do        
 	    	action :converge
+	    	converge true
 	    end
 	  end
 	end
