@@ -12,6 +12,7 @@ nfs_export node['dir_remote'] do
 	sync true
 	options ['no_root_squash']
 	only_if { node["NFS_server"] == true }
+	notifies :restart, "service[nfs]", :immediately
 end
 
 mount node['dir_remote'] do
