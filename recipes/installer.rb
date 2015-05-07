@@ -93,6 +93,14 @@ else
     :top_level
   end
 
+  template "#{node["installer"]["directory"]}/tomcat/conf/server.xml" do
+    source 'server.xml.erb'
+    owner 'root'
+    group 'root'
+    mode 00755
+    :top_level
+  end
+
   service "alfresco" do
     action [:restart, :enable]
     supports :status => false, :restart => true
