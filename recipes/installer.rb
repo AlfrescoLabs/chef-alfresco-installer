@@ -67,11 +67,12 @@ when 'windows'
     only_if { node["install_solr4_war"] == false }
   end
 
-  case node['alfresco.cluster.enabled']
-    when "false"
+  case node['START_SERVICES']
+    when true
     service "alfrescoPostgreSQL" do
       action [:start, :enable]
       supports :status => false, :restart => true, :stop => true , :start => true
+      only_if { node["START_POSGRES"] == true }
     end
     service "alfrescoTomcat" do
       action [:start, :enable]
@@ -81,6 +82,7 @@ when 'windows'
     service "alfrescoPostgreSQL" do
       action :enable
       supports :status => false, :restart => true, :stop => true , :start => true
+      only_if { node["START_POSGRES"] == true }
     end
     service "alfrescoTomcat" do
       action :enable
@@ -156,8 +158,8 @@ else
     only_if { node["install_solr4_war"] == false }
   end
 
-  case node['alfresco.cluster.enabled']
-  when "false"
+  case node['START_SERVICES']
+  when true
     service "alfresco" do
       action [:restart, :enable]
       supports :status => false, :restart => true

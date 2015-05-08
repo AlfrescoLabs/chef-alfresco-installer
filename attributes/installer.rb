@@ -52,4 +52,7 @@ default['install_alfresco_war']=true
 default['install_share_war']=true
 default['install_solr4_war']=true
 
+default['START_SERVICES']=true
+default['START_POSGRES']=true
+
 
