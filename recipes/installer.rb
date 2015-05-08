@@ -46,6 +46,27 @@ when 'windows'
     :top_level
   end
 
+  execute 'remove share war' do
+    user 'root'
+    command "del #{node["installer"]["directory"]}\\tomcat\\webapps\\share.war"
+    action :run
+    only_if { node["install_share_war"] == false }
+  end
+
+  execute 'remove alfresco war' do
+    user 'root'
+    command "del #{node["installer"]["directory"]}\\tomcat\\webapps\\alfresco.war"
+    action :run
+    only_if { node["install_alfresco_war"] == false }
+  end
+
+  execute 'remove solr4 war' do
+    user 'root'
+    command "del #{node["installer"]["directory"]}\\tomcat\\webapps\\solr4.war"
+    action :run
+    only_if { node["install_solr4_war"] == false }
+  end
+
   case node['alfresco.cluster.enabled']
     when "false"
     service "alfrescoPostgreSQL" do
@@ -112,6 +133,27 @@ else
     group 'root'
     mode 00755
     :top_level
+  end
+
+  execute 'remove share war' do
+    user 'root'
+    command "rm -rf #{node["installer"]["directory"]}/tomcat/webapps/share.war"
+    action :run
+    only_if { node["install_share_war"] == false }
+  end
+
+  execute 'remove alfresco war' do
+    user 'root'
+    command "rm -rf #{node["installer"]["directory"]}/tomcat/webapps/alfresco.war"
+    action :run
+    only_if { node["install_alfresco_war"] == false }
+  end
+
+  execute 'remove solr4 war' do
+    user 'root'
+    command "rm -rf #{node["installer"]["directory"]}/tomcat/webapps/solr4.war"
+    action :run
+    only_if { node["install_solr4_war"] == false }
   end
 
   case node['alfresco.cluster.enabled']

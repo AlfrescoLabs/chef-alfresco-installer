@@ -285,6 +285,27 @@ tomcat_root = node['tomcat']['tomcat_folder']
     :top_level
   end
 
+  execute 'remove share war' do
+    user 'root'
+    command "rm -rf #{node['tomcat']['tomcat_folder']}/webapps/share.war"
+    action :run
+    only_if { node["install_share_war"] == false }
+  end
+
+  execute 'remove alfresco war' do
+    user 'root'
+    command "rm -rf #{node['tomcat']['tomcat_folder']}/webapps/alfresco.war"
+    action :run
+    only_if { node["install_alfresco_war"] == false }
+  end
+
+  execute 'remove solr4 war' do
+    user 'root'
+    command "rm -rf #{node['tomcat']['tomcat_folder']}/webapps/solr4.war"
+    action :run
+    only_if { node["install_solr4_war"] == false }
+  end
+
 case node['platform_family']
 when 'solaris','solaris2'
 
