@@ -50,3 +50,20 @@ suites:
   - recipe[java-wrapper::java8]
   - recipe[alfresco-chef::installer]
   attributes: { localPath: false }
+- name: replication
+  excludes:
+    - suse12
+    - solaris112
+    - ubuntu1204
+    - win2012
+  run_list:
+  - recipe[alfresco-chef::replication]
+  attributes: 
+    localPath: false
+    NFS_server: true
+    dir_server: "/opt/ReplicateServer"
+
+
+
+
+
