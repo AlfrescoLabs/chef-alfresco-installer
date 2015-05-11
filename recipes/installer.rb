@@ -174,7 +174,7 @@ else
     only_if { node["install_solr4_war"] == false }
   end
 
-  remote_file "node["installer"]["directory"]/qa50.lic" do
+  remote_file "#{node["installer"]["directory"]}/qa50.lic" do
     source node['alfresco.cluster.prerequisites']
     owner "root"
     group "root"
