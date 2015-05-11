@@ -21,7 +21,7 @@ default["don't use installer"] = false
 default["localPath"] = false
 
 default["installer"]["alfresco_admin_password"]= "admin"
-default["installer"]["enable-components"] = "alfrescowcmqs,alfrescogoogledocs,libreofficecomponent"
+default["installer"]["enable-components"] = "alfrescowcmqs"
 default["installer"]["disable-components"] = "javaalfresco"
 default["installer"]["jdbc_username"] = "alfresco"
 default["installer"]["jdbc_password"] = "alfresco"

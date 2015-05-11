@@ -15,52 +15,52 @@ share.host=<%= node['ipaddress']%>
 share.port=<%= node['share.port']%>
 share.protocol=http
 
-### WQS Settings ###
+################################################################## WQS Settings ##################################################################
 <%= render "ag-wqs.erb" %>
 
-### FTP Settings ###
+################################################################## FTP Settings ##################################################################
 ftp.enabled=true
 <%= render 'ag-ftp.erb' %>
 
-### database connection properties ###
+################################################################## database connection properties ################################################
 <%= render 'ag-database.erb' %>
 
 # The server mode. Set value here
 # UNKNOWN | TEST | BACKUP | PRODUCTION
 system.serverMode=UNKNOWN
 
-### RMI registry port for JMX ###
+################################################################## RMI registry port for JMX #####################################################
 alfresco.rmi.services.port=50500
 monitor.rmi.service.port=0
 
-### External executable locations ###
+################################################################## External executable locations #################################################
 <%= render 'ag-externalApps.erb' %>
 
-### Initial admin password ###
+################################################################## Initial admin password ########################################################
 alfresco_user_store.adminpassword=209c6174da490caeb422f3fa5a7ae634
 
-### E-mail site invitation setting ###
+################################################################## E-mail site invitation setting ################################################
 notification.email.siteinvite=false
 
-### License location ###
-dir.license.external=/opt/target/alf-installation
+################################################################## License location ##############################################################
+dir.license.external=<%= node["installer"]["directory"]%>
 
-### Solr indexing ###
+################################################################## Solr indexing #################################################################
 <%= render 'ag-solr.erb' %>
 
-### BPM Engine ###
+################################################################## BPM Engine ####################################################################
 system.workflow.engine.jbpm.enabled=false
 
-#Cloud
+################################################################## Cloud #########################################################################
 hybridworkflow.enabled=true
 sync.cloud.url=https://NCT1052a.alfresco.me/alfresco/a/{network}/
 sync.mode=ON_PREMISE
 system.serverMode=PRODUCTION
 
-### E-mail site invitation setting ###
+################################################################## E-mail site invitation setting ################################################
 notification.email.siteinvite=true
 
-#CIFS config
+################################################################## CIFS config ###################################################################
 cifs.enabled=true
 cifs.serverName=${localname}A
 cifs.hostannounce=true
@@ -71,7 +71,7 @@ cifs.netBIOSSMB.namePort=4137
 cifs.netBIOSSMB.datagramPort=4138
 cifs.netBIOSSMB.sessionPort=4139
 
-#NFS config
+################################################################## NFS config ###################################################################
 nfs.enabled=true
 nfs.mountServerPort=2250
 nfs.nfsServerPort=2249
@@ -86,7 +86,7 @@ nfs.user.mappings.value.admin.gid=0
 nfs.user.mappings.value.corinaz.uid=1200
 nfs.user.mappings.value.corinaz.gid=1200
 
-# Mail config
+################################################################## Mail config ###################################################################
 mail.host=172.29.100.164
 mail.port=587
 mail.transport.protocol=smtp
@@ -106,9 +106,12 @@ imap.server.enabled=true
 imap.server.host=<%= node['ipaddress']%>
 imap.server.port=143
 
-#### Cluster configuration ###
+################################################################## Cluster configuration ##########################################################
+<% if node['alfresco.cluster.enabled'] == "true" %>
 <%= render 'ag-hazelcast.erb' %>
+<% end %>
 
-### Replication ###
+################################################################## Replication ####################################################################
+<% if node['replication.enabled'] == "true" %>
 <%= render 'ag-replication.erb' %>
-
+<% end %>

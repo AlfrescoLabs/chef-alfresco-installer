@@ -82,7 +82,7 @@ else
 
 default['db.driver']="org.postgresql.Driver"
 default['db.username']="alfresco"
-default['db.password']="alfresco"
+default['db.password']="admin"
 default['db.name']="alfresco"
 default['db.url']="jdbc:postgresql://localhost:5432/${db.name}"
 default['db.pool.max']="275"

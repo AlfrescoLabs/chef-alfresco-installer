@@ -164,6 +164,13 @@ else
       action [:restart, :enable]
       supports :status => false, :restart => true
     end
+    execute 'Waiting for tomcat to start' do
+      command "tail -n2 #{node["installer"]["directory"]}/tomcat/logs/catalina.out | grep \"Server startup in .* ms\""
+      action :run
+      retries 60
+      retry_delay 3
+      returns 0
+    end
   else
     service "alfresco" do
       action :enable

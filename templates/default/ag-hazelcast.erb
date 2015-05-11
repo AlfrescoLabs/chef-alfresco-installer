@@ -1,4 +1,4 @@
-alfresco.cluster.enabled=<%= node['alfresco.cluster.enabled']%>
+alfresco.cluster.enabled=true
 alfresco.cluster.name=alfresco
 alfresco.hazelcast.tcp.config=<members><% for @item in node["additional_cluster_members"] %>
     <%= @item %>,
