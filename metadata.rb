@@ -1,9 +1,8 @@
 name             'alfresco-metal'
-maintainer       'YOUR_NAME'
-maintainer_email 'YOUR_EMAIL'
+maintainer       'Sergiu Vidrascu'
+maintainer_email 'sergiu.vidrascu@ness.com'
 license          'All rights reserved'
-description      'Installs/Configures alfresco-metal'
-long_description 'Installs/Configures alfresco-metal'
+description      'Installs/Configures alfresco in cluster using chef-provisioning'
 version          '0.1.0'
 
 depends "chef-client"

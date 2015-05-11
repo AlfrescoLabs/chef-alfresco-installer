@@ -1,6 +1,6 @@
-gem_package 'chef-provisioning-ssh' do
-  action :install
-end
+  gem_package 'chef-provisioning-ssh' do
+    action :install
+  end
 
 require 'chef/provisioning/ssh_driver/driver'
 
@@ -11,8 +11,10 @@ require 'chef/provisioning/ssh_driver/driver'
 	# with_chef_server "http://172.29.101.100:4000"
  	with_chef_local_server :chef_repo_path => '/tmp/kitchen/cache', :cookbook_path => '/tmp/kitchen/cache/cookbooks'
 
-    machine "node1" do
-      action [:ready, :setup]
+  	machine_batch do
+
+     machine "node1" do
+      action [:ready, :setup, :converge]
       machine_options :transport_options => {
         :ip_address => '172.29.101.99',
         :username => 'root',
@@ -20,27 +22,59 @@ require 'chef/provisioning/ssh_driver/driver'
           :password => 'alfresco'
         }
       }
-        run_list ['recipe[java-wrapper::java8]','recipe[alfresco-chef::installer]']
-        converge false
-        attributes "installer" => { "nodename" => "node1"}
+        run_list ['recipe[java-wrapper::java8]',
+        'recipe[alfresco-chef::installer]'
+        ]
+        attributes "installer" => 
+          { "nodename" => "node1",
+            "disable-components" => "javaalfresco,postgres"},
+          "db.url" => "jdbc:postgresql://172.29.101.98:5432/${db.name}",
+          "db.password" => "alfresco",
+          "db.username" => "alfresco",
+          "NFS_client" => true,
+          "replication.enabled" => "true",
+          "alfresco.cluster.enabled" => "true",
+          "additional_cluster_members" => ["172.29.101.97"],
+          "replication_remote_ip" => "172.29.101.98",
+          "install_solr4_war" => false,
+          "START_SERVICES" => false, 
+          "START_POSGRES" => false,
+          "solr.host" => "172.29.101.98"
+
     end
 
     machine "node2" do
-      action [:ready, :setup]
+      action [:ready, :setup, :converge]
       machine_options :transport_options => {
         :ip_address => '172.29.101.97',
         :username => 'root',
         :ssh_options => {
           :password => 'alfresco'
         }
-      }	
-        run_list ['recipe[java-wrapper::java8]','recipe[alfresco-chef::installer]']
-        converge false
-        attributes "installer" => { "nodename" => "node2"}
+      } 
+        run_list [
+          'recipe[java-wrapper::java8]',
+          'recipe[alfresco-chef::installer]'
+        ]
+        attributes "installer" => 
+          { "nodename" => "node1",
+            "disable-components" => "javaalfresco,postgres"},
+          "db.url" => "jdbc:postgresql://172.29.101.98:5432/${db.name}",
+          "db.password" => "alfresco",
+          "db.username" => "alfresco",
+          "NFS_client" => true,
+          "replication.enabled" => "true",
+          "alfresco.cluster.enabled" => "true",
+          "additional_cluster_members" => ["172.29.101.99"],
+          "replication_remote_ip" => "172.29.101.98",
+          "install_solr4_war" => false,
+          "START_SERVICES" => false, 
+          "START_POSGRES" => false,
+          "solr.host" => "172.29.101.98"
     end
 
-    machine "LB" do
-      action [:ready, :setup]
+  	machine "LB" do
+      action [:ready, :setup, :converge]
       machine_options :transport_options => {
         :ip_address => '172.29.101.98',
         :username => 'root',
@@ -48,32 +82,64 @@ require 'chef/provisioning/ssh_driver/driver'
           :password => 'alfresco'
         }
       }
-        run_list ['recipe[java-wrapper::java8]','recipe[alfresco-chef::loadbalancer]']
-        converge false
+        run_list [
+        'recipe[java-wrapper::java8]',
+        'recipe[alfresco-chef::replication]',
+        'recipe[alfresco-chef::loadbalancer]',
+        'recipe[alfresco-dbwrapper::postgres]',
+        'recipe[alfresco-chef::installer]'
+      ]
         attributes "lb" => {
-        		"ips_and_nodenames" => [
-        			{
-        				"ip" => "172.29.101.97", 
-        				"nodename" => "node2"
-        			},
-        			{
-        				"ip" => "172.29.101.99", 
-        				"nodename" => "node1"
-        			}
-        				]
-        		}
+            "ips_and_nodenames" => [
+              {
+                "ip" => "172.29.101.97", 
+                "nodename" => "node2"
+              },
+              {
+                "ip" => "172.29.101.99", 
+                "nodename" => "node1"
+              }
+          ]},
+          "installer" => 
+          { "nodename" => "LB",
+            "disable-components" => "javaalfresco,postgres,alfrescowcmqs,alfrescosolr,alfrescowcmqs,alfrescogoogledocs,libreofficecomponent"},
+          "NFS_server" => true,
+          "NFS_client" => false,
+          "replication.enabled" => "false",
+          "alfresco.cluster.enabled" => "true",
+          "install_share_war" => false,
+          "install_alfresco_war" => false,
+          "START_SERVICES" => false, 
+          "START_POSGRES" => false,
+          "solr.target.alfresco.host" => "172.29.101.99"
+      end
+
+  	end
+
+    machine "LB" do
+      action :converge
+      converge true
+      recipe 'alfresco-chef::installer'
+      attribute "START_SERVICES", true
+      attribute %w[postgres installpostgres], false
+      attribute %w[postgres createdb], false
+      notifies :converge, 'machine[node1]', :immediately
     end
 
-	machine_batch do
-	  %w(node1 node2 LB).each do |name|
-	    machine name do        
-	    	action :converge
-	    	converge true
-	    end
-	  end
-	end
+    machine "node1" do
+      action :nothing
+      recipe 'alfresco-chef::replication'
+      recipe 'alfresco-chef::installer'
+      converge true
+      attribute "START_SERVICES", true
+      notifies :converge, 'machine[node2]', :immediately
+    end
 
-
-
-
+    machine "node2" do
+      action :nothing
+      recipe 'alfresco-chef::replication'
+      recipe 'alfresco-chef::installer'
+      converge true
+      attribute "START_SERVICES", true
+    end
 
