@@ -17,10 +17,10 @@ alfresco.version=5.0.0
 # Properties loaded during alfresco tracking
 #
 
-alfresco.host=<%= node['alfresco.host']%>
-alfresco.port=<%= node['alfresco.port']%>
-alfresco.port.ssl=<%= node['alfresco.port.ssl']%>
-alfresco.baseUrl=<%= node['alfresco.baseUrl']%>
+alfresco.host=<%= node['solr.target.alfresco.host']%>
+alfresco.port=<%= node['solr.target.alfresco.port']%>
+alfresco.port.ssl=<%= node['solr.target.alfresco.port.ssl']%>
+alfresco.baseUrl=<%= node['solr.target.alfresco.baseUrl']%>
 alfresco.cron=0/15 * * * * ? *
 alfresco.stores=workspace://SpacesStore
 #alfresco.index.transformContent=false
