@@ -55,4 +55,12 @@ default['install_solr4_war']=true
 default['START_SERVICES']=true
 default['START_POSGRES']=true
 
+####### If you are setting up solr only you will need to setup the alfresco target ######
+default["alfresco.host"]="localhost"
+default["alfresco.port"]="8080"
+default["alfresco.port.ssl"]="8443"
+default["alfresco.baseUrl"]="/alfresco"
+
+
+
 

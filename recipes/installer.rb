@@ -137,6 +137,22 @@ else
     :top_level
   end
 
+  template "#{node["installer"]["directory"]}/solr4/archive-SpacesStore/conf/solrcore.properties" do
+    source 'solrcore-archive.erb'
+    owner 'root'
+    group 'root'
+    mode 00755
+    :top_level
+  end
+
+  template "#{node["installer"]["directory"]}/solr4/workspace-SpacesStore/conf/solrcore.properties" do
+    source 'solrcore-workspace.erb'
+    owner 'root'
+    group 'root'
+    mode 00755
+    :top_level
+  end
+
   execute 'remove share war' do
     user 'root'
     command "rm -rf #{node["installer"]["directory"]}/tomcat/webapps/share.war"
@@ -153,9 +169,17 @@ else
 
   execute 'remove solr4 war' do
     user 'root'
-    command "rm -rf #{node["installer"]["directory"]}/tomcat/webapps/solr4.war"
+    command "rm -rf #{node["installer"]["directory"]}/tomcat/webapps/solr4.war && rm -rf #{node["installer"]["directory"]}/tomcat/conf/Catalina/localhost/solr4.xml"
     action :run
     only_if { node["install_solr4_war"] == false }
+  end
+
+  remote_file "node["installer"]["directory"]/qa50.lic" do
+    source node['alfresco.cluster.prerequisites']
+    owner "root"
+    group "root"
+    mode "775"
+    action :create_if_missing
   end
 
   case node['START_SERVICES']
