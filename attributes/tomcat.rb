@@ -52,6 +52,8 @@ default['ftp.port']="21"
 #solr
 default['index.subsystem.name']="solr4"
 default['dir.keystore']="${dir.root}/keystore"
+default['solr.host']="localhost"
+default['solr.port']="8080"
 default['solr.port.ssl']="8443"
 
 case node['platform_family']
