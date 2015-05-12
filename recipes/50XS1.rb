@@ -103,6 +103,9 @@ require 'chef/provisioning/ssh_driver/driver'
           "installer" => 
           { "nodename" => "LB",
             "disable-components" => "javaalfresco,postgres,alfrescowcmqs,alfrescosolr,alfrescowcmqs,alfrescogoogledocs,libreofficecomponent"},
+          "postgres" => 
+          { "installpostgres" => true,
+            "createdb" => true},
           "NFS_server" => true,
           "NFS_client" => false,
           "replication.enabled" => "false",
@@ -116,10 +119,19 @@ require 'chef/provisioning/ssh_driver/driver'
 
   	end
 
+    machine_batch do
+      %w(node1 node2).each do |name|
+        machine name do
+          recipe 'alfresco-chef::replication'
+          action :converge
+          converge true 
+        end
+      end
+    end
+
     machine "LB" do
       action :converge
       converge true
-      recipe 'alfresco-chef::installer'
       attribute "START_SERVICES", true
       attribute %w[postgres installpostgres], false
       attribute %w[postgres createdb], false
@@ -128,8 +140,6 @@ require 'chef/provisioning/ssh_driver/driver'
 
     machine "node1" do
       action :nothing
-      recipe 'alfresco-chef::replication'
-      recipe 'alfresco-chef::installer'
       converge true
       attribute "START_SERVICES", true
       notifies :converge, 'machine[node2]', :immediately
@@ -137,8 +147,6 @@ require 'chef/provisioning/ssh_driver/driver'
 
     machine "node2" do
       action :nothing
-      recipe 'alfresco-chef::replication'
-      recipe 'alfresco-chef::installer'
       converge true
       attribute "START_SERVICES", true
     end
