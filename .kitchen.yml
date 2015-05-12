@@ -15,3 +15,6 @@ suites:
 - name: 50XS1
   run_list:
   - recipe[alfresco-metal::50XS1]
+- name: 50XS5
+  run_list:
+  - recipe[alfresco-metal::50XS5]
