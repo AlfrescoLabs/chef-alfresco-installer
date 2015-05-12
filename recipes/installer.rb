@@ -181,7 +181,7 @@ case node['platform_family']
       action :create_if_missing
     end
 
-    remote_file "#{node['installer']['directory']}/tomcat/libs/#{node['db.driver.filename']}" do
+    remote_file "#{node['installer']['directory']}/tomcat/lib/#{node['db.driver.filename']}" do
       source node['db.driver.url']
       owner 'root'
       group 'root'
