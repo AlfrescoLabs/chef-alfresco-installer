@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
-
-gem 'berkshelf'
+ruby "2.1.5"
 
 # Uncomment these lines if you want to live on the Edge:
 #
@@ -13,7 +12,9 @@ gem 'berkshelf'
 #   gem "vagrant-berkshelf", github: "berkshelf/vagrant-berkshelf"
 #   gem "vagrant-omnibus", github: "schisamo/vagrant-omnibus"
 # end
-
-    gem 'test-kitchen', :group => :integration
-    gem 'cucumber', :group => :integration
-    gem 'rspec-expectations', :group => :integration
+gem 'berkshelf', '~> 3.2.3'
+gem 'test-kitchen', '~> 1.3.1'
+gem 'cucumber', '~> 1.3.19'
+gem 'rspec-expectations', '~> 3.2.0'
+gem 'kitchen-ssh', '~> 0.0.7'
+gem 'winrm-transport', '~> 1.0'
