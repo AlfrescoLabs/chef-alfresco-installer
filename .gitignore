@@ -24,3 +24,15 @@ encrypted_data_bag_secret_key
 attributes/default.rb
 /.project
 /encrypted_data_bag_secret
+
+.idea/.name
+
+.idea/alfresco-chef.iml
+
+.idea/misc.xml
+
+.idea/modules.xml
+
+.idea/vcs.xml
+
+.idea/workspace.xml

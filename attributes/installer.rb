@@ -41,11 +41,6 @@ else
   default["installer"]["directory"] = "/opt/target/alf-installation"
 end
 
-default["install"]["component"]["use java from installer"]=false
-default["install"]["component"]["wqs"]=false
-default["install"]["component"]["solr1"]=false
-default["install"]["component"]["googleDocs"]=false
-
 default["installer"]["nodename"]="alf1"
 
 default['install_alfresco_war']=true
@@ -60,6 +55,8 @@ default["solr.target.alfresco.host"]="localhost"
 default["solr.target.alfresco.port"]="8080"
 default["solr.target.alfresco.port.ssl"]="8443"
 default["solr.target.alfresco.baseUrl"]="/alfresco"
+
+
 
 
 

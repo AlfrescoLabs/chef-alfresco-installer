@@ -182,6 +182,13 @@ else
     action :create_if_missing
   end
 
+  remote_file "#{node["installer"]["directory"]}/tomcat/libs/#{node["db.driver.filename"]}" do
+    source node["db.driver.url"]
+    owner "root"
+    group "root"
+    mode "775"
+  end
+
   case node['START_SERVICES']
   when true
     service "alfresco" do
