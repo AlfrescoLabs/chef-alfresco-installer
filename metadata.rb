@@ -6,6 +6,6 @@ description      'Installs/Configures alfresco_java'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          '0.2.5'
 
-depends "java"
-depends "windows"
-depends "aws"
+depends 'java'
+depends 'windows'
+depends 'aws'

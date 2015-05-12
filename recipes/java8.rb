@@ -17,43 +17,43 @@
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
 #/
 
-case node["platform"]
-when "windows"
+case node['platform']
+when 'windows'
 
-  windows_package "Java SE Development Kit 8 Update 25 (64-bit)" do
+  windows_package 'Java SE Development Kit 8 Update 25 (64-bit)' do
     source node['java_8_download_path']
-    checksum node["java_installer"]["checksum"]
+    checksum node['java_installer']['checksum']
     action :install
     installer_type :custom
-    options "/s INSTALLDIR:#{node["java_installer"]["java_home"]}"
+    options "/s INSTALLDIR:#{node['java_installer']['java_home']}"
   end
 
-  env "JAVA_HOME" do
-    value node["java_installer"]["java_home"]
+  env 'JAVA_HOME' do
+    value node['java_installer']['java_home']
   end
 
-  windows_path "#{node["java_installer"]["java_home"]}bin" do
+  windows_path "#{node['java_installer']['java_home']}bin" do
     action :add
   end
 
 when 'solaris','solaris2'
   
-  directory "/resources" do
-    owner "root"
-    group "root"
-    mode "0775"
+  directory '/resources' do
+    owner 'root'
+    group 'root'
+    mode '0775'
     action :create
   end
 
-  remote_file node["java_installer"]["local"] do
+  remote_file node['java_installer']['local'] do
     source node['java_8_download_path']
-    checksum node["java_installer"]["checksum"]
-    owner "root"
-    group "root"
-    mode "644"
+    checksum node['java_installer']['checksum']
+    owner 'root'
+    group 'root'
+    mode '644'
     action :create
     sensitive true
-    not_if { node["localPath"] == true }
+    not_if { node['localPath'] == true }
   end
   
   bash 'install_java' do
@@ -69,30 +69,30 @@ when 'solaris','solaris2'
 
 else
 
-  directory "/resources" do
-    owner "root"
-    group "root"
-    mode "0775"
+  directory '/resources' do
+    owner 'root'
+    group 'root'
+    mode '0775'
     action :create
   end
 
-  remote_file node["java_installer"]["local"] do
+  remote_file node['java_installer']['local'] do
     source node['java_8_download_path']
-    checksum node["java_installer"]["checksum"]
-    owner "root"
-    group "root"
-    mode "644"
+    checksum node['java_installer']['checksum']
+    owner 'root'
+    group 'root'
+    mode '644'
     action :create
     sensitive true
-    not_if { node["localPath"] == true }
+    not_if { node['localPath'] == true }
   end
 
   node.set['java']['install_flavor'] = 'oracle'
   node.set['java']['oracle']['accept_oracle_download_terms'] = false
   node.set['java']['jdk_version'] = 8
-  node.set['java']['jdk']['8']['x86_64']['url'] = "file:///#{node["java_installer"]["local"]}"
-  node.set['java']['jdk']['8']['x86_64']['checksum'] = node["java_installer"]["checksum"]
+  node.set['java']['jdk']['8']['x86_64']['url'] = "file:///#{node['java_installer']['local']}"
+  node.set['java']['jdk']['8']['x86_64']['checksum'] = node['java_installer']['checksum']
 
-  include_recipe "java"
+  include_recipe 'java'
 
 end

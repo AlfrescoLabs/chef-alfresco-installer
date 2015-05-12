@@ -29,11 +29,11 @@ Given(/^I have run Chef$/) do
 end
 
 Given(/^a ssh connection to the installed machine$/) do
-  @connect_command="vagrant ssh"
+  @connect_command='vagrant ssh'
 end
 
 When(/^a user issues the command java \-version$/) do
-  @execute_command=""
+  @execute_command=''
 end
 
 Then(/^the user should see "(.*?)"$/) do |arg1|

@@ -15,3 +15,13 @@ data_bags/bamboo/pass.json
 encrypted_data_bag_secret_key
 /.project
 /encrypted_data_bag_secret
+
+.idea/java-wrapper.iml
+
+.idea/misc.xml
+
+.idea/modules.xml
+
+.idea/vcs.xml
+
+.idea/workspace.xml
