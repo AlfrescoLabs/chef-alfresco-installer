@@ -3,3 +3,13 @@
 .kitchen.local.yml
 
 .kitchen/logs/kitchen.log
+
+.idea/alfresco-metal.iml
+
+.idea/misc.xml
+
+.idea/modules.xml
+
+.idea/vcs.xml
+
+.idea/workspace.xml

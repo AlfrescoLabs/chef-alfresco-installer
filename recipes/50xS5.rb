@@ -26,7 +26,9 @@ machine_batch do
     attributes 'installer' =>
                    {'nodename' => 'node1',
                     'disable-components' => 'javaalfresco,postgres'},
-               'db.url' => 'jdbc:postgresql://172.29.101.98:5432/${db.name}',
+               'installer.database-type' => 'mysql',
+               'installer.database-version' => '5.6.17',
+               'db.url' => 'jdbc:mysql://172.29.101.98:3306/${db.name}?useUnicode=yes&characterEncoding=UTF-8',
                'db.password' => 'alfresco',
                'db.username' => 'alfresco',
                'NFS_client' => true,
@@ -54,7 +56,9 @@ machine_batch do
     attributes 'installer' =>
                    {'nodename' => 'node1',
                     'disable-components' => 'javaalfresco,postgres'},
-               'db.url' => 'jdbc:postgresql://172.29.101.98:5432/${db.name}',
+               'installer.database-type' => 'mysql',
+               'installer.database-version' => '5.6.17',
+               'db.url' => 'jdbc:mysql://172.29.101.98:3306/${db.name}?useUnicode=yes&characterEncoding=UTF-8',
                'db.password' => 'alfresco',
                'db.username' => 'alfresco',
                'NFS_client' => true,
@@ -77,7 +81,7 @@ machine_batch do
                             :password => 'alfresco'
                         }
                     }
-    run_list %w(recipe[java-wrapper::java8] recipe[alfresco-chef::replication] recipe[alfresco-chef::loadbalancer] recipe[alfresco-dbwrapper::postgres] recipe[alfresco-chef::installer])
+    run_list %w(recipe[java-wrapper::java8] recipe[alfresco-chef::replication] recipe[alfresco-chef::loadbalancer] recipe[alfresco-dbwrapper::mysql] recipe[alfresco-chef::installer])
     attributes 'lb' => {
                    'ips_and_nodenames' => [
                        {
@@ -92,8 +96,8 @@ machine_batch do
                'installer' =>
                    {'nodename' => 'LB',
                     'disable-components' => 'javaalfresco,postgres,alfrescowcmqs,alfrescosolr,alfrescogoogledocs,libreofficecomponent'},
-               'postgres' =>
-                   {'installpostgres' => true,
+               'mysql' =>
+                   {'createuser' => true,
                     'createdb' => true},
                'NFS_server' => true,
                'NFS_client' => false,
