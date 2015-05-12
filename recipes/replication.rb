@@ -11,7 +11,7 @@ end
 
 nfs_export node['dir_server'] do
 	network "#{node['ipaddress']}/8"
-	writeable false
+	writeable true
 	sync true
 	options ['no_root_squash']
 	notifies :restart, "service[#{node['nfs']['service']['server']}]", :immediately
