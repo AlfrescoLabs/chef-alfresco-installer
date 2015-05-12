@@ -27,4 +27,4 @@ template '/opt/target/alf-installation/tomcat/shared/classes/wqsapi-custom.prope
 	notifies :restart, 'service[alfresco]', :delayed
 end
 
-node.set["install"]["component"]["wqs"]=true
+node.set['install']['component']['wqs']=true

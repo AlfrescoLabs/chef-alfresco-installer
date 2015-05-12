@@ -19,14 +19,14 @@
 case node['platform_family']
 when 'solaris','solaris2'
 
-  template "/opt/opencsw.sh" do
+  template '/opt/opencsw.sh' do
     source 'opencsw.sh.erb'
     owner 'root'
     group 'root'
     mode 00755
   end
 
-  file "/opt/opencsw.sh" do
+  file '/opt/opencsw.sh' do
   	owner 'root'
 	  group 'root'
 	  mode 00755
@@ -39,17 +39,17 @@ when 'solaris','solaris2'
     code <<-EOH
     expect opencsw.sh
     EOH
-    not_if { File.exists?("/opt/csw/bin/pkgutil") }
+    not_if { File.exists?('/opt/csw/bin/pkgutil') }
   end
 
   package 'gcc-45' do
     action :install
   end
 
-  remote_file "/opt/freetype-2.5.5.tar.gz" do
-    source  node["url"]["freetype"]
-    owner "root"
-    group "root"
+  remote_file '/opt/freetype-2.5.5.tar.gz' do
+    source  node['url']['freetype']
+    owner 'root'
+    group 'root'
     mode 00775
     action :create_if_missing
     sensitive true
@@ -62,13 +62,13 @@ when 'solaris','solaris2'
     tar xvf freetype-2.5.5.tar.gz
     cd freetype-2.5.5 && ./configure && gmake && gmake install
     EOH
-    not_if { File.exists?("/usr/local/bin/freetype-config") }
+    not_if { File.exists?('/usr/local/bin/freetype-config') }
   end
 
-remote_file "/opt/jpegsrc.v9.tar.gz" do
-    source  node["url"]["jpegsrc"]
-    owner "root"
-    group "root"
+remote_file '/opt/jpegsrc.v9.tar.gz' do
+    source  node['url']['jpegsrc']
+    owner 'root'
+    group 'root'
     mode 00775
     action :create_if_missing
   end
@@ -80,21 +80,21 @@ bash 'Install jpegsrc' do
     tar xvf jpegsrc.v9.tar.gz
     cd jpeg-9 && ./configure && gmake && gmake install
     EOH
-    not_if { File.exists?("/usr/local/bin/jpeg2swf") }
+    not_if { File.exists?('/usr/local/bin/jpeg2swf') }
   end
 
-  remote_file "/opt/xpdf-3.04.tar.gz" do
-    source  node["url"]["xpdf"]
-    owner "root"
-    group "root"
+  remote_file '/opt/xpdf-3.04.tar.gz' do
+    source  node['url']['xpdf']
+    owner 'root'
+    group 'root'
     mode 00775
     action :create_if_missing
   end
 
-  remote_file "/opt/swftools-0.9.2.tar.gz" do
-    source  node["url"]["swftools"]
-    owner "root"
-    group "root"
+  remote_file '/opt/swftools-0.9.2.tar.gz' do
+    source  node['url']['swftools']
+    owner 'root'
+    group 'root'
     mode 00775
     action :create_if_missing
   end
@@ -108,13 +108,13 @@ bash 'Install jpegsrc' do
     crle -u -l /usr/local/lib
     cd swftools-0.9.2 && ./configure && gmake && gmake install
     EOH
-    not_if { File.exists?("/usr/local/bin/png2swf") }
+    not_if { File.exists?('/usr/local/bin/png2swf') }
   end
 
-  remote_file "/opt/ghostscript.tar.gz" do
-    source  node["url"]["ghostscript"]
-    owner "root"
-    group "root"
+  remote_file '/opt/ghostscript.tar.gz' do
+    source  node['url']['ghostscript']
+    owner 'root'
+    group 'root'
     mode 00775
     action :create_if_missing
   end
@@ -127,7 +127,7 @@ bash 'Install jpegsrc' do
     cd ghostscript-9.15
     ./configure --without-gnu-make && make && make install
     EOH
-    not_if { File.exists?("/usr/local/bin/gs") }
+    not_if { File.exists?('/usr/local/bin/gs') }
   end
 
 
@@ -137,15 +137,15 @@ bash 'Install jpegsrc' do
     code <<-EOH
     /opt/csw/bin/pkgutil -y -i imagemagick
     EOH
-    not_if { File.exists?("/opt/csw/bin/convert") }
+    not_if { File.exists?('/opt/csw/bin/convert') }
   end
 
 
-  remote_file "/opt/openOffice.tar.gz" do
-    source  node["url"]["openOffice"]
-   owner "root"
-    group "root"
-    mode "775"
+  remote_file '/opt/openOffice.tar.gz' do
+    source  node['url']['openOffice']
+   owner 'root'
+    group 'root'
+    mode '775'
     action :create_if_missing
   end
 
@@ -157,7 +157,7 @@ bash 'Install jpegsrc' do
     mv Apache_OpenOffice_incubating_3.4.0_Solaris_x86_install-arc_en-US openOffice
     chmod -R 700 openOffice
     EOH
-    not_if { File.exists?("/opt/openOffice/openoffice.org3/program/soffice") }
+    not_if { File.exists?('/opt/openOffice/openoffice.org3/program/soffice') }
   end
 
 end
@@ -165,10 +165,10 @@ end
 installation_root = node['tomcat']['installation_folder']
 tomcat_root = node['tomcat']['tomcat_folder']
 
-  directory "/resources" do
-    owner "root"
-    group "root"
-    mode "0775"
+  directory '/resources' do
+    owner 'root'
+    group 'root'
+    mode '0775'
     action :create
   end
 
@@ -184,10 +184,10 @@ tomcat_root = node['tomcat']['tomcat_folder']
     end
   end
 
-  remote_file "/opt/tomcat.tar.gz" do
+  remote_file '/opt/tomcat.tar.gz' do
     source node['tomcat']['download_url']
-    owner "root"
-    group "root"
+    owner 'root'
+    group 'root'
     mode 00775
     action :create_if_missing
   end
@@ -256,10 +256,10 @@ tomcat_root = node['tomcat']['tomcat_folder']
     :top_level
   end
 
-  remote_file node["alfresco"]["local"] do
-    source node["alfresco"]["downloadpath"]
-    owner "root"
-    group "root"
+  remote_file node['alfresco']['local'] do
+    source node['alfresco']['downloadpath']
+    owner 'root'
+    group 'root'
     mode 00775
     action :create_if_missing
     sensitive true
@@ -270,7 +270,7 @@ tomcat_root = node['tomcat']['tomcat_folder']
     cwd '/opt'
     code <<-EOH
     unzip alfresco.zip
-    cp -rf #{node["alfresco"]["zipfolder"]}/* #{installation_root}/
+    cp -rf #{node['alfresco']['zipfolder']}/* #{installation_root}/
     cp -rf  #{installation_root}/web-server/* #{tomcat_root}/
     rm -rf #{installation_root}/web-server
     EOH
@@ -289,27 +289,27 @@ tomcat_root = node['tomcat']['tomcat_folder']
     user 'root'
     command "rm -rf #{node['tomcat']['tomcat_folder']}/webapps/share.war"
     action :run
-    only_if { node["install_share_war"] == false }
+    only_if { node['install_share_war'] == false }
   end
 
   execute 'remove alfresco war' do
     user 'root'
     command "rm -rf #{node['tomcat']['tomcat_folder']}/webapps/alfresco.war"
     action :run
-    only_if { node["install_alfresco_war"] == false }
+    only_if { node['install_alfresco_war'] == false }
   end
 
   execute 'remove solr4 war' do
     user 'root'
     command "rm -rf #{node['tomcat']['tomcat_folder']}/webapps/solr4.war"
     action :run
-    only_if { node["install_solr4_war"] == false }
+    only_if { node['install_solr4_war'] == false }
   end
 
 case node['platform_family']
 when 'solaris','solaris2'
 
-  service "application/tomcat" do
+  service 'application/tomcat' do
     supports :restart => true, :disable => true, :enable => true
     action :nothing
     notifies :run, 'execute[wait for tomcat]', :immediately

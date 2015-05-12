@@ -1,4 +1,4 @@
-case node["NFS_server"]
+case node['NFS_server']
 when true
 include_recipe 'nfs::server'
 
@@ -23,11 +23,11 @@ directory node['dir_client'] do
   group 'root'
   mode '0777'
   action :create
-  only_if { node["NFS_client"] == true }
+  only_if { node['NFS_client'] == true }
 end
 
 mount node['dir_client'] do
 	device "#{node['replication_remote_ip']}:#{node['dir_server']}"
 	fstype 'nfs'
-	only_if { node["NFS_client"] == true }
+	only_if { node['NFS_client'] == true }
 end

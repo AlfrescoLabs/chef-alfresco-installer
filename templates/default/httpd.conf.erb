@@ -1017,7 +1017,7 @@ BrowserMatch "^Dreamweaver-WebDAV-SCM1" redirect-carefully
 	ProxyPassReverse /share balancer://sharenodes
 
 	<Proxy balancer://sharenodes>
-	<% for @item in node["lb"]["ips_and_nodenames"] %>
+	<% for @item in node['lb']['ips_and_nodenames'] %>
     BalancerMember ajp://<%= @item[:ip] %>:8009/share route=<%= @item[:nodename] %>
   	<% end %>
 	</Proxy>
@@ -1025,7 +1025,7 @@ BrowserMatch "^Dreamweaver-WebDAV-SCM1" redirect-carefully
 	ProxyPass /alfresco balancer://alfresconodes stickysession=JSESSIONID|jsessionid nofailover=On
 	ProxyPassReverse /alfresco balancer://alfresconodes
 	<Proxy balancer://alfresconodes>
-	<% for @item in node["lb"]["ips_and_nodenames"] %>
+	<% for @item in node['lb']['ips_and_nodenames'] %>
     BalancerMember ajp://<%= @item[:ip] %>:8009/alfresco route=<%= @item[:nodename] %>
   	<% end %>
 	</Proxy>
