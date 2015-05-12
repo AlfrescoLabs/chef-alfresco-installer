@@ -35,27 +35,27 @@ end
 
 context 'When we check if the alfresco database exists the mysql stdout' do
   it { expect(command("C:\\mariadb\\bin\\mysql.exe --host=172.29.101.51 --user=alfresco --password=alfresco --database=alfresco -e \"show databases;\"")
-  	.stdout).to include("alfresco") }
+  	.stdout).to include('alfresco') }
 end
 
 context 'When we check if we can create a table the mysql stdout' do
   it { expect(command("C:\\mariadb\\bin\\mysql.exe --host=172.29.101.51 --user=alfresco --password=alfresco --database=alfresco -e \"create table test(col1 varchar(10));\"")
-  	.stderr).not_to include("ERROR") }
+  	.stderr).not_to include('ERROR') }
 end
 
 context 'When we check if we can insert row "magic" in the table the mysql stdout' do
   it { expect(command("C:\\mariadb\\bin\\mysql.exe --host=172.29.101.51 --user=alfresco --password=alfresco --database=alfresco -e \"insert into test values ('magic');\"")
-  	.stderr).not_to include("ERROR") }
+  	.stderr).not_to include('ERROR') }
 end
 
 context 'When we check if we can select from table the mysql stdout' do
   it { expect(command("C:\\mariadb\\bin\\mysql.exe --host=172.29.101.51 --user=alfresco --password=alfresco --database=alfresco -e \"select * from test;\"")
-    .stdout).to include("magic")}
+    .stdout).to include('magic')}
 end
 
 context 'When we check if we can drop a table the mysql stdout' do
   it { expect(command("C:\\mariadb\\bin\\mysql.exe --host=172.29.101.51 --user=alfresco --password=alfresco --database=alfresco -e \"drop table test;\"")
-    .stderr).not_to include("ERROR") }
+    .stderr).not_to include('ERROR') }
 end
 
 end

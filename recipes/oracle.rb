@@ -17,11 +17,11 @@
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
 #/
 
-environment_setup = {'ORACLE_UNQNAME'=>"alfresco",
+environment_setup = {'ORACLE_UNQNAME'=> 'alfresco',
 			'ORACLE_BASE'=>node['oracle']['base'],
 			'ORACLE_HOME'=>node['oracle']['home'],
-			'ORACLE_SID'=>"alfresco",
-			'PATH'=>"#{node['oracle']['home']}/bin:#{ENV["PATH"]}"}
+			'ORACLE_SID'=> 'alfresco',
+			'PATH'=>"#{node['oracle']['home']}/bin:#{ENV['PATH']}"}
 
 remote_file '/opt/oracle1.zip' do
   owner 'root'

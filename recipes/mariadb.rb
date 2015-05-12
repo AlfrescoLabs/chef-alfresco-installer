@@ -18,23 +18,23 @@
 #/
 
   directory "C:\\mariadb" do
-    rights :read, "Administrator"
-    rights :write, "Administrator"
-    rights :full_control, "Administrator"
-    rights :full_control, "Administrator", :applies_to_children => true
-    group "Administrators"
+    rights :read, 'Administrator'
+    rights :write, 'Administrator'
+    rights :full_control, 'Administrator'
+    rights :full_control, 'Administrator', :applies_to_children => true
+    group 'Administrators'
   end
 
-  remote_file node["mariadb"]["localpath"] do
-    rights :read, "Administrator"
-    rights :write, "Administrator"
-    rights :full_control, "Administrator"
-  	source node["mariadb"]["downloadpath"]
+  remote_file node['mariadb']['localpath'] do
+    rights :read, 'Administrator'
+    rights :write, 'Administrator'
+    rights :full_control, 'Administrator'
+  	source node['mariadb']['downloadpath']
   	:create_if_missing
   end
 
-  windows_package "MariaDB 10.0 (x64)" do
-    source node["mariadb"]["localpath"]
+  windows_package 'MariaDB 10.0 (x64)' do
+    source node['mariadb']['localpath']
     action :install
     installer_type :msi
     options " INSTALLDIR=C:\\mariadb SERVICENAME=mariadb /qn"
@@ -50,19 +50,19 @@
 	C:\\mariadb\\bin\\mysql.exe -uroot -e "CREATE USER #{node['mariadb']['user']}@'%' IDENTIFIED BY '#{node['mariadb']['password']}';"
 	C:\\mariadb\\bin\\mysql.exe -uroot -e "GRANT ALL PRIVILEGES ON *.* TO #{node['mariadb']['user']}@'%' WITH GRANT OPTION;"
 	EOH
-	only_if { node['mariadb']['createuser'] == true }
+	only_if { node['mariadb']['createuser'] }
 end
 
 batch 'Create new db' do
 	code <<-EOH
 	C:\\mariadb\\bin\\mysql.exe -uroot -e "create database #{node['mariadb']['dbname']};"
 	EOH
-	only_if { node['mariadb']['createdb'] == true }
+	only_if { node['mariadb']['createdb'] }
 end
 
 batch 'Drop db' do
 	code <<-EOH
 	C:\\mariadb\\bin\\mysql.exe -uroot -e "drop database #{node['mariadb']['dbname']};"
 	EOH
-	only_if { node['mariadb']['dropdb'] == true }
+	only_if { node['mariadb']['dropdb'] }
 end

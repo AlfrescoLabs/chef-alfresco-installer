@@ -49,7 +49,7 @@ bash 'Create new user' do
 	exit
 	EOF
 	EOH
-	only_if { node['mysql']['createuser'] == true }
+	only_if { node['mysql']['createuser'] }
 end
 
 bash 'Create new db' do
@@ -61,7 +61,7 @@ bash 'Create new db' do
 	exit
 	EOF
 	EOH
-	only_if { node['mysql']['createdb'] == true }
+	only_if { node['mysql']['createdb'] }
 end
 
 bash 'Drop db' do
@@ -73,6 +73,6 @@ bash 'Drop db' do
 	exit
 	EOF
 	EOH
-	only_if { node['mysql']['dropdb'] == true }
+	only_if { node['mysql']['dropdb'] }
 end
 	

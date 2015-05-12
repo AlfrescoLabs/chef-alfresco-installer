@@ -25,7 +25,7 @@ context 'When we check the status of mysql 3306 port it' do
 end
 
 context 'When we verify if mysql is installed yum list install ' do
-  it { expect(command('yum list installed | grep mysql-community-server').stdout).to include("mysql-community-server.x86_64        5.6.17-4.el6") }
+  it { expect(command('yum list installed | grep mysql-community-server').stdout).to include('mysql-community-server.x86_64        5.6.17-4.el6') }
 end
 
 context 'When we verify if the service is enabled' do
@@ -44,26 +44,26 @@ end
 
 context 'When we check if we can create a table the mysql stdout' do
   it { expect(command("mysql -h172.29.101.52 -ualfresco -palfresco alfresco -e \"create table test(col1 varchar(10));\"")
-  	.stdout).not_to include("ERROR") }
+  	.stdout).not_to include('ERROR') }
 end
 
 context 'When we check if we can insert row "magic" in the table the mysql stdout' do
   it { expect(command("mysql -h172.29.101.52 -ualfresco -palfresco alfresco -e \"insert into test values ('magic');\"")
-  	.stdout).not_to include("ERROR") }
+  	.stdout).not_to include('ERROR') }
 end
 
 context 'When we check if we can select from table the mysql stdout' do
-  it { expect(command("mysql -h172.29.101.52 -ualfresco -palfresco alfresco << EOF 
+  it { expect(command('mysql -h172.29.101.52 -ualfresco -palfresco alfresco << EOF
   	select * from test;
   	exit
-  	EOF").stdout).to match /| magic |/ }
+  	EOF').stdout).to match /| magic |/ }
 end
 
 context 'When we check if we can drop a table the mysql stdout' do
-  it { expect(command("mysql -h172.29.101.52 -ualfresco -palfresco alfresco << EOF 
+  it { expect(command('mysql -h172.29.101.52 -ualfresco -palfresco alfresco << EOF
   	drop table test;
   	exit
-  	EOF").stdout).not_to include("ERROR") }
+  	EOF').stdout).not_to include('ERROR') }
 end
 
 end

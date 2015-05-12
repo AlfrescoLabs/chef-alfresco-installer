@@ -37,8 +37,8 @@ end
 
 remote_file "/opt/#{node['url']['package']}.tar.gz" do
     source  node['url']['postgresql']
-    owner "root"
-    group "root"
+    owner 'root'
+    group 'root'
     mode 00775
     action :create_if_missing
 end
@@ -56,6 +56,7 @@ bash 'Install postgres' do
 	chown postgres /usr/local/pgsql/data
     EOH
     only_if { node['postgres']['installpostgres'] == true }
+		not_if { File.exists?('/usr/local/pgsql/bin/psql') }
 end
 
 bash 'Startup postgres' do
@@ -70,6 +71,7 @@ bash 'Startup postgres' do
 	/usr/local/pgsql/bin/createuser #{node['postgres']['user']}
 	EOH
 	only_if { node['postgres']['installpostgres'] == true }
+  not_if { File.exists?('/usr/local/pgsql/bin/psql') }
 end
 
 bash 'drop database' do
