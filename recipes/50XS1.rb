@@ -11,7 +11,7 @@ with_driver 'ssh'
 # with_chef_server "http://172.29.101.100:4000"
 with_chef_local_server :chef_repo_path => '/tmp/kitchen/cache', :cookbook_path => '/tmp/kitchen/cache/cookbooks'
 
-machine_batch do
+machine_batch 'Initial setup on nodes and lb' do
 
   machine 'node1' do
     action [:ready, :setup, :converge]
@@ -108,19 +108,17 @@ machine_batch do
 
 end
 
-machine_batch do
+machine_batch 'replication setup' do
   %w(node1 node2).each do |name|
     machine name do
       recipe 'alfresco-chef::replication'
       action :converge
-      converge true
     end
   end
 end
 
 machine 'LB' do
   action :converge
-  converge true
   attribute 'START_SERVICES', true
   attribute %w[postgres installpostgres], false
   attribute %w[postgres createdb], false
@@ -129,14 +127,12 @@ end
 
 machine 'node1' do
   action :nothing
-  converge true
   attribute 'START_SERVICES', true
   notifies :converge, 'machine[node2]', :immediately
 end
 
 machine 'node2' do
   action :nothing
-  converge true
   attribute 'START_SERVICES', true
 end
 
