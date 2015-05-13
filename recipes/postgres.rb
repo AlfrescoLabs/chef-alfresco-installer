@@ -71,20 +71,7 @@ bash 'Startup postgres' do
 	/usr/local/pgsql/bin/createuser #{node['postgres']['user']}
 	EOH
 	only_if { node['postgres']['installpostgres'] == true }
-  not_if { File.exists?('/usr/local/pgsql/bin/psql') }
-end
-
-bash 'drop database' do
-	user 'postgres'
-	cwd '/usr/local/pgsql/bin'
-	code <<-EOH
-		./psql << EOF
-		SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '#{node['postgres']['dbname']}';
-		drop database #{node['postgres']['dbname']};
-		\\q
-		EOF
-	EOH
-	only_if { node['postgres']['dropdb'] == true }
+  	not_if { File.exists?('/usr/local/pgsql/bin/psql') }
 end
 
 bash 'create database' do
@@ -98,4 +85,18 @@ bash 'create database' do
 		EOF
 	EOH
 	only_if { node['postgres']['createdb'] == true }
+	not_if 'su - postgres -c \"/usr/local/pgsql/bin/psql -c \'\list\'\" | grep alfresco'
+end
+
+bash 'drop database' do
+	user 'postgres'
+	cwd '/usr/local/pgsql/bin'
+	code <<-EOH
+		./psql << EOF
+		SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '#{node['postgres']['dbname']}';
+		drop database #{node['postgres']['dbname']};
+		\\q
+		EOF
+	EOH
+	only_if { node['postgres']['dropdb'] == true }
 end

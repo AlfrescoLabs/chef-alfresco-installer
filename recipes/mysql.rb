@@ -56,6 +56,7 @@ bash 'Create new db' do
 	mysql -e "create database #{node['mysql']['dbname']};"
 	EOH
 	only_if { node['mysql']['createdb'] }
+	not_if 'mysql -e "show databases;" | grep alfresco'
 end
 
 bash 'Drop db' do
