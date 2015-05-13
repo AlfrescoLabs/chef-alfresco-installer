@@ -43,11 +43,8 @@ bash 'Create new user' do
 	user 'root'
 	cwd '/tmp'
 	code <<-EOH
-	mysql << EOF
-	CREATE USER #{node['mysql']['user']}@'%' IDENTIFIED BY '#{node['mysql']['password']}';
-	GRANT ALL PRIVILEGES ON *.* TO #{node['mysql']['user']}@'%' WITH GRANT OPTION;
-	exit
-	EOF
+	mysql -e "CREATE USER #{node['mysql']['user']}@'%' IDENTIFIED BY '#{node['mysql']['password']}';"
+	mysql -e "GRANT ALL PRIVILEGES ON *.* TO #{node['mysql']['user']}@'%' WITH GRANT OPTION;"
 	EOH
 	only_if { node['mysql']['createuser'] }
 end
@@ -56,10 +53,7 @@ bash 'Create new db' do
 	user 'root'
 	cwd '/tmp'
 	code <<-EOH
-	mysql << EOF
-	create database #{node['mysql']['dbname']};
-	exit
-	EOF
+	mysql -e "create database #{node['mysql']['dbname']};"
 	EOH
 	only_if { node['mysql']['createdb'] }
 end
@@ -68,10 +62,7 @@ bash 'Drop db' do
 	user 'root'
 	cwd '/tmp'
 	code <<-EOH
-	mysql << EOF
-	drop database #{node['mysql']['dbname']};
-	exit
-	EOF
+	mysql -e "drop database #{node['mysql']['dbname']};"
 	EOH
 	only_if { node['mysql']['dropdb'] }
 end
