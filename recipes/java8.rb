@@ -32,7 +32,7 @@ when 'windows'
     value node['java_installer']['java_home']
   end
 
-  windows_path "#{node['java_installer']['java_home']}bin" do
+  windows_path "#{node['java_installer']['java_home']}\\bin" do
     action :add
   end
 
