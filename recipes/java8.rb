@@ -20,6 +20,7 @@
 case node['platform']
 when 'windows'
 
+
   windows_package 'Java SE Development Kit 8 Update 25 (64-bit)' do
     source node['java_8_download_path']
     checksum node['java_installer']['checksum']
@@ -35,6 +36,7 @@ when 'windows'
   windows_path "#{node['java_installer']['java_home']}\\bin" do
     action :add
   end
+
 
 when 'solaris','solaris2'
   

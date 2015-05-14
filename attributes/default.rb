@@ -23,7 +23,7 @@ case node['platform_family']
 when 'windows'
   default['java_8_download_path'] = 'ftp://172.29.103.222/chef-resources/jdk-8u25-windows-x64.exe'
   default['java_installer']['local'] = 'c:/jdk-8u25-windows-x64.exe'
-  default['java_installer']['java_home'] = "C:\\Program Files\\Java\\jre1.8.0_25"
+  default['java_installer']['java_home'] = "C:\\java"
   default['java_installer']['checksum'] = 'b68acf3048672b7e744fe8d0d2dcf201c6aacedb75fb8ed90db23a806fc47c2b'
 when 'solaris','solaris2'
   default['java']['java_folder'] = 'jdk1.8.0_40'
