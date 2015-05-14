@@ -3,14 +3,14 @@
 #
 # data is in ${data.dir.root}/${data.dir.store}
 
-data.dir.root=/opt/target/alf-installation/alf_data/solr4/index
+data.dir.root=<%= node['data.dir.root']%>
 data.dir.store=workspace/SpacesStore
 enable.alfresco.tracking=true
 
 #
 # Alfresco version
 #
-alfresco.version=5.0.0
+alfresco.version=<%= node['alfresco.version']%>
 
 
 #

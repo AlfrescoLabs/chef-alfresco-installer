@@ -172,9 +172,8 @@ tomcat_root = node['tomcat']['tomcat_folder']
     action :create
   end
 
-  %w[ /opt/target
-      /opt/target/alf-installation
-      /opt/target/alf-installation/tomcat
+  %w[ #{installation_root}
+      #{tomcat_root}
      ].each do |path|
     directory path do
       owner 'root'
@@ -202,11 +201,11 @@ tomcat_root = node['tomcat']['tomcat_folder']
     not_if { ::File.directory?("#{tomcat_root}/bin") }
   end
 
-  %w[ /opt/target/alf-installation/tomcat/shared
-      /opt/target/alf-installation/tomcat/shared/classes
-      /opt/target/alf-installation/tomcat/shared/lib
-      /opt/target/alf-installation/tomcat/conf/Catalina
-      /opt/target/alf-installation/tomcat/conf/Catalina/localhost
+  %w[ #{tomcat_root}/shared
+      #{tomcat_root}/shared/classes
+      #{tomcat_root}/shared/lib
+      #{tomcat_root}/conf/Catalina
+      #{tomcat_root}/conf/Catalina/localhost
      ].each do |path|
     directory path do
       owner 'root'
@@ -287,21 +286,21 @@ tomcat_root = node['tomcat']['tomcat_folder']
 
   execute 'remove share war' do
     user 'root'
-    command "rm -rf #{node['tomcat']['tomcat_folder']}/webapps/share.war"
+    command "rm -rf #{tomcat_root}/webapps/share.war"
     action :run
     only_if { node['install_share_war'] == false }
   end
 
   execute 'remove alfresco war' do
     user 'root'
-    command "rm -rf #{node['tomcat']['tomcat_folder']}/webapps/alfresco.war"
+    command "rm -rf #{tomcat_root}/webapps/alfresco.war"
     action :run
     only_if { node['install_alfresco_war'] == false }
   end
 
   execute 'remove solr4 war' do
     user 'root'
-    command "rm -rf #{node['tomcat']['tomcat_folder']}/webapps/solr4.war"
+    command "rm -rf #{tomcat_root}/webapps/solr4.war"
     action :run
     only_if { node['install_solr4_war'] == false }
   end

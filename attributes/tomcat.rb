@@ -20,12 +20,21 @@
 #tomcat
 default['tomcat']['download_url']='ftp://172.29.103.222/tomcat/apache-tomcat-7.0.53.tar.gz'
 default['tomcat']['package_name']='apache-tomcat-7.0.53'
-default['tomcat']['target_folder']='/opt/target'
-default['tomcat']['installation_folder']='/opt/target/alf-installation'
-default['tomcat']['tomcat_folder']='/opt/target/alf-installation/tomcat'
+case node['platform_family']
+  when 'windows'
+    default['alfresco']['local'] = 'C:\\alfresco.zip'
+    default['tomcat']['target_folder']='C:\\'
+    default['tomcat']['installation_folder']='C:\\alf-installation'
+    default['tomcat']['tomcat_folder']='C:\\alf-installation\tomcat'
+  else
+    default['alfresco']['local'] = '/opt/alfresco.zip'
+    default['tomcat']['target_folder']='/opt/target'
+    default['tomcat']['installation_folder']='/opt/target/alf-installation'
+    default['tomcat']['tomcat_folder']='/opt/target/alf-installation/tomcat'
+end
 
 #alfresco zip
-default['alfresco']['local'] = '/opt/alfresco.zip'
+
 default['alfresco']['downloadpath'] = 'ftp://172.29.103.222/chef-resources/alfresco-enterprise-5.0.2-SNAPSHOT.zip'
 default['alfresco']['zipfolder'] = 'alfresco-enterprise-5.0.2-SNAPSHOT'
 
@@ -36,3 +45,13 @@ default['url']['ghostscript']='ftp://172.29.103.222/external_apps/ghostscript-9.
 default['url']['openOffice']='ftp://172.29.103.222/external_apps/Apache_OpenOffice_incubating_3.4.0_Solaris_x86_install-arc_en-US.tar.gz'
 default['url']['xpdf']='ftp://172.29.103.222/external_apps/xpdf-3.04.tar.gz'
 default['url']['swftools']='ftp://172.29.103.222/external_apps/swftools-0.9.2.tar.gz'
+
+
+#solr spacesstore
+default['alfresco.version']='5.0.0'
+case node['platform_family']
+  when 'windows'
+    default['data.dir.root'] = 'C:/alf-installation/alf_data/solr4/index'
+  else
+    default['data.dir.root'] = '/opt/target/alf-installation/alf_data/solr4/index'
+end

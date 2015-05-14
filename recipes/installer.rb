@@ -28,12 +28,35 @@ case node['platform_family']
       group 'Administrators'
     end
 
-    windows_package 'Alfresco One' do
+    remote_file node['installer']['local'] do
       source node['installer']['downloadpath']
-      checksum checksum node['installer']['checksum']
-      action :install
-      installer_type :custom
-      options "--mode unattended --alfresco_admin_password #{node['installer']['alfresco_admin_password']} --enable-components #{node['installer']['enable-components']} --disable-components #{node['installer']['disable-components']} --jdbc_username #{node['installer']['jdbc_username']} --jdbc_password #{node['installer']['jdbc_password']} --prefix #{node['installer']['directory']}"
+      rights :read, 'Administrator'
+      rights :write, 'Administrator'
+      rights :full_control, 'Administrator'
+      rights :full_control, 'Administrator', :applies_to_children => true
+      group 'Administrators'
+      action :create_if_missing
+    end
+
+    windows_task 'Install Alfresco' do
+      user 'Administrator'
+      password 'alfresco'
+      command "#{node['installer']['local']} --mode unattended --alfresco_admin_password #{node['installer']['alfresco_admin_password']} --enable-components #{node['installer']['enable-components']} --disable-components #{node['installer']['disable-components']} --jdbc_username #{node['installer']['jdbc_username']} --jdbc_password #{node['installer']['jdbc_password']} --prefix #{node['installer']['directory']}"
+      run_level :highest
+      frequency :monthly
+      action [:create, :run]
+      not_if { File.exists?("#{node['installer']['directory']}\\uninstall.exe") }
+    end
+
+    batch 'Waiting for installation to finish ...' do
+      code <<-EOH
+      dir /S /P \"C:\\alf-installation\\uninstall.exe\"
+      EOH
+      action :run
+      retries 30
+      retry_delay 10
+      notifies :delete, 'windows_task[Install Alfresco]', :delayed
+      not_if { File.exists?("#{node['installer']['directory']}\\uninstall.exe") }
     end
 
     template node['alfresco-global']['directory'] do
@@ -46,43 +69,93 @@ case node['platform_family']
       :top_level
     end
 
+    template "#{node['installer']['directory']}\\tomcat\\conf\\server.xml" do
+      source 'server.xml.erb'
+      rights :read, 'Administrator'
+      rights :write, 'Administrator'
+      rights :full_control, 'Administrator'
+      rights :full_control, 'Administrator', :applies_to_children => true
+      group 'Administrators'
+      :top_level
+    end
+
+    template "#{node['installer']['directory']}\\solr4\\archive-SpacesStore\\conf\\solrcore.properties" do
+      source 'solrcore-archive.erb'
+      rights :read, 'Administrator'
+      rights :write, 'Administrator'
+      rights :full_control, 'Administrator'
+      rights :full_control, 'Administrator', :applies_to_children => true
+      group 'Administrators'
+      :top_level
+    end
+
+    template "#{node['installer']['directory']}\\solr4\\workspace-SpacesStore\\conf\\solrcore.properties" do
+      source 'solrcore-workspace.erb'
+      rights :read, 'Administrator'
+      rights :write, 'Administrator'
+      rights :full_control, 'Administrator'
+      rights :full_control, 'Administrator', :applies_to_children => true
+      group 'Administrators'
+      :top_level
+    end
+
     execute 'remove share war' do
       user 'root'
       command "del #{node['installer']['directory']}\\tomcat\\webapps\\share.war"
       action :run
-      only_if { node['install_share_war'] == false }
+      only_if { !node['install_share_war'] }
     end
 
     execute 'remove alfresco war' do
       user 'root'
       command "del #{node['installer']['directory']}\\tomcat\\webapps\\alfresco.war"
       action :run
-      only_if { node['install_alfresco_war'] == false }
+      only_if { !node['install_alfresco_war'] }
     end
 
     execute 'remove solr4 war' do
       user 'root'
       command "del #{node['installer']['directory']}\\tomcat\\webapps\\solr4.war"
       action :run
-      only_if { node['install_solr4_war'] == false }
+      only_if { !node['install_solr4_war'] }
+    end
+
+    remote_file "#{node['installer']['directory']}/qa50.lic" do
+      source node['alfresco.cluster.prerequisites']
+      rights :read, 'Administrator'
+      rights :write, 'Administrator'
+      rights :full_control, 'Administrator'
+      rights :full_control, 'Administrator', :applies_to_children => true
+      group 'Administrators'
+      action :create_if_missing
+    end
+
+    remote_file "#{node['installer']['directory']}\\tomcat\\lib\\#{node['db.driver.filename']}" do
+      source node['db.driver.url']
+      rights :read, 'Administrator'
+      rights :write, 'Administrator'
+      rights :full_control, 'Administrator'
+      rights :full_control, 'Administrator', :applies_to_children => true
+      group 'Administrators'
+      action :create_if_missing
     end
 
     case node['START_SERVICES']
       when true
         service 'alfrescoPostgreSQL' do
-          action [:start, :enable]
+          action [:enable, :start]
           supports :status => false, :restart => true, :stop => true, :start => true
-          only_if { node['START_POSGRES'] == true }
+          only_if { node['START_POSGRES'] }
         end
         service 'alfrescoTomcat' do
-          action [:start, :enable]
+          action [:enable, :start]
           supports :status => true, :restart => true, :stop => true, :start => true
         end
       else
         service 'alfrescoPostgreSQL' do
           action :enable
           supports :status => false, :restart => true, :stop => true, :start => true
-          only_if { node['START_POSGRES'] == true }
+          only_if { node['START_POSGRES'] }
         end
         service 'alfrescoTomcat' do
           action :enable
@@ -112,7 +185,7 @@ case node['platform_family']
       mode '775'
       action :create_if_missing
       sensitive true
-      not_if { node['localPath'] == true }
+      not_if { node['localPath'] }
     end
 
     execute 'Install alfresco' do
@@ -156,21 +229,21 @@ case node['platform_family']
       user 'root'
       command "rm -rf #{node['installer']['directory']}/tomcat/webapps/share.war"
       action :run
-      only_if { node['install_share_war'] == false }
+      only_if { !node['install_share_war'] }
     end
 
     execute 'remove alfresco war' do
       user 'root'
       command "rm -rf #{node['installer']['directory']}/tomcat/webapps/alfresco.war"
       action :run
-      only_if { node['install_alfresco_war'] == false }
+      only_if { !node['install_alfresco_war'] }
     end
 
     execute 'remove solr4 war' do
       user 'root'
       command "rm -rf #{node['installer']['directory']}/tomcat/webapps/solr4.war && rm -rf #{node['installer']['directory']}/tomcat/conf/Catalina/localhost/solr4.xml"
       action :run
-      only_if { node['install_solr4_war'] == false }
+      only_if { !node['install_solr4_war'] }
     end
 
     remote_file "#{node['installer']['directory']}/qa50.lic" do
