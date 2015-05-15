@@ -10,4 +10,7 @@ depends 'chef-client'
 depends 'apt'
 depends 'line'
 suggests 'windows'
-suggests 'nfs'
+
+if RbConfig::CONFIG['host_os'] == /redhat/
+  depends 'nfs'
+end

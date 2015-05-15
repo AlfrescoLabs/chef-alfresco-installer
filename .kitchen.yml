@@ -63,7 +63,24 @@ suites:
     localPath: false
     NFS_server: true
     dir_server: "/opt/ReplicateServer"
+- name: replicationclient
+  excludes:
+    - suse12
+    - solaris112
+    - ubuntu1204
+  run_list:
+  - recipe[alfresco-chef::replication]
+  attributes:
+    replication_remote_ip: '172.29.101.98'
 
+- name: lbwin
+  excludes:
+    - suse12
+    - solaris112
+    - ubuntu1204
+    - redhat65
+  run_list:
+  - recipe[alfresco-chef::loadbalancer]
 
 
 
