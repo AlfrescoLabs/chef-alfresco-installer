@@ -31,7 +31,6 @@ machine_batch 'Initial setup on nodes and lb' do
                'db.url' => 'jdbc:mysql://172.29.101.98:3306/${db.name}?useUnicode=yes&characterEncoding=UTF-8',
                'db.password' => 'alfresco',
                'db.username' => 'alfresco',
-               'NFS_client' => true,
                'replication.enabled' => 'true',
                'alfresco.cluster.enabled' => 'true',
                'additional_cluster_members' => ['172.29.101.97'],
@@ -61,7 +60,6 @@ machine_batch 'Initial setup on nodes and lb' do
                'db.url' => 'jdbc:mysql://172.29.101.98:3306/${db.name}?useUnicode=yes&characterEncoding=UTF-8',
                'db.password' => 'alfresco',
                'db.username' => 'alfresco',
-               'NFS_client' => true,
                'replication.enabled' => 'true',
                'alfresco.cluster.enabled' => 'true',
                'additional_cluster_members' => ['172.29.101.99'],
@@ -81,7 +79,7 @@ machine_batch 'Initial setup on nodes and lb' do
                             :password => 'alfresco'
                         }
                     }
-    run_list %w(recipe[java-wrapper::java8] recipe[alfresco-chef::replication] recipe[alfresco-chef::loadbalancer] recipe[alfresco-dbwrapper::mysql] recipe[alfresco-chef::installer])
+    run_list %w(recipe[java-wrapper::java8] recipe[alfresco-chef::replication_server] recipe[alfresco-chef::loadbalancer] recipe[alfresco-dbwrapper::mysql] recipe[alfresco-chef::installer])
     attributes 'lb' => {
                    'ips_and_nodenames' => [
                        {
@@ -96,8 +94,6 @@ machine_batch 'Initial setup on nodes and lb' do
                'installer' =>
                    {'nodename' => 'LB',
                     'disable-components' => 'javaalfresco,postgres,alfrescowcmqs,alfrescosolr,alfrescogoogledocs,libreofficecomponent'},
-               'NFS_server' => true,
-               'NFS_client' => false,
                'replication.enabled' => 'false',
                'alfresco.cluster.enabled' => 'true',
                'install_share_war' => false,
@@ -112,7 +108,7 @@ end
 machine_batch 'replication setup' do
   %w(node1 node2).each do |name|
     machine name do
-      recipe 'alfresco-chef::replication'
+      recipe 'alfresco-chef::replication_client'
       action :converge
     end
   end
