@@ -1,10 +1,9 @@
-default['NFS_server']=false
-default['NFS_client']=true
 case node['platform_family']
   when 'windows'
     default['dir_client']='M:/'
     default['windows_drive']='M:'
-    default['dir_server']='\\opt\\Replicate'
+    default['dir_server']='/Replicate'
+    default['dir_server_local']='C:\\Replicate'
   else
     default['dir_client']='/opt/Replicate'
     default['dir_server']='/opt/Replicate'
