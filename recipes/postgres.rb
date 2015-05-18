@@ -68,7 +68,7 @@ bash 'Startup postgres' do
 	echo "listen_addresses = '*'" >> /usr/local/pgsql/data/postgresql.conf
 	/usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l logfile start 
 	sleep 5
-	/usr/local/pgsql/bin/createuser alfresco #{node['postgres']['user']}
+	/usr/local/pgsql/bin/createuser #{node['postgres']['user']}
 	EOH
 	only_if { node['postgres']['installpostgres'] == true }
   	not_if { File.exists?('/usr/local/pgsql/data/postgresql.conf') }
@@ -79,7 +79,7 @@ bash 'create database' do
 	cwd '/usr/local/pgsql/bin'
 	code <<-EOH
 		./psql << EOF
-		create database #{node['postgres']['dbname']} with encoding='utf-8' owner=#{node['postgres']['user']} connection limit=-1;
+		create database #{node['postgres']['dbname']} with encoding='utf-8' template=template0 owner=#{node['postgres']['user']} connection limit=-1;
 		GRANT ALL PRIVILEGES ON DATABASE #{node['postgres']['dbname']} TO #{node['postgres']['user']};
 		\\q
 		EOF
