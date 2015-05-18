@@ -179,7 +179,6 @@ case node['platform_family']
 
     remote_file node['installer']['local'] do
       source node['installer']['downloadpath']
-      checksum node['installer']['checksum']
       owner 'root'
       group 'root'
       mode '775'
