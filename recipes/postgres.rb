@@ -68,10 +68,10 @@ bash 'Startup postgres' do
 	echo "listen_addresses = '*'" >> /usr/local/pgsql/data/postgresql.conf
 	/usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l logfile start 
 	sleep 5
-	/usr/local/pgsql/bin/createuser #{node['postgres']['user']}
+	/usr/local/pgsql/bin/createuser alfresco #{node['postgres']['user']}
 	EOH
 	only_if { node['postgres']['installpostgres'] == true }
-  	not_if { File.exists?('/usr/local/pgsql/bin/psql') }
+  	not_if { File.exists?('/usr/local/pgsql/data/postgresql.conf') }
 end
 
 bash 'create database' do
