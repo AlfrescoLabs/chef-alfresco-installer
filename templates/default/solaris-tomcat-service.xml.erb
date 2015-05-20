@@ -12,7 +12,7 @@
       timeout_seconds='60' >
    <method_context>
       <method_environment>
-         <envvar name="JAVA_OPTS" value="-XX:+DisableExplicitGC -Djava.awt.headless=true -Dalfresco.home=<%=node['tomcat']['installation_folder']%> -Dcom.sun.management.jmxremote -XX:ReservedCodeCacheSize=128m -XX:MaxPermSize=256M -Xms512M -Xmx2048M" />
+         <envvar name="JAVA_OPTS" value="-XX:+DisableExplicitGC -Djava.awt.headless=true -Dalfresco.home=<%=node['installer']['directory']%> -Dcom.sun.management.jmxremote -XX:ReservedCodeCacheSize=128m -XX:MaxPermSize=256M -Xms512M -Xmx2048M" />
       </method_environment>
    </method_context>
    </exec_method>

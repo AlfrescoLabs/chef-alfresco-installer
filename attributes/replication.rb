@@ -4,9 +4,11 @@ case node['platform_family']
     default['windows_drive']='M:'
     default['dir_server']='/Replicate'
     default['dir_server_local']='C:\\Replicate'
+    
     normal['nfs']['service_provider']['lock'] = ''
 	normal['nfs']['service_provider']['portmap'] = ''
 	normal['nfs']['service_provider']['server'] = ''
+	normal['nfs']['service_provider']['idmap'] = ''
   else
     default['dir_client']='/opt/Replicate'
     default['dir_server']='/opt/Replicate'

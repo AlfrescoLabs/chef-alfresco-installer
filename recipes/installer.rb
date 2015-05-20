@@ -189,7 +189,7 @@ case node['platform_family']
 
     execute 'Install alfresco' do
       command "#{node['installer']['local']} --mode unattended --alfresco_admin_password #{node['installer']['alfresco_admin_password']} --enable-components #{node['installer']['enable-components']} --disable-components #{node['installer']['disable-components']} --jdbc_username #{node['installer']['jdbc_username']} --jdbc_password #{node['installer']['jdbc_password']} --prefix #{node['installer']['directory']}"
-      creates '/opt/target/alf-installation/alfresco.sh'
+      not_if { File.exists?("#{node['installer']['directory']}//alfresco.sh") }
     end
 
     template node['alfresco-global']['directory'] do
@@ -222,6 +222,15 @@ case node['platform_family']
       group 'root'
       mode 00755
       :top_level
+    end
+
+    if node['disable_solr_ssl']
+      unless node['install_alfresco_war']
+
+      end
+      unless node['install_solr4_war']
+
+      end
     end
 
     execute 'remove share war' do

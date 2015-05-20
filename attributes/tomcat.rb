@@ -23,14 +23,8 @@ default['tomcat']['package_name']='apache-tomcat-7.0.53'
 case node['platform_family']
   when 'windows'
     default['alfresco']['local'] = 'C:\\alfresco.zip'
-    default['tomcat']['target_folder']='C:\\'
-    default['tomcat']['installation_folder']='C:\\alf-installation'
-    default['tomcat']['tomcat_folder']='C:\\alf-installation\tomcat'
   else
     default['alfresco']['local'] = '/opt/alfresco.zip'
-    default['tomcat']['target_folder']='/opt/target'
-    default['tomcat']['installation_folder']='/opt/target/alf-installation'
-    default['tomcat']['tomcat_folder']='/opt/target/alf-installation/tomcat'
 end
 
 #alfresco zip
@@ -51,7 +45,7 @@ default['url']['swftools']='ftp://172.29.103.222/external_apps/swftools-0.9.2.ta
 default['alfresco.version']='5.0.0'
 case node['platform_family']
   when 'windows'
-    default['data.dir.root'] = 'C:/alf-installation/alf_data/solr4/index'
+    default['data.dir.root'] = "#{node['installer']['directory']}/alf_data/solr4/index"
   else
-    default['data.dir.root'] = '/opt/target/alf-installation/alf_data/solr4/index'
+    default['data.dir.root'] = "#{node['installer']['directory']}/alf_data/solr4/index"
 end

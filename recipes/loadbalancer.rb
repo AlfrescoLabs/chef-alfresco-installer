@@ -40,8 +40,32 @@ case node['platform_family']
 
   else
 
+
     package 'httpd' do
       action :install
+    end
+
+    directory '/resources' do
+      owner 'root'
+      group 'root'
+      mode '0775'
+      action :create
+    end
+
+    remote_file '/resources/server.crt' do
+      source 'ftp://172.29.101.56/tomcat/cert/server.crt'
+      owner 'root'
+      group 'root'
+      mode 00775
+      action :create_if_missing
+    end
+
+    remote_file '/resources/server.key' do
+      source 'ftp://172.29.101.56/tomcat/cert/server.key'
+      owner 'root'
+      group 'root'
+      mode 00775
+      action :create_if_missing
     end
 
     template '/etc/httpd/conf/httpd.conf' do

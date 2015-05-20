@@ -25,10 +25,6 @@ ftp.enabled=true
 ############### database connection properties ###############
 <%= render 'ag-database.erb' %>
 
-# The server mode. Set value here
-# UNKNOWN | TEST | BACKUP | PRODUCTION
-system.serverMode=UNKNOWN
-
 ############### RMI registry port for JMX ###############
 alfresco.rmi.services.port=50500
 monitor.rmi.service.port=0
@@ -38,9 +34,6 @@ monitor.rmi.service.port=0
 
 ############### Initial admin password ###############
 alfresco_user_store.adminpassword=209c6174da490caeb422f3fa5a7ae634
-
-############### E-mail site invitation setting ###############
-notification.email.siteinvite=false
 
 ############### License location ###############
 dir.license.external=<%= node['installer']['directory']%>
@@ -55,7 +48,7 @@ system.workflow.engine.jbpm.enabled=false
 hybridworkflow.enabled=true
 sync.cloud.url=https://NCT1052a.alfresco.me/alfresco/a/{network}/
 sync.mode=ON_PREMISE
-system.serverMode=PRODUCTION
+system.serverMode=TEST
 
 ############### E-mail site invitation setting ###############
 notification.email.siteinvite=true

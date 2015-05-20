@@ -162,9 +162,6 @@ bash 'Install jpegsrc' do
 
 end
 
-installation_root = node['tomcat']['installation_folder']
-tomcat_root = node['tomcat']['tomcat_folder']
-
   directory '/resources' do
     owner 'root'
     group 'root'
@@ -172,8 +169,8 @@ tomcat_root = node['tomcat']['tomcat_folder']
     action :create
   end
 
-  %w[ #{installation_root}
-      #{tomcat_root}
+  %w[ #{node['installer']['directory']}
+      #{node['installer']['directory']}/tomcat
      ].each do |path|
     directory path do
       owner 'root'
@@ -196,16 +193,16 @@ tomcat_root = node['tomcat']['tomcat_folder']
     cwd '/opt'
     code <<-EOH
     tar xvf tomcat.tar.gz
-    mv #{node['tomcat']['package_name']}/* #{tomcat_root}
+    mv #{node['tomcat']['package_name']}/* #{node['installer']['directory']}/tomcat
     EOH
-    not_if { ::File.directory?("#{tomcat_root}/bin") }
+    not_if { ::File.directory?("#{node['installer']['directory']}/tomcat/bin") }
   end
 
-  %w[ #{tomcat_root}/shared
-      #{tomcat_root}/shared/classes
-      #{tomcat_root}/shared/lib
-      #{tomcat_root}/conf/Catalina
-      #{tomcat_root}/conf/Catalina/localhost
+  %w[ #{node['installer']['directory']}/tomcat/shared
+      #{node['installer']['directory']}/tomcat/shared/classes
+      #{node['installer']['directory']}/tomcat/shared/lib
+      #{node['installer']['directory']}/tomcat/conf/Catalina
+      #{node['installer']['directory']}/tomcat/conf/Catalina/localhost
      ].each do |path|
     directory path do
       owner 'root'
@@ -215,7 +212,7 @@ tomcat_root = node['tomcat']['tomcat_folder']
     end
   end
 
-  template "#{tomcat_root}/conf/catalina.properties" do
+  template "#{node['installer']['directory']}/tomcat/conf/catalina.properties" do
     source 'catalina.properties.erb'
     owner 'root'
     group 'root'
@@ -223,7 +220,7 @@ tomcat_root = node['tomcat']['tomcat_folder']
     :top_level
   end
 
-  template "#{tomcat_root}/conf/server.xml" do
+  template "#{node['installer']['directory']}/tomcat/conf/server.xml" do
     source 'server.xml.erb'
     owner 'root'
     group 'root'
@@ -231,7 +228,7 @@ tomcat_root = node['tomcat']['tomcat_folder']
     :top_level
   end
 
-  template "#{tomcat_root}/conf/context.xml" do
+  template "#{node['installer']['directory']}/tomcat/conf/context.xml" do
     source 'context.xml.erb'
     owner 'root'
     group 'root'
@@ -239,7 +236,7 @@ tomcat_root = node['tomcat']['tomcat_folder']
     :top_level
   end
 
-  template "#{tomcat_root}/conf/Catalina/localhost/solr4.xml" do
+  template "#{node['installer']['directory']}/tomcat/conf/Catalina/localhost/solr4.xml" do
     source 'solr4.xml.erb'
     owner 'root'
     group 'root'
@@ -247,7 +244,7 @@ tomcat_root = node['tomcat']['tomcat_folder']
     :top_level
   end
 
-  template "#{tomcat_root}/conf/tomcat-users.xml" do
+  template "#{node['installer']['directory']}/tomcat/conf/tomcat-users.xml" do
     source 'tomcat-users.xml.erb'
     owner 'root'
     group 'root'
@@ -269,14 +266,14 @@ tomcat_root = node['tomcat']['tomcat_folder']
     cwd '/opt'
     code <<-EOH
     unzip alfresco.zip
-    cp -rf #{node['alfresco']['zipfolder']}/* #{installation_root}/
-    cp -rf  #{installation_root}/web-server/* #{tomcat_root}/
-    rm -rf #{installation_root}/web-server
+    cp -rf #{node['alfresco']['zipfolder']}/* #{node['installer']['directory']}
+    cp -rf  #{node['installer']['directory']}web-server/* #{node['installer']['directory']}/tomcat/
+    rm -rf #{node['installer']['directory']}/web-server
     EOH
-    not_if { File.exists?("#{installation_root}/web-server/shared/classes/alfresco-global.properties.sample") }
+    not_if { File.exists?("#{node['installer']['directory']}/web-server/shared/classes/alfresco-global.properties.sample") }
   end
 
-  template "#{tomcat_root}/shared/classes/alfresco-global.properties" do
+  template "#{node['installer']['directory']}/tomcat/shared/classes/alfresco-global.properties" do
     source 'alfresco-global.properties.erb'
     owner 'root'
     group 'root'
@@ -286,23 +283,23 @@ tomcat_root = node['tomcat']['tomcat_folder']
 
   execute 'remove share war' do
     user 'root'
-    command "rm -rf #{tomcat_root}/webapps/share.war"
+    command "rm -rf #{node['installer']['directory']}/tomcat/webapps/share.war"
     action :run
-    only_if { node['install_share_war'] == false }
+    only_if { !node['install_share_war'] }
   end
 
   execute 'remove alfresco war' do
     user 'root'
-    command "rm -rf #{tomcat_root}/webapps/alfresco.war"
+    command "rm -rf #{node['installer']['directory']}/tomcat/webapps/alfresco.war"
     action :run
-    only_if { node['install_alfresco_war'] == false }
+    only_if { !node['install_alfresco_war']}
   end
 
   execute 'remove solr4 war' do
     user 'root'
-    command "rm -rf #{tomcat_root}/webapps/solr4.war"
+    command "rm -rf #{node['installer']['directory']}/tomcat/webapps/solr4.war"
     action :run
-    only_if { node['install_solr4_war'] == false }
+    only_if { !node['install_solr4_war'] }
   end
 
 case node['platform_family']
@@ -319,7 +316,7 @@ when 'solaris','solaris2'
     action :nothing
   end
 
-  template "#{installation_root}/tomcat.xml" do
+  template "#{node['installer']['directory']}tomcat.xml" do
     source 'solaris-tomcat-service.xml.erb'
     owner 'root'
     group 'root'
@@ -328,7 +325,7 @@ when 'solaris','solaris2'
 
   execute 'Import solaris tomcat service' do
     user 'root'
-    command "svccfg import #{installation_root}/tomcat.xml"
+    command "svccfg import #{node['installer']['directory']}tomcat.xml"
     notifies :restart, 'service[application/tomcat]'
   end
 
