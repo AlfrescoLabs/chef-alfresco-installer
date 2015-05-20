@@ -164,7 +164,7 @@ oracle.install.db.config.starterdb.storageType=FILE_SYSTEM_STORAGE
 oracle.install.db.config.starterdb.fileSystemStorage.dataLocation=#{node['oracle']['base']}/oradata
 SECURITY_UPDATES_VIA_MYORACLESUPPORT=false
 DECLINE_SECURITY_UPDATES=true"
-	only_if { node['oracle']['installoracle'] == true }
+	only_if { node['oracle']['installoracle']}
 	end
 
 execute 'Run oracle installer' do
@@ -172,7 +172,7 @@ execute 'Run oracle installer' do
 	cwd node['oracle']['downloaddir']
 	command "su oracle -c 'ulimit -n 65536 && ulimit -s 32768 && ./runInstaller -showProgress -silent -waitforcompletion -ignoreSysPrereqs -responseFile #{node['oracle']['downloaddir']}/db_install.rsp'"
 	returns 6
-	only_if { node['oracle']['installoracle'] == true }
+	only_if { node['oracle']['installoracle'] }
 	not_if { File.exists?("#{node['oracle']['home']}/bin/sqlplus") }
 end
 
@@ -198,7 +198,7 @@ export PATH=#{node['oracle']['home']}/bin:$PATH" >> /export/home/oracle/.profile
 	EOH
 	not_if 'cat /root/.profile | grep ORACLE_HOME'
 	not_if 'cat /export/home/oracle/.profile | grep ORACLE_HOME'
-	only_if { node['oracle']['installoracle'] == true }
+	only_if { node['oracle']['installoracle']}
 end
 
 bash 'Create default alfresco database' do
@@ -220,7 +220,7 @@ bash 'Create default alfresco database' do
 	EOH
 	environment (environment_setup)
 	notifies :run, 'execute[Restart the database]', :immediately
-	only_if { node['oracle']['installoracle'] == true }
+	only_if { node['oracle']['installoracle'] }
 	not_if { ::File.directory?("#{node['oracle']['base']}/oradata/alfresco") }
 end
 
@@ -270,7 +270,7 @@ bash 'Create new schema' do
 	!
 	EOH
 	environment (environment_setup)
-	only_if { node['oracle']['createschema'] == true }
+	only_if { node['oracle']['createschema'] }
 end
 
 bash 'Drop existent schema' do
@@ -284,5 +284,5 @@ bash 'Drop existent schema' do
 	EOF
 	EOH
 	environment (environment_setup)
-	only_if { node['oracle']['dropschema'] == true }
+	only_if { node['oracle']['dropschema'] }
 end

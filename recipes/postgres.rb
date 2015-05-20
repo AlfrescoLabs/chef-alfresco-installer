@@ -55,7 +55,7 @@ bash 'Install postgres' do
 	mkdir /usr/local/pgsql/data
 	chown postgres /usr/local/pgsql/data
     EOH
-    only_if { node['postgres']['installpostgres'] == true }
+    only_if { node['postgres']['installpostgres'] }
 		not_if { File.exists?('/usr/local/pgsql/bin/psql') }
 end
 
@@ -70,7 +70,7 @@ bash 'Startup postgres' do
 	sleep 5
 	/usr/local/pgsql/bin/createuser #{node['postgres']['user']}
 	EOH
-	only_if { node['postgres']['installpostgres'] == true }
+	only_if { node['postgres']['installpostgres'] }
   	not_if { File.exists?('/usr/local/pgsql/data/postgresql.conf') }
 end
 
@@ -84,7 +84,7 @@ bash 'create database' do
 		\\q
 		EOF
 	EOH
-	only_if { node['postgres']['createdb'] == true }
+	only_if { node['postgres']['createdb'] }
 	not_if 'su - postgres -c \"/usr/local/pgsql/bin/psql -c \'\list\'\" | grep alfresco'
 end
 
@@ -98,5 +98,5 @@ bash 'drop database' do
 		\\q
 		EOF
 	EOH
-	only_if { node['postgres']['dropdb'] == true }
+	only_if { node['postgres']['dropdb'] }
 end
