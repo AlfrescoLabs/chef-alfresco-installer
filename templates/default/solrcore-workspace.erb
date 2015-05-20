@@ -19,7 +19,9 @@ alfresco.version=<%= node['alfresco.version']%>
 
 alfresco.host=<%= node['solr.target.alfresco.host']%>
 alfresco.port=<%= node['solr.target.alfresco.port']%>
-alfresco.port.ssl=<%= node['solr.target.alfresco.port.ssl']%>
+<% if !node['disable_solr_ssl'] %>
+    alfresco.port.ssl=<%= node['solr.target.alfresco.port.ssl']%>
+<% end %>
 alfresco.baseUrl=<%= node['solr.target.alfresco.baseUrl']%>
 alfresco.cron=0/15 * * * * ? *
 alfresco.stores=workspace://SpacesStore
@@ -35,7 +37,12 @@ alfresco.batch.count=1000
 # encryption
 
 # none, https
-alfresco.secureComms=https
+<% if node['disable_solr_ssl'] %>
+    alfresco.secureComms=none
+<% else %>
+    alfresco.secureComms=https
+<% end %>
+
 
 # ssl
 alfresco.encryption.ssl.keystore.type=JCEKS
