@@ -49,4 +49,3 @@ suites:
 - name: java8
   run_list:
   - recipe[java-wrapper::java8]
-  attributes: { localPath: false }

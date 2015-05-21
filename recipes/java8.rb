@@ -55,7 +55,6 @@ when 'solaris','solaris2'
     mode '644'
     action :create
     sensitive true
-    not_if { node['localPath'] == true }
   end
   
   bash 'install_java' do
@@ -86,7 +85,6 @@ else
     mode '644'
     action :create
     sensitive true
-    not_if { node['localPath'] == true }
   end
 
   node.set['java']['install_flavor'] = 'oracle'

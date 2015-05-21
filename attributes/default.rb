@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
 #/
-default['localPath'] = false
+
 default['java_7_download_path'] = 'ftp://172.29.103.222/chef-resources/jdk-7u75-linux-x64.tar.gz'
 
 case node['platform_family']
