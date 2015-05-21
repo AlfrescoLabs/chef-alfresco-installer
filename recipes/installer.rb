@@ -261,6 +261,7 @@ case node['platform_family']
     jar -cvf alfresco.war -C tmp-alfrescowar/ .
     cp -rf alfresco.war #{node['installer']['directory']}/tomcat/webapps/
     rm -rf alfresco.war
+    rm -rf tmp-alfrescowar
           EOH
           not_if { ::File.exist?("#{node['installer']['directory']}/tomcat/webapps/alfresco/WEB-INF/web.xml") }
         end
@@ -302,6 +303,7 @@ case node['platform_family']
     jar -cvf solr4.war -C tmp-solr4war/ .
     cp -rf solr4.war #{node['installer']['directory']}/tomcat/webapps/
     rm -rf solr4.war
+    rm -rf tmp-solr4war
           EOH
           not_if { ::File.exist?("#{node['installer']['directory']}/tomcat/webapps/solr4/WEB-INF/web.xml") }
         end
