@@ -241,17 +241,25 @@ case node['platform_family']
           not_if { ::File.exist?("#{node['installer']['directory']}/tomcat/webapps/alfresco/WEB-INF/web.xml") }
         end
 
-        template 'set web.xml for alfresco' do
+        template 'set web.xml for alfresco.war' do
           source 'web.xml-alfresco.erb'
-          if ::File.exist?('/opt/tmp-alfrescowar/WEB-INF/web.xml')
-            path '/opt/tmp-alfrescowar/WEB-INF/web.xml'
-          else
-            path "#{node['installer']['directory']}/tomcat/webapps/alfresco/WEB-INF/web.xml"
-          end
+          path '/opt/tmp-alfrescowar/WEB-INF/web.xml'
           owner 'root'
           group 'root'
           mode 00755
           :top_level
+          not_if { ::File.exist?("#{node['installer']['directory']}/tomcat/webapps/alfresco/WEB-INF/web.xml") }
+          only_if { ::File.exist?('/opt/tmp-alfrescowar/WEB-INF/web.xml') }
+        end
+
+        template 'set web.xml for alfresco' do
+          source 'web.xml-alfresco.erb'
+          path "#{node['installer']['directory']}/tomcat/webapps/alfresco/WEB-INF/web.xml"
+          owner 'root'
+          group 'root'
+          mode 00755
+          :top_level
+          only_if { ::File.exist?("#{node['installer']['directory']}/tomcat/webapps/alfresco/WEB-INF/web.xml") }
         end
 
         bash 'archive and move alfresco war' do
@@ -283,17 +291,25 @@ case node['platform_family']
           not_if { ::File.exist?("#{node['installer']['directory']}/tomcat/webapps/solr4/WEB-INF/web.xml") }
         end
 
-        template 'set web.xml for solr4' do
+        template 'set web.xml for solr4.war' do
           source 'web.xml-solr4.erb'
-          if ::File.exist?('/opt/tmp-solr4war/WEB-INF/web.xml')
-            path '/opt/tmp-solr4war/WEB-INF/web.xml'
-          else
-            path "#{node['installer']['directory']}/tomcat/webapps/solr4/WEB-INF/web.xml"
-          end
+          path '/opt/tmp-solr4war/WEB-INF/web.xml'
           owner 'root'
           group 'root'
           mode 00755
           :top_level
+          not_if { ::File.exist?("#{node['installer']['directory']}/tomcat/webapps/solr4/WEB-INF/web.xml") }
+          only_if { ::File.exist?('/opt/tmp-solr4war/WEB-INF/web.xml') }
+        end
+
+        template 'set web.xml for solr4' do
+          source 'web.xml-solr4.erb'
+          path "#{node['installer']['directory']}/tomcat/webapps/solr4/WEB-INF/web.xml"
+          owner 'root'
+          group 'root'
+          mode 00755
+          :top_level
+          only_if { ::File.exist?("#{node['installer']['directory']}/tomcat/webapps/solr4/WEB-INF/web.xml") }
         end
 
         bash 'archive and move alfresco war' do
