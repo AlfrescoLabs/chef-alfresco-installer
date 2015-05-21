@@ -41,11 +41,4 @@ default['url']['xpdf']='ftp://172.29.103.222/external_apps/xpdf-3.04.tar.gz'
 default['url']['swftools']='ftp://172.29.103.222/external_apps/swftools-0.9.2.tar.gz'
 
 
-#solr spacesstore
-default['alfresco.version']='5.0.0'
-case node['platform_family']
-  when 'windows'
-    default['data.dir.root'] = "%{node['installer']['directory']}/alf_data/solr4/index"
-  else
-    default['data.dir.root'] = "%{node['installer']['directory']}/alf_data/solr4/index"
-end
+

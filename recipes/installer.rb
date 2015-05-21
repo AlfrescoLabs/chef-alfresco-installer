@@ -28,8 +28,9 @@ case node['platform_family']
       group 'Administrators'
     end
 
-    remote_file node['installer']['local'] do
+    remote_file 'download alfresco installer' do
       source node['installer']['downloadpath']
+      path node['installer']['local']
       rights :read, 'Administrator'
       rights :write, 'Administrator'
       rights :full_control, 'Administrator'
@@ -59,7 +60,7 @@ case node['platform_family']
       not_if { File.exists?("#{node['installer']['directory']}\\uninstall.exe") }
     end
 
-    template node['alfresco-global']['directory'] do
+    template "#{node['installer']['directory']}\\tomcat\\shared\\classes\\alfresco-global.properties" do
       source 'alfresco-global.properties.erb'
       rights :read, 'Administrator'
       rights :write, 'Administrator'
@@ -177,14 +178,14 @@ case node['platform_family']
       action :create
     end
 
-    remote_file node['installer']['local'] do
+    remote_file 'download alfresco build' do
       source node['installer']['downloadpath']
+      path node['installer']['local']
       owner 'root'
       group 'root'
       mode '775'
       action :create_if_missing
       sensitive true
-      not_if { node['localPath'] }
     end
 
     execute 'Install alfresco' do
@@ -192,7 +193,7 @@ case node['platform_family']
       not_if { File.exists?("#{node['installer']['directory']}//alfresco.sh") }
     end
 
-    template node['alfresco-global']['directory'] do
+    template "#{node['installer']['directory']}/tomcat/shared/classes/alfresco-global.properties" do
       source 'alfresco-global.properties.erb'
       owner 'root'
       group 'root'

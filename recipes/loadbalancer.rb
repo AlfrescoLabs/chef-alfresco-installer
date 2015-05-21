@@ -52,22 +52,6 @@ case node['platform_family']
       action :create
     end
 
-    remote_file '/resources/server.crt' do
-      source 'ftp://172.29.101.56/tomcat/cert/server.crt'
-      owner 'root'
-      group 'root'
-      mode 00775
-      action :create_if_missing
-    end
-
-    remote_file '/resources/server.key' do
-      source 'ftp://172.29.101.56/tomcat/cert/server.key'
-      owner 'root'
-      group 'root'
-      mode 00775
-      action :create_if_missing
-    end
-
     template '/etc/httpd/conf/httpd.conf' do
       source 'httpd.conf.erb'
       owner 'root'
