@@ -50,30 +50,30 @@ case node['platform_family']
     default['jodconverter.portNumbers']=''
 
   when 'windows'
-    default['ooo.exe']="#{node['installer']['directory']}/libreoffice/App/libreoffice/program/soffice.exe"
+    default['ooo.exe']="%{node['installer']['directory']}/libreoffice/App/libreoffice/program/soffice.exe"
     default['ooo.enabled']='false'
     default['ooo.port']='8100'
     default['img.root']='C:\\\\alf-installation\\\\imagemagick'
     default['img.coders']='C:\\\\alf-installation\\\\imagemagick\\\\modules\\\\coders'
     default['img.gslib']='C:\\\\alf-installation\\\\common\\\\lib'
     default['img.exe']='C:\\\\alf-installation\\\\imagemagick\\\\convert.exe'
-    default['swf.exe']="#{node['installer']['directory']}/swftools/pdf2swf.exe"
-    default['swf.languagedir']="#{node['installer']['directory']}/swftools/japanese"
+    default['swf.exe']="%{node['installer']['directory']}/swftools/pdf2swf.exe"
+    default['swf.languagedir']="%{node['installer']['directory']}/swftools/japanese"
     default['jodconverter.enabled']='true'
-    default['jodconverter.officeHome']="#{node['installer']['directory']}/libreoffice/App/libreoffice"
+    default['jodconverter.officeHome']="%{node['installer']['directory']}/libreoffice/App/libreoffice"
     default['jodconverter.portNumbers']='8100'
   else
 
-    default['ooo.exe']="#{node['installer']['directory']}/libreoffice/program/soffice"
+    default['ooo.exe']="%{node['installer']['directory']}/libreoffice/program/soffice"
     default['ooo.enabled']='false'
     default['ooo.port']='8100'
-    default['img.root']="#{node['installer']['directory']}/common"
-    default['img.dyn']="#{node['installer']['directory']}/common/lib"
-    default['img.exe']="#{node['installer']['directory']}/common/bin/convert"
-    default['swf.exe']="#{node['installer']['directory']}/common/bin/pdf2swf"
-    default['swf.languagedir']="#{node['installer']['directory']}/common/japanese"
+    default['img.root']="%{node['installer']['directory']}/common"
+    default['img.dyn']="%{node['installer']['directory']}/common/lib"
+    default['img.exe']="%{node['installer']['directory']}/common/bin/convert"
+    default['swf.exe']="%{node['installer']['directory']}/common/bin/pdf2swf"
+    default['swf.languagedir']="%{node['installer']['directory']}/common/japanese"
     default['jodconverter.enabled']='true'
-    default['jodconverter.officeHome']="#{node['installer']['directory']}/libreoffice"
+    default['jodconverter.officeHome']="%{node['installer']['directory']}/libreoffice"
     default['jodconverter.portNumbers']='8100'
 
 end
