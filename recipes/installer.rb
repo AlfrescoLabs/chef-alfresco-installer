@@ -190,7 +190,7 @@ case node['platform_family']
 
     execute 'Install alfresco' do
       command "#{node['installer']['local']} --mode unattended --alfresco_admin_password #{node['installer']['alfresco_admin_password']} --enable-components #{node['installer']['enable-components']} --disable-components #{node['installer']['disable-components']} --jdbc_username #{node['installer']['jdbc_username']} --jdbc_password #{node['installer']['jdbc_password']} --prefix #{node['installer']['directory']}"
-      not_if { File.exists?("#{node['installer']['directory']}//alfresco.sh") }
+      not_if { File.exists?("#{node['installer']['directory']}/alfresco.sh") }
     end
 
     template "#{node['installer']['directory']}/tomcat/shared/classes/alfresco-global.properties" do
