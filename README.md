@@ -1,31 +1,13 @@
-java-wrapper Cookbook
+Servers spec tests to validate alfresco installations
 ======================
-This is a wrapper cookbook for java modified to fit the alfresco internal process.
-It currently installs java from a local repository.
 
-This is an experimental cookbook!!!
+Setup your test target machine in the test.properties file
+along with the other properties as required
 
+execute with 
+rspec spec
 
-Requirements
-------------
-java cookbook 1.7.0 or higher
-
-
-Usage
------
-#### java-wrapper::java8
-
-e.g.
-Just include `java-wrapper` in your node's `run_list`:
-
-```json
-{
-  "name":"my_node",
-  "run_list": [
-    "recipe[java-wrapper::java8]"
-  ]
-}
-```
+Autogenerates a serverspec.html report file.
 
 Contributing
 ------------
