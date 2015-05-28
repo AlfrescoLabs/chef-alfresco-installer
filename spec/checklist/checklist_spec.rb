@@ -1,14 +1,5 @@
 require 'spec_helper'
 
-currentDir=Dir.pwd
-propertiesFile = {}
-IO.foreach("#{currentDir}/test.properties") do |line|
-  propertiesFile[$1.strip] = $2 if line =~ /([^=]*)=(.*)\/\/(.*)/ || line =~/([^=]*)=(.*)/
-end
-output = "File Name #{"#{currentDir}/test.properties"} \n"
-propertiesFile.each {|key,value| output += " #{key}= #{value} \n" }
-puts Dir.pwd
-
 describe 'Alfresco Global Checks' do
 
   it 'When we check the status of alfresco port it' do
@@ -27,7 +18,7 @@ describe 'Alfresco Global Checks' do
     expect(service('alfresco')).to be_enabled
   end
 
-  connection = Faraday.new(:url => "http://#{propertiesFile['host']}:8080",
+  connection = Faraday.new(:url => "http://#{ENV['TARGET_HOST']}:8080",
                            :headers => {'Host' => host_inventory['hostname']}) do |faraday|
     faraday.adapter Faraday.default_adapter
   end
@@ -48,7 +39,7 @@ describe 'Alfresco Global Checks' do
     expect(connection.get('/alfresco/').body).to include('Alfresco WebScripts Home')
   end
 
-  connection2 = Faraday.new(:url => "http://admin:admin@#{propertiesFile['host']}:8080",
+  connection2 = Faraday.new(:url => "http://admin:admin@#{ENV['TARGET_HOST']}:8080",
                             :headers => {'Host' => host_inventory['hostname']}) do |faraday|
     faraday.adapter Faraday.default_adapter
   end
@@ -91,7 +82,7 @@ describe 'Alfresco Global Checks' do
 
 end
 
-String globalProperties = file(propertiesFile['alfrescoGlobalLocation']).content
+String globalProperties = file(ENV['alfrescoGlobalLocation']).content
 properties = {}
 globalProperties.each_line do |line|
   properties[$1.strip] = $2 if line =~ /([^=]*)=(.*)\/\/(.*)/ || line =~/([^=]*)=(.*)/
