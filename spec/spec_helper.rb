@@ -12,14 +12,24 @@ RSpec.configure do |c|
   c.formatter = 'html'
 end
 
-set :sudo_password, ENV['PASSWORD']
 
-host = ENV['TARGET_HOST']
+testProperties="#{currentDir}/test.properties"
+propertiesFile = {}
+IO.foreach(testProperties) do |line|
+  propertiesFile[$1.strip] = $2 if line =~ /([^=]*)=(.*)\/\/(.*)/ || line =~/([^=]*)=(.*)/
+end
+output = "File Name #{testProperties} \n"
+propertiesFile.each {|key,value| output += " #{key}= #{value} \n" }
+
+
+set :sudo_password, propertiesFile['password']
+
+host = propertiesFile['host']
 
 options = Net::SSH::Config.for(host)
 
-options[:user] ||= ENV['USER']
-options[:password] ||= ENV['PASSWORD']
+options[:user] ||= propertiesFile['user']
+options[:password] ||= propertiesFile['password']
 
 set :host,        options[:host_name] || host
 set :ssh_options, options
