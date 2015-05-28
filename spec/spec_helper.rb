@@ -12,6 +12,7 @@ RSpec.configure do |c|
   c.formatter = 'html'
 end
 
+
 testProperties="#{currentDir}/test.properties"
 propertiesFile = {}
 IO.foreach(testProperties) do |line|
