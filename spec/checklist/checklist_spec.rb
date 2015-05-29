@@ -2,10 +2,10 @@ require 'spec_helper'
 
 currentDir=Dir.pwd
 propertiesFile = {}
-IO.foreach("#{currentDir}/test.glProps") do |line|
+IO.foreach("#{currentDir}/test.properties") do |line|
   propertiesFile[$1.strip] = $2 if line =~ /([^=]*)=(.*)\/\/(.*)/ || line =~/([^=]*)=(.*)/
 end
-output = "File Name #{"#{currentDir}/test.glProps"} \n"
+output = "File Name #{"#{currentDir}/test.properties"} \n"
 propertiesFile.each {|key,value| output += " #{key}= #{value} \n" }
 
 
