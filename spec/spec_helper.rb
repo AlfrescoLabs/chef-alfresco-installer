@@ -21,15 +21,31 @@ end
 output = "File Name #{testProperties} \n"
 propertiesFile.each {|key,value| output += " #{key}= #{value} \n" }
 
+if ENV['checklist_sudo_pass']
+  set :sudo_password, ENV['checklist_sudo_pass']
+else
+  set :sudo_password, propertiesFile['sudo_password']
+end
 
-set :sudo_password, propertiesFile['password']
-
-host = propertiesFile['host']
+if ENV['checklist_target_host']
+  host = ENV['checklist_target_host']
+else
+  host = propertiesFile['host']
+end
 
 options = Net::SSH::Config.for(host)
 
-options[:user] ||= propertiesFile['user']
-options[:password] ||= propertiesFile['password']
+if ENV['checklist.target_user']
+  options[:user] ||= ENV['checklist_target_user']
+else
+  options[:user] ||= propertiesFile['user']
+end
+
+if ENV['checklist_target_password']
+  options[:password] ||= ENV['checklist_target_password']
+else
+  options[:password] ||= propertiesFile['PASSWORD']
+end
 
 set :host,        options[:host_name] || host
 set :ssh_options, options

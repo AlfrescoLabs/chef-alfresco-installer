@@ -9,7 +9,7 @@ output = "File Name #{"#{currentDir}/test.properties"} \n"
 propertiesFile.each {|key,value| output += " #{key}= #{value} \n" }
 
 
-puts command('ifconfig | grep "inet .*"').stdout
+puts "\n Running tests on: \n" + command('ifconfig | grep "inet .*"').stdout
 
 describe 'Alfresco Global Checks' do
 
@@ -44,8 +44,13 @@ describe 'Alfresco Global Checks' do
   it {expect(connection2.get('/alfresco/s/api/solrstats').status).to eq 200}
 
 end
+if ENV['checklist_target_alf_glob']
+  alfrescoGlobalLocation = ENV['checklist_target_alf_glob']
+else
+  alfrescoGlobalLocation = propertiesFile['alfrescoGlobalLocation']
+end
 
-String globalProperties = file(propertiesFile['alfrescoGlobalLocation']).content
+String globalProperties = file(alfrescoGlobalLocation).content
 properties = {}
 globalProperties.each_line do |line|
   properties[$1.strip] = $2 if line =~ /([^=]*)=(.*)\/\/(.*)/ || line =~/([^=]*)=(.*)/
