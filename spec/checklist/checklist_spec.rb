@@ -11,12 +11,7 @@ propertiesFile.each {|key,value| output += " #{key}= #{value} \n" }
 
 puts "\n Running tests on: \n" + command('ifconfig | grep "inet .*"').stdout
 
-
-if ENV['checklist_target_host']
-  target_host = ENV['checklist_target_host']
-else
-  target_host = propertiesFile['host']
-end
+target_host = ENV['checklist_target_host']
 
 describe 'Alfresco Global Checks' do
 

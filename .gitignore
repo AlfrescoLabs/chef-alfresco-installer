@@ -27,3 +27,4 @@ encrypted_data_bag_secret_key
 .idea/workspace.xml
 
 serverspec.html
+spec/reports/
