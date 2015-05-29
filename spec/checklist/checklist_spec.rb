@@ -95,13 +95,7 @@ describe 'Alfresco Global Checks' do
 
 end
 
-if ENV['checklist_target_alf_glob']
-  alfrescoGlobalFileLocation = ENV['checklist_target_alf_glob']
-else
-  alfrescoGlobalFileLocation = propertiesFile['alfrescoGlobalFileLocation']
-end
-
-String globalPropertiesFile = file(alfrescoGlobalFileLocation).content
+String globalPropertiesFile = file(ENV['checklist_target_alf_glob']).content
 glProps = {}
 globalPropertiesFile.each_line do |line|
   glProps[$1.strip] = $2 if line =~ /([^=]*)=(.*)\/\/(.*)/ || line =~/([^=]*)=(.*)/
@@ -110,9 +104,9 @@ output = 'File Name alfresco-global.glProps \n'
 glProps.each {|key,value| output += " #{key}= #{value} \n" }
 
 describe 'FTP/FTPS settings' do
-  it {expect(glProps).to include('ftp.enabled' => 'true')}
-  it {expect(glProps).not_to include('ftp.port' => '')}
-  context "and the port set : #{glProps['ftp.port']}" do
+  it {expect(glProps).to include("ftp.enabled" => "true")}
+  it {expect(glProps).not_to include("ftp.port" => "")}
+  context "and the port set : #{glProps["ftp.port"]}" do
     it {expect(port(glProps['ftp.port'])).to be_listening}
   end
 end
@@ -120,4 +114,25 @@ end
 describe 'JBPM settings' do
   it {expect(glProps).to include('system.workflow.engine.jbpm.enabled' => 'true')}
   it {expect(glProps).to include('system.workflow.engine.jbpm.definitions.visible' => 'true')}
+end
+
+logfile = file(ENV['checklist_target_catalina_log']).content
+
+describe 'Cloud license' do
+  it {expect(logfile).to include('[repo.sync.SyncAdminServiceImpl] [localhost-startStop-1] A key is provided for cloud sync')}
+end
+String cloudUrl = globalPropertiesFile.match( /http.*?(?=a\.alfresco.*)/)
+String computedString =  "#{cloudUrl}my.alfresco.me/share/"
+cloudConnection = Faraday.new(:url => computedString,
+                              :headers => {'Host' => host_inventory['hostname']}) do |faraday|
+  faraday.adapter Faraday.default_adapter
+end
+
+describe 'Cloud sync and Hybrid' do
+  it {expect(glProps).to include('hybridworkflow.enabled'=>'true')}
+  it {expect(glProps).not_to include('sync.cloud.url'=>'')}
+  it {expect(cloudConnection.get('').status).to eq 200}
+  it {expect(cloudConnection.get('').body).to include('2005-2015 Alfresco Software')}
+  it {expect(glProps).to include('sync.mode'=>'ON_PREMISE')}
+  it {expect(glProps).to include('system.serverMode'=>'PRODUCTION')}
 end
