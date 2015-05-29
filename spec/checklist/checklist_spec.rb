@@ -20,37 +20,86 @@ end
 
 describe 'Alfresco Global Checks' do
 
-  it {expect(port(8080)).to be_listening}
-  it {expect(port(5432)).to be_listening}
-  it {expect(port(8443)).to be_listening}
-  it {expect(service('alfresco')).to be_enabled}
+  context 'When we check the status of alfresco port it' do
+   it  {expect(port(8080)).to be_listening}
+  end
+
+  context 'When we check the status of Database port it' do
+   it  {expect(port(5432)).to be_listening}
+  end
+
+  context 'When we check the status of SOLR port it' do
+   it  {expect(port(8443)).to be_listening}
+  end
+
+  context 'When alfresco is set to start at boot then the service'  do
+   it  {expect(service('alfresco')).to be_enabled}
+  end
 
   connection = Faraday.new(:url => "http://#{target_host}:8080",
                            :headers => {'Host' => host_inventory['hostname']}) do |faraday|
     faraday.adapter Faraday.default_adapter
   end
 
-  it {expect(connection.get('').body).to include('Welcome to Alfresco!')}
-  it {expect(connection.get('/share/page').status).to eq 200}
-  it {expect(connection.get('/alfresco/').status).to eq 200}
-  it {expect(connection.get('/alfresco/').body).to include('Alfresco WebScripts Home')}
+  context 'When we are on the root of the server, the body' do
+   it  {expect(connection.get('').body).to include('Welcome to Alfresco!')}
+  end
+
+  context 'When share is up the http status' do
+   it  {expect(connection.get('/share/page').status).to eq 200}
+  end
+
+  context 'When alfresco is up the http status' do
+   it  {expect(connection.get('/alfresco/').status).to eq 200}
+  end
+
+  context 'When we are on the alfresco main page, the body' do
+   it  {expect(connection.get('/alfresco/').body).to include('Alfresco WebScripts Home')}
+  end
 
   connection2 = Faraday.new(:url => "http://admin:admin@#{target_host}:8080",
                             :headers => {'Host' => host_inventory['hostname']}) do |faraday|
     faraday.adapter Faraday.default_adapter
   end
 
-  it {expect(connection2.get('/alfresco/s/index').status).to eq 200}
-  it {expect(connection2.get('/alfresco/s/index').body).to include('Browse all Web Scripts')}
-  it {expect(connection2.get('/alfresco/webdav').status).to eq 200}
-  it {expect(connection2.get('/alfresco/webdav').body).to include('Data Dictionary')}
-  it {expect(connection2.get('/alfresco/webdav').body).to include('Directory listing for /')}
-  it {expect(connection2.get('/alfresco/s/enterprise/admin/admin-systemsummary').status).to eq 200}
-  it {expect(connection2.get('/alfresco/s/enterprise/admin/admin-systemsummary').body).to include('System Summary')}
-  it {expect(connection2.get('/alfresco/s/enterprise/admin/admin-systemsummary').body).to match(">Solr\ 4.*\n.*\n.*Enabled")}
-  it {expect(connection2.get('/alfresco/s/api/solrstats').status).to eq 200}
+  context 'When WebScripts page is up the http status' do
+   it  {expect(connection2.get('/alfresco/s/index').status).to eq 200}
+  end
+
+  context 'When we are on the Web Scripts main page, the body'  do
+   it  {expect(connection2.get('/alfresco/s/index').body).to include('Browse all Web Scripts')}
+  end
+
+  context 'When webdav is up the http response status' do
+   it  {expect(connection2.get('/alfresco/webdav').status).to eq 200}
+  end
+
+  context 'When we are on the webdav main page, the body' do
+   it  {expect(connection2.get('/alfresco/webdav').body).to include('Data Dictionary')}
+  end
+
+  context 'When we are on the webdav main page, the body' do
+   it  {expect(connection2.get('/alfresco/webdav').body).to include('Directory listing for /')}
+  end
+
+  context 'When admin console is up the http status' do
+   it  {expect(connection2.get('/alfresco/s/enterprise/admin/admin-systemsummary').status).to eq 200}
+  end
+
+  context 'When we are on the admin console main page the body' do
+   it  {expect(connection2.get('/alfresco/s/enterprise/admin/admin-systemsummary').body).to include('System Summary')}
+  end
+
+  context 'When we have solr4 enabled on the admin console page the body' do
+   it  {expect(connection2.get('/alfresco/s/enterprise/admin/admin-systemsummary').body).to match(">Solr\ 4.*\n.*\n.*Enabled")}
+  end
+
+  context 'When solr is started correctly, the http status of solrstats' do
+   it  {expect(connection2.get('/alfresco/s/api/solrstats').status).to eq 200}
+  end
 
 end
+
 if ENV['checklist_target_alf_glob']
   alfrescoGlobalFileLocation = ENV['checklist_target_alf_glob']
 else
