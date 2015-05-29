@@ -9,7 +9,7 @@ output = "File Name #{"#{currentDir}/test.properties"} \n"
 propertiesFile.each {|key,value| output += " #{key}= #{value} \n" }
 
 
-puts command('ifconfig | grep "inet .*"')
+puts command('ifconfig | grep "inet .*"').stdout
 
 describe 'Alfresco Global Checks' do
 
