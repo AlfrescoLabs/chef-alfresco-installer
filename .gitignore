@@ -25,3 +25,5 @@ encrypted_data_bag_secret_key
 .idea/vcs.xml
 
 .idea/workspace.xml
+
+serverspec.html
