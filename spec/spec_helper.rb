@@ -1,5 +1,7 @@
 require 'serverspec'
 require 'net/ssh'
+require 'net/smtp'
+require 'net/imap'
 require 'faraday'
 
 set :backend, :ssh
