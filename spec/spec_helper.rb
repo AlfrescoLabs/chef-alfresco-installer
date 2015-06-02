@@ -1,6 +1,5 @@
 require 'serverspec'
 require 'net/ssh'
-require 'yarjuf'
 require 'faraday'
 
 set :backend, :ssh

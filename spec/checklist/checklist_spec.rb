@@ -13,7 +13,7 @@ puts "\n Running tests on: \n" + command('ifconfig | grep "inet .*"').stdout
 
 target_host = ENV['checklist_target_host']
 
-describe 'Alfresco Global Checks' do
+describe 'Alfresco Global Checks:' do
 
   context 'When we check the status of alfresco port it' do
    it  {expect(port(8080)).to be_listening}
@@ -103,7 +103,7 @@ end
 output = 'File Name alfresco-global.glProps \n'
 glProps.each {|key,value| output += " #{key}= #{value} \n" }
 
-describe 'FTP/FTPS settings' do
+describe 'FTP/FTPS settings:' do
   it {expect(glProps).to include("ftp.enabled" => "true")}
   it {expect(glProps).not_to include("ftp.port" => "")}
   context "and the specified port: #{glProps["ftp.port"]}" do
@@ -111,14 +111,14 @@ describe 'FTP/FTPS settings' do
   end
 end
 
-describe 'JBPM settings' do
+describe 'JBPM settings:' do
   it {expect(glProps).to include('system.workflow.engine.jbpm.enabled' => 'true')}
   it {expect(glProps).to include('system.workflow.engine.jbpm.definitions.visible' => 'true')}
 end
 
 logfile = file(ENV['checklist_target_catalina_log']).content
 
-describe 'Cloud license' do
+describe 'Cloud license:' do
   it {expect(logfile).to include('[repo.sync.SyncAdminServiceImpl] [localhost-startStop-1] A key is provided for cloud sync')}
 end
 String cloudUrl = globalPropertiesFile.match( /http.*?(?=a\.alfresco.*)/)
@@ -128,7 +128,7 @@ cloudConnection = Faraday.new(:url => computedString,
   faraday.adapter Faraday.default_adapter
 end
 
-describe 'Cloud sync and Hybrid' do
+describe 'Cloud sync and Hybrid:' do
   it {expect(glProps).to include('hybridworkflow.enabled'=>'true')}
   it {expect(glProps).not_to include('sync.cloud.url'=>'')}
   context "When accessing the specified cloud url: #{computedString}"  do
