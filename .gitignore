@@ -1,17 +1,9 @@
 Gemfile.lock
-Thorfile
-Vagrantfile
 
 /.project
 
-.idea/java-wrapper.iml
+.idea/
 
-.idea/misc.xml
-
-.idea/modules.xml
-
-.idea/vcs.xml
-
-.idea/workspace.xml
+htmlReport/serverspec.html
 
 spec/reports/
