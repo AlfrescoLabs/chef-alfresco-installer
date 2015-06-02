@@ -7,15 +7,10 @@ set :backend, :ssh
 
 currentDir=Dir.pwd
 
-# RSpec.configure do |c|
-#   c.output_stream = File.open("#{currentDir}/serverspec.html", 'w')
-#   c.formatter = 'html'
-# end
-
-# RSpec.configure do |c|
-#   c.output_stream = File.open("#{currentDir}/testss.xml", 'w')
-#   c.formatter = 'RspecJunitFormatter'
-# end
+RSpec.configure do |c|
+  c.output_stream = File.open("#{currentDir}/htmlReport/serverspec.html", 'w')
+  c.formatter = 'html'
+end
 
 testProperties="#{currentDir}/test.properties"
 propertiesFile = {}

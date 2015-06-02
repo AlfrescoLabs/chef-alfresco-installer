@@ -106,7 +106,7 @@ glProps.each {|key,value| output += " #{key}= #{value} \n" }
 describe 'FTP/FTPS settings' do
   it {expect(glProps).to include("ftp.enabled" => "true")}
   it {expect(glProps).not_to include("ftp.port" => "")}
-  context "and the port set : #{glProps["ftp.port"]}" do
+  context "and the specified port: #{glProps["ftp.port"]}" do
     it {expect(port(glProps['ftp.port'])).to be_listening}
   end
 end
@@ -131,8 +131,10 @@ end
 describe 'Cloud sync and Hybrid' do
   it {expect(glProps).to include('hybridworkflow.enabled'=>'true')}
   it {expect(glProps).not_to include('sync.cloud.url'=>'')}
-  it {expect(cloudConnection.get('').status).to eq 200}
-  it {expect(cloudConnection.get('').body).to include('2005-2015 Alfresco Software')}
+  context "When accessing the specified cloud url: #{computedString}"  do
+    it {expect(cloudConnection.get('').status).to eq 200}
+    it {expect(cloudConnection.get('').body).to include('2005-2015 Alfresco Software')}
+  end
   it {expect(glProps).to include('sync.mode'=>'ON_PREMISE')}
   it {expect(glProps).to include('system.serverMode'=>'PRODUCTION')}
 end
