@@ -5,6 +5,7 @@ require 'net/imap'
 require 'net/ftp'
 require 'faraday'
 require 'nokogiri'
+require 'net/telnet'
 
 set :backend, :ssh
 

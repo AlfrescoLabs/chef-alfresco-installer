@@ -13,8 +13,8 @@ propertiesFile = parsePropertiesFile "#{currentDir}/test.properties"
 target_host = ENV['checklist_target_host']
 
 describe 'Alfresco Global Checks:' do
-  let(:serverConnection) { getFaradayConnection "http://#{target_host}:8080" }
-  let(:authenticatedServerConnection) { getFaradayConnection "http://admin:admin@#{target_host}:8080" }
+  let(:serverConnection) { $serverConnection ||= getFaradayConnection "http://#{target_host}:8080" }
+  let(:authenticatedServerConnection) { authenticatedServerConnection ||= getFaradayConnection "http://admin:admin@#{target_host}:8080" }
   context 'When we check the status of alfresco port it' do
     it { expect(port(8080)).to be_listening }
   end
@@ -85,7 +85,6 @@ describe 'Alfresco Global Checks:' do
 
 end
 
-
 String globalPropertiesFile = file(ENV['checklist_target_alf_glob']).content
 glProps = parsePropertiesFile globalPropertiesFile
 
@@ -129,7 +128,7 @@ end
 describe 'Cloud sync and Hybrid:' do
   String cloudUrl = globalPropertiesFile.match(/http.*?(?=a\.alfresco.*)/)
   String computedString = "#{cloudUrl}my.alfresco.me/share/"
-  let(:cloudConnection) { getFaradayConnection computedString }
+  let(:cloudConnection) { $cloudConnection ||= getFaradayConnection computedString }
   context 'when verifying the alfresco global properties file' do
     it { expect(glProps).to include('hybridworkflow.enabled' => 'true') }
     it { expect(glProps).not_to include('sync.cloud.url' => '') }
@@ -156,8 +155,8 @@ describe 'Outbound SMTP:' do
     it { expect(glProps).not_to include('mail.smtp.auth' => '') }
   end
   context 'when verifying if the mail server responds correctly at the specified port' do
-    let(:smtp) { Net::SMTP.start(glProps["mail.host"], glProps["mail.port"], glProps["mail.username"],
-                                 glProps["mail.username"], glProps["mail.password"], :login) }
+    let(:smtp) { $smtp ||= Net::SMTP.start(glProps["mail.host"], glProps["mail.port"], glProps["mail.username"],
+                                           glProps["mail.username"], glProps["mail.password"], :login) }
     it { expect(smtp.started?).to be true }
     it 'smtp connection can be terminated ' do
       smtp.finish
@@ -179,7 +178,7 @@ describe 'Imbound mail:' do
     it { expect(glProps).not_to include('email.inbound.unknownUser' => '') }
   end
   context 'when verifying if the Alfresco mail server responds correctly at the specified port' do
-    let(:smtp) { Net::SMTP.start(target_host, glProps["email.server.port"]) }
+    let(:smtp) { $smtp ||= Net::SMTP.start(target_host, glProps["email.server.port"]) }
     it { expect(smtp.started?).to be true }
     it 'smtp connection can be terminated ' do
       smtp.finish
@@ -191,29 +190,50 @@ describe 'Imbound mail:' do
   end
 end
 
-describe 'IMAP:' do
+describe 'IMAP/IMAPS:' do
   context 'when verifying the alfresco global properties file' do
     it { expect(glProps).to include('imap.server.enabled' => 'true') }
     it { expect(glProps).not_to include('imap.server.host' => '') }
     it { expect(glProps).not_to include('imap.server.port' => '') }
+    it { expect(glProps).to include('imap.server.imaps.enabled' => 'true') }
+    it { expect(glProps).not_to include('imap.server.imaps.port' => '') }
+    it { expect(glProps).not_to include('javax.net.ssl.keyStore' => '') }
+    it { expect(glProps).not_to include('javax.net.ssl.keyStorePassword' => '') }
   end
-  context 'when verifying if the Alfresco mail server responds correctly at the specified port' do
-    let(:imap) { Net::IMAP.new(target_host) }
+  context 'when verifying if the Alfresco imap server responds correctly at the specified port' do
+    let(:imap) { $imap ||= Net::IMAP.new(target_host, port_or_options=glProps["imap.server.port"]) }
 
     it 'can login as admin/admin' do
-      expect(imap.login('admin', 'admin')[3]).to include('LOGIN completed.')
-      imap.disconnect
-    end
-    it 'can list the folders for the imap server' do
-      imap.login('admin', 'admin')
-      expect(imap.list('', 'Alfresco IMAP/Sites')[0]).to include('Alfresco IMAP/Sites')
-      imap.disconnect
+      expect(imap.login('admin', 'admin')[3]).to include('LOGIN completed')
     end
     it 'connection can be terminated ' do
       imap.disconnect
       expect(imap.disconnected?).to be true
     end
   end
+
+  context 'when verifying if the Alfresco imap secure server responds correctly at the specified port' do
+    let(:imaps) { $imaps ||= Net::IMAP.new(target_host, options={'port' => glProps["imap.server.imaps.port"], 'ssl' => 'true'}) }
+
+    it 'can login as admin/admin' do
+      expect(imaps.login('admin', 'admin')[3]).to include('LOGIN completed')
+    end
+    it 'connection can be terminated ' do
+      imaps.disconnect
+      expect(imaps.disconnected?).to be true
+    end
+  end
+
+  context 'when verifying the admin console' do
+
+    let(:authenticatedServerConnection) { getFaradayConnection "http://admin:admin@#{target_host}:8080" }
+    let(:html) { $html ||= Nokogiri::HTML(authenticatedServerConnection.get('/alfresco/s/enterprise/admin/admin-imap').body) }
+
+    it 'imap should be enabled' do
+      expect(html.xpath('.//span[text()="Enable IMAP:"]/..//input[@checked="checked"]')[0]).not_to be_nil
+    end
+  end
+
   context 'when verifying the alfresco log file' do
     it { expect(logfile).to include("[repo.imap.AlfrescoImapServer] [localhost-startStop-1] IMAP service started on host:port #{glProps["imap.server.host"]}:#{glProps["imap.server.port"]}") }
     it { expect(logfile).to include('[management.subsystems.ChildApplicationContextFactory] [localhost-startStop-1] Startup of \'imap\' subsystem, ID: [imap, default] complete') }
@@ -227,7 +247,7 @@ end
 
 describe 'Transformation Services:' do
   let(:authenticatedServerConnection) { getFaradayConnection "http://admin:admin@#{target_host}:8080" }
-  let(:html) { Nokogiri::HTML(authenticatedServerConnection.get('/alfresco/s/enterprise/admin/admin-transformations').body) }
+  let(:html) { $html ||= Nokogiri::HTML(authenticatedServerConnection.get('/alfresco/s/enterprise/admin/admin-transformations').body) }
 
   context 'when verifying the log file' do
     it { expect(logfile).to include('[management.subsystems.ChildApplicationContextFactory] [http-bio-8443-exec-7] Startup of \'Transformers\' subsystem, ID: [Transformers, default] complete') }
@@ -295,8 +315,8 @@ describe 'Transformation Services:' do
           it { expect(logfile).to include('[management.subsystems.ChildApplicationContextFactory] [localhost-startStop-1] Startup of \'OOoJodconverter\' subsystem, ID: [OOoJodconverter, default] complete') }
         end
       end
-    end
 
+    end
 
   end
 
@@ -316,3 +336,59 @@ describe 'Transformation Services:' do
   end
 
 end
+
+
+describe 'JMX settings:' do
+  context 'when verifying the alfresco global properties file' do
+    it { expect(glProps).not_to include('alfresco.rmi.services.port' => '') }
+    it { expect(glProps).not_to include('alfresco.rmi.services.host' => '') }
+    it { expect(glProps).not_to include('monitor.rmi.service.port' => '') }
+    it { expect(glProps).not_to include('avm.rmi.service.port' => '') }
+    it { expect(glProps).not_to include('avmsync.rmi.service.port' => '') }
+    it { expect(glProps).not_to include('attribute.rmi.service.port' => '') }
+    it { expect(glProps).not_to include('authentication.rmi.service.port' => '') }
+    it { expect(glProps).not_to include('repo.rmi.service.port' => '') }
+    it { expect(glProps).not_to include('action.rmi.service.port' => '') }
+    it { expect(glProps).not_to include('deployment.rmi.service.port' => '') }
+    it 'we can connect to the specified host and port' do
+      expect(Net::Telnet::new('Host' => glProps["alfresco.rmi.services.host"], 'Port' => glProps["alfresco.rmi.services.port"])).not_to be_nil
+    end
+  end
+end
+
+describe 'Alfresco License:' do
+  context 'when verifying the alfresco global properties file' do
+    it { expect(glProps).not_to include('dir.license.external' => '') }
+    it 'license exists at the location specified in properties' do
+      expect(command("ls #{glProps["dir.license.external"]} | grep .lic.installed").exit_status).to equal(0)
+    end
+  end
+  context 'when verifying the log file' do
+    it { expect(logfile).to include('[enterprise.license.AlfrescoLicenseManager] [localhost-startStop-1] Successfully installed license from file') }
+    it { expect(logfile).to include('[service.descriptor.DescriptorService] [localhost-startStop-1] Alfresco license: Mode ENTERPRISE') }
+  end
+  context 'when verifying the admin console' do
+    let(:authenticatedServerConnection) { getFaradayConnection "http://admin:admin@#{target_host}:8080" }
+    let(:html) { $html ||= Nokogiri::HTML(authenticatedServerConnection.get('/alfresco/s/enterprise/admin/admin-license').body) }
+
+    it 'Max Users should be unlimited' do
+      expect(html.xpath('.//span[text()="Max Users:"]/..//span[text()="Unlimited"]')[0]).not_to be_nil
+    end
+    it 'Max Content Objects should be unlimited' do
+      expect(html.xpath('.//span[text()="Max Content Objects:"]/..//span[text()="Unlimited"]')[0]).not_to be_nil
+    end
+    it 'Heartbeat should be enabled' do
+      expect(html.xpath('.//span[text()="Heart Beat:"]/..//span[text()="Enabled"]')[0]).not_to be_nil
+    end
+    it 'CloudSync should be enabled' do
+      expect(html.xpath('.//span[text()="Cloud Sync:"]/..//span[text()="Enabled"]')[0]).not_to be_nil
+    end
+    it 'Repository Server Clustering should be enabled' do
+      expect(html.xpath('.//span[text()="Clustering Permitted:"]/..//span[text()="Enabled"]')[0]).not_to be_nil
+    end
+    it 'Encrypted Content Store should be enabled' do
+      expect(html.xpath('.//span[text()="Encrypting Permitted:"]/..//span[text()="Enabled"]')[0]).not_to be_nil
+    end
+  end
+end
+
