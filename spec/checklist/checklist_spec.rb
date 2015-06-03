@@ -155,12 +155,12 @@ describe 'Outbound SMTP:' do
     it { expect(glProps).not_to include('mail.smtp.auth' => '') }
   end
   context 'when verifying if the mail server responds correctly at the specified port' do
-    let(:smtp) { $smtp ||= Net::SMTP.start(glProps["mail.host"], glProps["mail.port"], glProps["mail.username"],
+    let(:outbound) { $outbound ||= Net::SMTP.start(glProps["mail.host"], glProps["mail.port"], glProps["mail.username"],
                                            glProps["mail.username"], glProps["mail.password"], :login) }
-    it { expect(smtp.started?).to be true }
+    it { expect(outbound.started?).to be true }
     it 'smtp connection can be terminated ' do
-      smtp.finish
-      expect(smtp.started?).to be false
+      outbound.finish
+      expect(outbound.started?).to be false
     end
   end
   context 'when verifying the alfresco log file' do
@@ -178,11 +178,11 @@ describe 'Imbound mail:' do
     it { expect(glProps).not_to include('email.inbound.unknownUser' => '') }
   end
   context 'when verifying if the Alfresco mail server responds correctly at the specified port' do
-    let(:smtp) { $smtp ||= Net::SMTP.start(target_host, glProps["email.server.port"]) }
-    it { expect(smtp.started?).to be true }
+    let(:imbound) { $imbound ||= Net::SMTP.start(target_host, glProps["email.server.port"]) }
+    it { expect(imbound.started?).to be true }
     it 'smtp connection can be terminated ' do
-      smtp.finish
-      expect(smtp.started?).to be false
+      imbound.finish
+      expect(imbound.started?).to be false
     end
   end
   context 'when verifying the alfresco log file' do
@@ -247,7 +247,7 @@ end
 
 describe 'Transformation Services:' do
   let(:authenticatedServerConnection) { getFaradayConnection "http://admin:admin@#{target_host}:8080" }
-  let(:html) { $html ||= Nokogiri::HTML(authenticatedServerConnection.get('/alfresco/s/enterprise/admin/admin-transformations').body) }
+  let(:transformation) { transformation ||= Nokogiri::HTML(authenticatedServerConnection.get('/alfresco/s/enterprise/admin/admin-transformations').body) }
 
   context 'when verifying the log file' do
     it { expect(logfile).to include('[management.subsystems.ChildApplicationContextFactory] [http-bio-8443-exec-7] Startup of \'Transformers\' subsystem, ID: [Transformers, default] complete') }
@@ -261,10 +261,10 @@ describe 'Transformation Services:' do
     end
     context 'when verifying the admin console' do
       it 'imagemagick should be enabled' do
-        expect(html.xpath('.//span[text()="ImageMagick Available:"]/..//span[text()="Enabled"]')[0]).not_to be_nil
+        expect(transformation.xpath('.//span[text()="ImageMagick Available:"]/..//span[text()="Enabled"]')[0]).not_to be_nil
       end
       it 'imagemagick version is displayed' do
-        expect(html.xpath('.//div[@class="control field"]//span[contains(text(),"ImageMagick")]')[0]).not_to be_nil
+        expect(transformation.xpath('.//div[@class="control field"]//span[contains(text(),"ImageMagick")]')[0]).not_to be_nil
       end
     end
   end
@@ -291,7 +291,7 @@ describe 'Transformation Services:' do
 
         context 'when verifying the admin console' do
           it 'JodConverter should be enabled' do
-            expect(html.xpath('.//span[text()="JODConverter Enabled:"]/..//input[@checked="checked"]')[0]).not_to be_nil
+            expect(transformation.xpath('.//span[text()="JODConverter Enabled:"]/..//input[@checked="checked"]')[0]).not_to be_nil
           end
         end
       end
@@ -327,10 +327,10 @@ describe 'Transformation Services:' do
     end
     context 'when verifying the admin console' do
       it 'swftools should be enabled' do
-        expect(html.xpath('.//span[text()="PDF2SWF Available:"]/..//span[text()="Enabled"]')[0]).not_to be_nil
+        expect(transformation.xpath('.//span[text()="PDF2SWF Available:"]/..//span[text()="Enabled"]')[0]).not_to be_nil
       end
       it 'swftools version is displayed' do
-        expect(html.xpath('.//div[@class="control field"]//span[contains(text(),"pdf2swf")]')[0]).not_to be_nil
+        expect(transformation.xpath('.//div[@class="control field"]//span[contains(text(),"pdf2swf")]')[0]).not_to be_nil
       end
     end
   end
@@ -369,25 +369,25 @@ describe 'Alfresco License:' do
   end
   context 'when verifying the admin console' do
     let(:authenticatedServerConnection) { getFaradayConnection "http://admin:admin@#{target_host}:8080" }
-    let(:html) { $html ||= Nokogiri::HTML(authenticatedServerConnection.get('/alfresco/s/enterprise/admin/admin-license').body) }
+    let(:license) { license ||= Nokogiri::HTML(authenticatedServerConnection.get('/alfresco/s/enterprise/admin/admin-license').body) }
 
     it 'Max Users should be unlimited' do
-      expect(html.xpath('.//span[text()="Max Users:"]/..//span[text()="Unlimited"]')[0]).not_to be_nil
+      expect(license.xpath('.//span[text()="Max Users:"]/..//span[text()="Unlimited"]')[0]).not_to be_nil
     end
     it 'Max Content Objects should be unlimited' do
-      expect(html.xpath('.//span[text()="Max Content Objects:"]/..//span[text()="Unlimited"]')[0]).not_to be_nil
+      expect(license.xpath('.//span[text()="Max Content Objects:"]/..//span[text()="Unlimited"]')[0]).not_to be_nil
     end
     it 'Heartbeat should be enabled' do
-      expect(html.xpath('.//span[text()="Heart Beat:"]/..//span[text()="Enabled"]')[0]).not_to be_nil
+      expect(license.xpath('.//span[text()="Heart Beat:"]/..//span[text()="Enabled"]')[0]).not_to be_nil
     end
     it 'CloudSync should be enabled' do
-      expect(html.xpath('.//span[text()="Cloud Sync:"]/..//span[text()="Enabled"]')[0]).not_to be_nil
+      expect(license.xpath('.//span[text()="Cloud Sync:"]/..//span[text()="Enabled"]')[0]).not_to be_nil
     end
     it 'Repository Server Clustering should be enabled' do
-      expect(html.xpath('.//span[text()="Clustering Permitted:"]/..//span[text()="Enabled"]')[0]).not_to be_nil
+      expect(license.xpath('.//span[text()="Clustering Permitted:"]/..//span[text()="Enabled"]')[0]).not_to be_nil
     end
     it 'Encrypted Content Store should be enabled' do
-      expect(html.xpath('.//span[text()="Encrypting Permitted:"]/..//span[text()="Enabled"]')[0]).not_to be_nil
+      expect(license.xpath('.//span[text()="Encrypting Permitted:"]/..//span[text()="Enabled"]')[0]).not_to be_nil
     end
   end
 end
