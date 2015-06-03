@@ -2,7 +2,9 @@ require 'serverspec'
 require 'net/ssh'
 require 'net/smtp'
 require 'net/imap'
+require 'net/ftp'
 require 'faraday'
+require 'nokogiri'
 
 set :backend, :ssh
 

@@ -29,4 +29,5 @@ module Helpers
     end
     return propertiesFile
   end
+
 end
