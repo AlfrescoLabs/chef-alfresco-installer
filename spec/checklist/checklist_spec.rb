@@ -11,6 +11,11 @@ propertiesFile = parsePropertiesFile "#{currentDir}/test.properties"
 # puts "\n Running tests on: \n" + command('ifconfig | grep "inet .*"').stdout
 
 target_host = ENV['checklist_target_host']
+logfile = file(ENV['checklist_target_catalina_log']).content
+String globalPropertiesFile = file(ENV['checklist_target_alf_glob']).content
+glProps = parsePropertiesFile globalPropertiesFile
+alfrescoMMT = ENV['checklist_target_alfresco_mmt']
+alfrescoWars = ENV['checklist_target_alfresco_wars']
 
 describe 'Alfresco Global Checks:' do
   let(:serverConnection) { $serverConnection ||= getFaradayConnection "http://#{target_host}:8080" }
@@ -85,9 +90,7 @@ describe 'Alfresco Global Checks:' do
 
 end
 
-String globalPropertiesFile = file(ENV['checklist_target_alf_glob']).content
-glProps = parsePropertiesFile globalPropertiesFile
-
+puts glProps.values_at('imap.server.imaps.enabled')
 describe 'FTP/FTPS settings:' do
 
   context 'when verifying the alfresco global properties file' do
@@ -114,11 +117,9 @@ describe 'FTP/FTPS settings:' do
 end
 
 describe 'JBPM settings:' do
-  it { expect(glProps).to include('system.workflow.engine.jbpm.enabled' => 'true') }
-  it { expect(glProps).to include('system.workflow.engine.jbpm.definitions.visible' => 'true') }
+  it { expect(glProps['system.workflow.engine.jbpm.enabled']).to eq 'true' }
+  it { expect(glProps['system.workflow.engine.jbpm.definitions.visible']).to eq 'true' }
 end
-
-logfile = file(ENV['checklist_target_catalina_log']).content
 
 describe 'Cloud license:' do
   it { expect(logfile).to include('[repo.sync.SyncAdminServiceImpl] [localhost-startStop-1] A key is provided for cloud sync') }
@@ -130,7 +131,7 @@ describe 'Cloud sync and Hybrid:' do
   String computedString = "#{cloudUrl}my.alfresco.me/share/"
   let(:cloudConnection) { $cloudConnection ||= getFaradayConnection computedString }
   context 'when verifying the alfresco global properties file' do
-    it { expect(glProps).to include('hybridworkflow.enabled' => 'true') }
+    it { expect(glProps['hybridworkflow.enabled']).to eq 'true' }
     it { expect(glProps).not_to include('sync.cloud.url' => '') }
     it { expect(glProps).to include('sync.mode' => 'ON_PREMISE') }
     it { expect(glProps).to include('system.serverMode' => 'PRODUCTION') }
@@ -142,7 +143,7 @@ describe 'Cloud sync and Hybrid:' do
 end
 
 describe 'Invitation enabled: ' do
-  it { expect(glProps).to include('notification.email.siteinvite' => 'true') }
+  it { expect(glProps['notification.email.siteinvite']).to eq 'true' }
 end
 
 describe 'Outbound SMTP:' do
@@ -156,7 +157,7 @@ describe 'Outbound SMTP:' do
   end
   context 'when verifying if the mail server responds correctly at the specified port' do
     let(:outbound) { $outbound ||= Net::SMTP.start(glProps["mail.host"], glProps["mail.port"], glProps["mail.username"],
-                                           glProps["mail.username"], glProps["mail.password"], :login) }
+                                                   glProps["mail.username"], glProps["mail.password"], :login) }
     it { expect(outbound.started?).to be true }
     it 'smtp connection can be terminated ' do
       outbound.finish
@@ -170,9 +171,9 @@ end
 
 describe 'Imbound mail:' do
   context 'when verifying the alfresco global properties file' do
-    it { expect(glProps).to include('email.inbound.enabled' => 'true') }
+    it { expect(glProps['email.inbound.enabled']).to eq 'true' }
     it { expect(glProps).not_to include('email.server.allowed.senders' => '') }
-    it { expect(glProps).to include('email.server.enabled' => 'true') }
+    it { expect(glProps['email.server.enabled']).to eq 'true' }
     it { expect(glProps).not_to include('email.server.port' => '') }
     it { expect(glProps).not_to include('email.server.domain' => '') }
     it { expect(glProps).not_to include('email.inbound.unknownUser' => '') }
@@ -192,10 +193,11 @@ end
 
 describe 'IMAP/IMAPS:' do
   context 'when verifying the alfresco global properties file' do
-    it { expect(glProps).to include('imap.server.enabled' => 'true') }
-    it { expect(glProps).not_to include('imap.server.host' => '') }
+    it { expect(glProps['imap.server.enabled']).to eq 'true' }
+    it { expect(glProps.key?('imap.server.host')).to eq true
+    expect(glProps['imap.server.host']).not_to be_nil }
     it { expect(glProps).not_to include('imap.server.port' => '') }
-    it { expect(glProps).to include('imap.server.imaps.enabled' => 'true') }
+    it { expect(glProps['imap.server.imaps.enabled']).to eq 'true' }
     it { expect(glProps).not_to include('imap.server.imaps.port' => '') }
     it { expect(glProps).not_to include('javax.net.ssl.keyStore' => '') }
     it { expect(glProps).not_to include('javax.net.ssl.keyStorePassword' => '') }
@@ -241,8 +243,8 @@ describe 'IMAP/IMAPS:' do
 end
 
 describe 'Replication settings:' do
-  it { expect(glProps).to include('replication.enabled' => 'true') }
-  it { expect(glProps).to include('transferservice.receiver.enabled' => 'true') }
+  it { expect(glProps['replication.enabled']).to eq 'true' }
+  it { expect(glProps['transferservice.receiver.enabled']).to eq 'true' }
 end
 
 describe 'Transformation Services:' do
@@ -281,7 +283,7 @@ describe 'Transformation Services:' do
 
         context 'when verifying the alfresco global properties file' do
           it { expect(glProps).not_to include('jodconverter.officeHome' => '') }
-          it { expect(glProps).to include('jodconverter.enabled' => 'true') }
+          it { expect(glProps['jodconverter.enabled']).to eq 'true' }
           it { expect(glProps).not_to include('jodconverter.portNumbers' => '') }
         end
 
@@ -302,7 +304,7 @@ describe 'Transformation Services:' do
 
         context 'when verifying the alfresco global properties file' do
           it { expect(glProps).not_to include('ooo.exe' => '') }
-          it { expect(glProps).to include('ooo.enabled' => 'true') }
+          it { expect(glProps['ooo.enabled']).to eq 'true' }
           it { expect(glProps).not_to include('ooo.port' => '') }
         end
 
@@ -372,7 +374,7 @@ describe 'Alfresco License:' do
     let(:license) { license ||= Nokogiri::HTML(authenticatedServerConnection.get('/alfresco/s/enterprise/admin/admin-license').body) }
 
     it 'Max Users should be unlimited' do
-      expect(license.xpath('.//span[text()="Max Users:"]/..//span[text()="Unlimited"]')[0]).not_to be_nil
+      expect(license.xpath('.//span[text()="Max Users:"]/..')[0].content).to include('Unlimited')
     end
     it 'Max Content Objects should be unlimited' do
       expect(license.xpath('.//span[text()="Max Content Objects:"]/..//span[text()="Unlimited"]')[0]).not_to be_nil
@@ -392,3 +394,84 @@ describe 'Alfresco License:' do
   end
 end
 
+describe 'Google docs:' do
+
+  context 'when verifying the log file' do
+    it { expect(logfile).to include('[repo.module.ModuleServiceImpl] [localhost-startStop-1] Installing module \'org.alfresco.integrations.google.docs\' version') }
+    it { expect(logfile).to include('[localhost-startStop-1] Startup of \'googledocs\' subsystem, ID: [googledocs, drive] complete') }
+  end
+
+  context 'when verifying the admin console' do
+    let(:authenticatedServerConnection) { getFaradayConnection "http://admin:admin@#{target_host}:8080" }
+    let(:google) { google ||= Nokogiri::HTML(authenticatedServerConnection.get('/alfresco/s/enterprise/admin/admin-googledocs').body) }
+
+    it 'Google Docs should be enabled' do
+      expect(google.xpath('.//span[text()="Google Docs™ Enabled:"]/..//input[@checked="checked"]')[0]).not_to be_nil
+    end
+  end
+
+  context command("java -jar #{alfrescoMMT} list #{alfrescoWars}alfresco.war") do
+    its(:stdout) { is_expected.to include('Module \'org.alfresco.integrations.google.docs\' installed') }
+  end
+
+  context command("java -jar #{alfrescoMMT} list #{alfrescoWars}share.war") do
+    its(:stdout) { is_expected.to include('Module \'org.alfresco.integrations.share.google.docs\' installed') }
+  end
+
+end
+
+describe 'CIFS: ' do
+  context 'when verifying the alfresco global properties file' do
+    it { expect(glProps['cifs.enabled']).to eq 'true' }
+    it { expect(glProps.key?('cifs.serverName')).to eq true
+         expect(glProps['cifs.serverName']).not_to be_nil }
+    it { expect(glProps['cifs.hostannounce']).to eq 'true' }
+    it { expect(glProps.key?('cifs.domain')).to eq true}
+    it { expect(glProps.key?('cifs.tcpipSMB.port')).to eq true
+         expect(glProps['cifs.tcpipSMB.port']).not_to be_nil }
+    it { expect(glProps.key?('cifs.netBIOSSMB.namePort')).to eq true
+         expect(glProps['cifs.netBIOSSMB.namePort']).not_to be_nil }
+    it { expect(glProps.key?('cifs.netBIOSSMB.datagramPort')).to eq true
+         expect(glProps['cifs.netBIOSSMB.datagramPort']).not_to be_nil }
+    it { expect(glProps.key?('cifs.netBIOSSMB.sessionPort')).to eq true
+         expect(glProps['cifs.netBIOSSMB.sessionPort']).not_to be_nil }
+    it "port specified: #{glProps["cifs.tcpipSMB.port"]}" do
+      expect(port(glProps["cifs.tcpipSMB.port"])).to be_listening
+    end
+    it "port specified: #{glProps["cifs.netBIOSSMB.namePort"]}" do
+      expect(port(glProps["cifs.netBIOSSMB.namePort"])).to be_listening
+    end
+    it "port specified: #{glProps["cifs.netBIOSSMB.datagramPort"]}" do
+      expect(port(glProps["cifs.netBIOSSMB.datagramPort"])).to be_listening
+    end
+    it "port specified: #{glProps["cifs.netBIOSSMB.sessionPort"]}" do
+      expect(port(glProps["cifs.netBIOSSMB.sessionPort"])).to be_listening
+    end
+    it { expect(port(445)).to be_listening }
+    it { expect(port(139)).to be_listening }
+    it { expect(port(137)).to be_listening }
+    it { expect(port(138)).to be_listening }
+  end
+
+  context 'when verifying the log file' do
+    it { expect(logfile).to include('[management.subsystems.ChildApplicationContextFactory] [localhost-startStop-1] Startup of \'fileServers\' subsystem, ID: [fileServers, default] complete') }
+  end
+
+end
+
+
+describe 'WCMQS :' do
+
+  context 'when verifying the log file' do
+    it { expect(logfile).to include('[repo.module.ModuleServiceImpl] [localhost-startStop-1] Installing module \'org_alfresco_module_wcmquickstart\'') }
+  end
+
+  context command("java -jar #{alfrescoMMT} list #{alfrescoWars}alfresco.war") do
+    its(:stdout) { is_expected.to include('Module \'org_alfresco_module_wcmquickstart\' installed') }
+  end
+
+  context command("java -jar #{alfrescoMMT} list #{alfrescoWars}share.war") do
+    its(:stdout) { is_expected.to include('Module \'org_alfresco_module_wcmquickstartshare\' installed') }
+  end
+
+end
