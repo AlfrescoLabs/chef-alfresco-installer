@@ -10,4 +10,7 @@ depends 'chef-client'
 depends 'apt'
 depends 'line'
 suggests 'windows'
-# depends 'nfs'
+
+#TODO fix dependencies
+depends 'tomcat'
+depends 'nfs'
