@@ -12,5 +12,4 @@ depends 'line'
 suggests 'windows'
 
 #TODO fix dependencies
-depends 'tomcat'
 depends 'nfs'

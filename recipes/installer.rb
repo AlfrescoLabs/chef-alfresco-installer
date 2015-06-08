@@ -167,7 +167,7 @@ case node['platform_family']
 
   when 'solaris', 'solaris2'
 
-    include_recipe 'tomcat'
+    puts 'Please use tomcat recipe for installing on solaris'
 
   else
 
