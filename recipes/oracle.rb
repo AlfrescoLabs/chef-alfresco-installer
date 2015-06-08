@@ -80,7 +80,6 @@ bash 'Setup Oracle Groups and Users' do
 	 useradd -d /export/home/oracle -m -s /bin/bash -g dba -G dba,oper,backupdba,oinstall oracle
 	 expect setOraclePass.sh
 	EOH
-	not_if 'id -a oracle'
 end
 
 bash 'set oracle pass' do
