@@ -12,11 +12,10 @@ with_driver 'ssh'
 with_chef_local_server :chef_repo_path => '/tmp/kitchen/cache', :cookbook_path => '/tmp/kitchen/cache/cookbooks'
 
 
-clusternode1='172.29.101.97'
-clusternode2='172.29.101.98'
-loadbalancer='172.29.101.99'
-username='root'
-installerPath='ftp://172.29.103.222/50N/5.0.2/alfresco-enterprise-5.0.2-SNAPSHOT-installer-linux-x64.bin'
+clusternode1='172.29.101.126'
+clusternode2='172.29.101.127'
+loadbalancer='172.29.101.51'
+username='Administrator'
 
 machine_batch 'Initial setup on nodes and lb' do
 
@@ -32,10 +31,9 @@ machine_batch 'Initial setup on nodes and lb' do
     run_list %w(recipe[java-wrapper::java8] recipe[alfresco-chef::installer])
     attributes 'installer' =>
                    {'nodename' => 'node1',
-                    'disable-components' => 'javaalfresco,postgres',
-                    'downloadpath' => installerPath},
-               'installer.database-type' => 'mysql',
-               'installer.database-version' => '5.6.17',
+                    'disable-components' => 'javaalfresco,postgres'},
+               'installer.database-type' => 'mariadb',
+               'installer.database-version' => '10.0.14',
                'db.url' => "jdbc:mysql://#{loadbalancer}:3306/${db.name}?useUnicode=yes&characterEncoding=UTF-8",
                'db.password' => 'alfresco',
                'db.username' => 'alfresco',
@@ -63,10 +61,9 @@ machine_batch 'Initial setup on nodes and lb' do
     run_list %w(recipe[java-wrapper::java8] recipe[alfresco-chef::installer])
     attributes 'installer' =>
                    {'nodename' => 'node2',
-                    'disable-components' => 'javaalfresco,postgres',
-                    'downloadpath' => installerPath},
-               'installer.database-type' => 'mysql',
-               'installer.database-version' => '5.6.17',
+                    'disable-components' => 'javaalfresco,postgres'},
+               'installer.database-type' => 'mariadb',
+               'installer.database-version' => '10.0.14',
                'db.url' => "jdbc:mysql://#{loadbalancer}:3306/${db.name}?useUnicode=yes&characterEncoding=UTF-8",
                'db.password' => 'alfresco',
                'db.username' => 'alfresco',
@@ -104,8 +101,7 @@ machine_batch 'Initial setup on nodes and lb' do
                    ]},
                'installer' =>
                    {'nodename' => 'LB',
-                    'disable-components' => 'javaalfresco,postgres,alfrescowcmqs,alfrescosolr,alfrescogoogledocs,libreofficecomponent',
-                    'downloadpath' => installerPath},
+                    'disable-components' => 'javaalfresco,postgres,alfrescowcmqs,alfrescosolr,alfrescogoogledocs,libreofficecomponent'},
                'replication.enabled' => 'false',
                'alfresco.cluster.enabled' => 'true',
                'install_share_war' => false,

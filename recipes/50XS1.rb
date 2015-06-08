@@ -13,11 +13,17 @@ with_chef_local_server :chef_repo_path => '/tmp/kitchen/cache', :cookbook_path =
 
 machine_batch 'Initial setup on nodes and lb' do
 
+  clusternode1='172.29.101.121'
+  clusternode2='172.29.101.122'
+  loadbalancer='172.29.101.120'
+  username='root'
+  installerPath='ftp://172.29.103.222/50N/5.0.2/alfresco-enterprise-5.0.2-SNAPSHOT-installer-linux-x64.bin'
+
   machine 'node1' do
     action [:ready, :setup, :converge]
     machine_options :transport_options => {
-                        :ip_address => '172.29.101.99',
-                        :username => 'root',
+                        :ip_address => clusternode1,
+                        :username => username,
                         :ssh_options => {
                             :password => 'alfresco'
                         }
@@ -25,52 +31,56 @@ machine_batch 'Initial setup on nodes and lb' do
     run_list %w(recipe[java-wrapper::java8] recipe[alfresco-chef::installer])
     attributes 'installer' =>
                    {'nodename' => 'node1',
-                    'disable-components' => 'javaalfresco,postgres'},
-               'db.url' => 'jdbc:postgresql://172.29.101.98:5432/${db.name}',
+                    'disable-components' => 'javaalfresco,postgres',
+                    'downloadpath' => installerPath},
+               'db.url' => "jdbc:postgresql://#{loadbalancer}:5432/${db.name}",
                'db.password' => 'alfresco',
                'db.username' => 'alfresco',
                'replication.enabled' => 'true',
                'alfresco.cluster.enabled' => 'true',
-               'additional_cluster_members' => ['172.29.101.97'],
-               'replication_remote_ip' => '172.29.101.98',
+               'additional_cluster_members' => [clusternode2],
+               'replication_remote_ip' => loadbalancer,
                'install_solr4_war' => false,
                'START_SERVICES' => false,
                'START_POSGRES' => false,
-               'solr.host' => '172.29.101.98'
+               'disable_solr_ssl' => true,
+               'solr.host' => loadbalancer
 
   end
 
   machine 'node2' do
     action [:ready, :setup, :converge]
     machine_options :transport_options => {
-                        :ip_address => '172.29.101.97',
-                        :username => 'root',
+                        :ip_address => clusternode2,
+                        :username => username,
                         :ssh_options => {
                             :password => 'alfresco'
                         }
                     }
     run_list %w(recipe[java-wrapper::java8] recipe[alfresco-chef::installer])
     attributes 'installer' =>
-                   {'nodename' => 'node1',
-                    'disable-components' => 'javaalfresco,postgres'},
-               'db.url' => 'jdbc:postgresql://172.29.101.98:5432/${db.name}',
+                   {'nodename' => 'node2',
+                    'disable-components' => 'javaalfresco,postgres',
+                    'downloadpath' => installerPath},
+               'db.url' => "jdbc:postgresql://#{loadbalancer}:5432/${db.name}",
                'db.password' => 'alfresco',
                'db.username' => 'alfresco',
                'replication.enabled' => 'true',
                'alfresco.cluster.enabled' => 'true',
-               'additional_cluster_members' => ['172.29.101.99'],
-               'replication_remote_ip' => '172.29.101.98',
+               'additional_cluster_members' => [clusternode1],
+               'replication_remote_ip' => loadbalancer,
                'install_solr4_war' => false,
                'START_SERVICES' => false,
                'START_POSGRES' => false,
-               'solr.host' => '172.29.101.98'
+               'disable_solr_ssl' => true,
+               'solr.host' => loadbalancer
   end
 
   machine 'LB' do
     action [:ready, :setup, :converge]
     machine_options :transport_options => {
-                        :ip_address => '172.29.101.98',
-                        :username => 'root',
+                        :ip_address => loadbalancer,
+                        :username => username,
                         :ssh_options => {
                             :password => 'alfresco'
                         }
@@ -79,27 +89,30 @@ machine_batch 'Initial setup on nodes and lb' do
     attributes 'lb' => {
                    'ips_and_nodenames' => [
                        {
-                           'ip' => '172.29.101.97',
-                           'nodename' => 'node2'
+                           'ip' => clusternode1,
+                           'nodename' => 'node1'
                        },
                        {
-                           'ip' => '172.29.101.99',
-                           'nodename' => 'node1'
+                           'ip' => clusternode2,
+                           'nodename' => 'node2'
                        }
                    ]},
                'installer' =>
                    {'nodename' => 'LB',
-                    'disable-components' => 'javaalfresco,postgres,alfrescowcmqs,alfrescosolr,alfrescogoogledocs,libreofficecomponent'},
+                    'disable-components' => 'javaalfresco,postgres,alfrescowcmqs,alfrescosolr,alfrescogoogledocs,libreofficecomponent',
+                    'downloadpath' => installerPath},
                'postgres' =>
                    {'installpostgres' => true,
                     'createdb' => true},
                'replication.enabled' => 'false',
                'alfresco.cluster.enabled' => 'true',
+               'disable_solr_ssl' => true,
                'install_share_war' => false,
                'install_alfresco_war' => false,
                'START_SERVICES' => false,
                'START_POSGRES' => false,
-               'solr.target.alfresco.host' => '172.29.101.99'
+               'solr.target.alfresco.host' => loadbalancer,
+               'solr.target.alfresco.port' => '80'
   end
 
 end

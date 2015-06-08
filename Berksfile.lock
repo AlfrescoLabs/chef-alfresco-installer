@@ -1,18 +1,18 @@
 DEPENDENCIES
   alfresco-chef
     git: https://github.com/AlfrescoTestAutomation/alfresco-chef.git
-    revision: f9d54bbcc55602006b2ae439b0ddf76e59d93e52
+    revision: 5e102adb0e4edd4d87ab73a8121dd614d4edbd80
     branch: master
   alfresco-dbwrapper
     git: https://github.com/AlfrescoTestAutomation/alfresco-chef.git
-    revision: 05d16a184bf4af8c816a0389ff1fd0bd1e4fdf90
+    revision: fd4b070cfc58f113bb5b38999a49a28243c5ab3b
     branch: alfresco-dbwrapper
   alfresco-metal
     path: .
     metadata: true
   java-wrapper
     git: https://github.com/AlfrescoTestAutomation/alfresco-chef.git
-    revision: 2b5e7f3e7725301cfcdc148a2c1269b6d2023d10
+    revision: 8b6aa84ddc3e175eff374e501d46ce66ba46279b
     branch: java-wrapper
 
 GRAPH
@@ -20,6 +20,7 @@ GRAPH
     apt (>= 0.0.0)
     chef-client (>= 0.0.0)
     line (>= 0.0.0)
+    nfs (>= 0.0.0)
   alfresco-dbwrapper (0.1.0)
   alfresco-metal (0.1.0)
     alfresco-chef (>= 0.0.0)
@@ -42,5 +43,7 @@ GRAPH
     windows (>= 0.0.0)
   line (0.6.1)
   logrotate (1.9.1)
+  nfs (2.1.0)
+    line (>= 0.0.0)
   windows (1.37.0)
     chef_handler (>= 0.0.0)
