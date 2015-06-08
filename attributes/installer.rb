@@ -63,22 +63,6 @@ default['solr.target.alfresco.baseUrl']='/alfresco'
 ####### Alfresco Global Properties #######
 ##########################################
 
-#################### !!! DATABASE TYPE !!! #################
-## This is a constant and must be set as specified below ###
-## This must be set to any of
-## postgres / mysql / oracle / db2 / sqlserver / mariadb ###
-default['installer.database-type']='postgres'
-
-#################### !!! DATABASE VERSION !!! ##############
-## This is a constant and must be set as specified below ###
-## Currently supported versions are:
-## postgres => 9.3.5
-## oracle => 12c
-## mysql => 5.6.17
-## mariadb => 10.0.14
-default['installer.database-version']='9.3.5'
-
-
 #alfresco and share ports
 default['alfresco.port']='8080'
 default['share.port']='8080'
@@ -119,6 +103,22 @@ case node['platform_family']
     default['jodconverter.officeHome']=''
 
 end
+
+
+#################### !!! DATABASE TYPE !!! #################
+## This is a constant and must be set as specified below ###
+## This must be set to any of
+## postgres / mysql / oracle / db2 / sqlserver / mariadb ###
+default['installer.database-type']='postgres'
+
+#################### !!! DATABASE VERSION !!! ##############
+## This is a constant and must be set as specified below ###
+## Currently supported versions are:
+## postgres => 9.3.5
+## oracle => 12c
+## mysql => 5.6.17
+## mariadb => 10.0.14
+default['installer.database-version']='9.3.5'
 
 case node['installer.database-type']
 
