@@ -2,9 +2,13 @@ DEPENDENCIES
   alfresco-chef
     path: .
     metadata: true
+  alfresco-dbwrapper
+    git: https://github.com/AlfrescoTestAutomation/alfresco-chef.git
+    revision: fd4b070cfc58f113bb5b38999a49a28243c5ab3b
+    branch: alfresco-dbwrapper
   java-wrapper
     git: https://github.com/AlfrescoTestAutomation/alfresco-chef.git
-    revision: 2b5e7f3e7725301cfcdc148a2c1269b6d2023d10
+    revision: 8b6aa84ddc3e175eff374e501d46ce66ba46279b
     branch: java-wrapper
 
 GRAPH
@@ -12,7 +16,7 @@ GRAPH
     apt (>= 0.0.0)
     chef-client (>= 0.0.0)
     line (>= 0.0.0)
-    nfs (>= 0.0.0)
+  alfresco-dbwrapper (0.1.0)
   apt (2.7.0)
   aws (2.7.0)
   chef-client (4.3.0)
@@ -28,7 +32,5 @@ GRAPH
     windows (>= 0.0.0)
   line (0.6.1)
   logrotate (1.9.1)
-  nfs (2.1.0)
-    line (>= 0.0.0)
   windows (1.37.0)
     chef_handler (>= 0.0.0)

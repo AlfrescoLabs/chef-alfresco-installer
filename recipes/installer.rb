@@ -167,7 +167,7 @@ case node['platform_family']
 
   when 'solaris', 'solaris2'
 
-    include recipe 'tomcat'
+    include_recipe 'tomcat'
 
   else
 

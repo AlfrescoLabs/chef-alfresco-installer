@@ -27,7 +27,15 @@ ftp.enabled=true
 
 ############### RMI registry port for JMX ###############
 alfresco.rmi.services.port=50500
+alfresco.rmi.services.host=<%= node['ipaddress']%>
 monitor.rmi.service.port=0
+avm.rmi.service.port=0
+avmsync.rmi.service.port=0
+attribute.rmi.service.port=0
+authentication.rmi.service.port=0
+repo.rmi.service.port=0
+action.rmi.service.port=0
+deployment.rmi.service.port=0
 
 ############### External executable locations ###############
 <%= render 'ag-externalApps.erb' %>
@@ -41,14 +49,15 @@ dir.license.external=<%= node['installer']['directory']%>
 ############### Solr indexing ###############
 <%= render 'ag-solr.erb' %>
 
-############### BPM Engine ###############
-system.workflow.engine.jbpm.enabled=false
+### BPM Engine ###
+system.workflow.engine.jbpm.enabled=true
+system.workflow.engine.jbpm.definitions.visible=true
 
 ############### Cloud ###############
 hybridworkflow.enabled=true
-sync.cloud.url=https://NCT1052a.alfresco.me/alfresco/a/{network}/
+sync.cloud.url=https://mmhfcloud40a.alfresco.me/alfresco/a/{network}/
 sync.mode=ON_PREMISE
-system.serverMode=TEST
+system.serverMode=PRODUCTION
 
 ############### E-mail site invitation setting ###############
 notification.email.siteinvite=true
@@ -59,10 +68,10 @@ cifs.serverName=${localname}A
 cifs.hostannounce=true
 cifs.domain=
 #SMB/CIFS
-cifs.tcpipSMB.port=4445
-cifs.netBIOSSMB.namePort=4137
-cifs.netBIOSSMB.datagramPort=4138
-cifs.netBIOSSMB.sessionPort=4139
+cifs.tcpipSMB.port=445
+cifs.netBIOSSMB.namePort=137
+cifs.netBIOSSMB.datagramPort=138
+cifs.netBIOSSMB.sessionPort=139
 
 ############### NFS config ###############
 nfs.enabled=true
@@ -105,6 +114,4 @@ imap.server.port=143
 <% end %>
 
 ############### Replication ###############
-<% if node['replication.enabled'] == 'true' %>
 <%= render 'ag-replication.erb' %>
-<% end %>

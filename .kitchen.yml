@@ -22,7 +22,7 @@ platforms:
     hostname: 172.29.101.50
 - name:  solaris112
   driver_config:
-    hostname: 172.29.101.64
+    hostname: 172.29.101.158
     username: root
     password: alfresco1
 - name:  win2012
@@ -30,6 +30,11 @@ platforms:
     hostname: 172.29.101.51
     port: 5985
     username: Administrator
+    password: alfresco
+- name:  checklist
+  driver_config:
+    hostname: 172.29.101.52
+    username: root
     password: alfresco
 
 suites:
@@ -39,17 +44,23 @@ suites:
     - redhat65
     - ubuntu1204
     - win2012
+    - checklist
   run_list:
   - recipe[java-wrapper::java8]
   - recipe[alfresco-chef::tomcat]
   attributes: { localPath: false }
+
+
 - name: installer
   excludes:
     - solaris112
+    - checklist
   run_list:
   - recipe[java-wrapper::java8]
+  - recipe[alfresco-dbwrapper::postgres]
   - recipe[alfresco-chef::installer]
-  attributes: { localPath: false, START_SERVICES: true }
+  attributes: { localPath: false, START_SERVICES: true}
+
 
 - name: replication
   excludes:
@@ -57,6 +68,7 @@ suites:
     - solaris112
     - ubuntu1204
     - win2012
+    - checklist
   run_list:
   - recipe[alfresco-chef::replication]
   attributes: 
@@ -69,10 +81,9 @@ suites:
     - suse12
     - solaris112
     - ubuntu1204
+    - checklist
   run_list:
   - recipe[alfresco-chef::replication_server]
-  attributes:
-    replication_remote_ip: '172.29.101.110'
 
 - name: lbwin
   excludes:
@@ -80,8 +91,20 @@ suites:
     - solaris112
     - ubuntu1204
     - redhat65
+    - checklist
   run_list:
   - recipe[alfresco-chef::loadbalancer]
+
+- name: checklist
+  excludes:
+    - suse12
+    - solaris112
+    - ubuntu1204
+    - redhat65
+    - win2012
+  run_list:
+  - recipe[alfresco-chef::test_helper]
+
 
 
 
