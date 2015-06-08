@@ -10,30 +10,15 @@ currentDir=Dir.pwd
 
 # puts "\n Running tests on: \n" + command('ifconfig | grep "inet .*"').stdout
 
-puts 'Checking if logfile, properties file, alfresco MMT and alfresco Wars exist'
-# RSpec.configure do |config|
-#   config.before(:all) do
-#   expect(file(ENV['checklist_target_alf_glob'])).to be_file
-#   expect(file(ENV['checklist_target_catalina_log'])).to be_file
-#   expect(file(ENV['checklist_target_alfresco_mmt'])).to be_file
-#   expect(file(ENV['checklist_target_alfresco_wars'])).to be_directory
-#   end
-# end
-
-nfs = %w(nfs.mountServerPort
-            nfs.nfsServerPort
-            nfs.rpcRegisterPort
-            nfs.portMapperPort
-            nfs.user.mappings.value.admin.uid
-            nfs.user.mappings.value.admin.gid
-            nfs.user.mappings.value.corinaz.uid
-            nfs.user.mappings.value.corinaz.gid)
-if  !file(ENV['checklist_target_alf_globa']).exists? or
-    !file(ENV['checklist_target_catalina_log']).exists? or
-    !file(ENV['checklist_target_alfresco_mmt']).exists? or
-    !file(ENV['checklist_target_alfresco_warsa']).exists?
-puts 'Please check your env variables !!!'
-  exit!
+puts 'Checking if logfile, properties file, alfresco MMT and alfresco wars exist'
+%w(checklist_target_alf_glob
+   checklist_target_catalina_log
+   checklist_target_alfresco_mmt
+   checklist_target_alfresco_wars).each do |property|
+    if !file(ENV[property]).exists?
+    puts "Please check your env variable > #{property}, the file or path does not exist!!!"
+    exit!
+    end
 end
 
 
@@ -496,11 +481,9 @@ end
 
 
 describe 'WCMQS :' do
-
   context 'when verifying the log file' do
     it { expect(logfile).to include('[repo.module.ModuleServiceImpl] [localhost-startStop-1] Installing module \'org_alfresco_module_wcmquickstart\'') }
   end
-
   context command("java -jar #{alfrescoMMT} list #{alfrescoWars}alfresco.war") do
     its(:stdout) { is_expected.to include('Module \'org_alfresco_module_wcmquickstart\' installed') }
   end
