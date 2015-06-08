@@ -94,8 +94,8 @@ puts glProps.values_at('imap.server.imaps.enabled')
 describe 'FTP/FTPS settings:' do
 
   context 'when verifying the alfresco global properties file' do
-    it { expect(glProps).to include("ftp.enabled" => "true") }
-    it { expect(glProps).not_to include("ftp.port" => "") }
+    it { expect(glProps).to include('ftp.enabled' => 'true') }
+    it { expect(glProps).not_to include('ftp.port' => '') }
   end
   context 'when verifying if the Alfresco ftp server responds correctly at the specified port' do
     let(:ftp) { Net::FTP.new(host = target_host, user='admin', password='admin', acct=nil) }
@@ -111,7 +111,7 @@ describe 'FTP/FTPS settings:' do
       expect(ftp.closed?).to be true
     end
   end
-  context "and the specified port: #{glProps["ftp.port"]}" do
+  context "and the specified port: #{glProps['ftp.port']}" do
     it { expect(port(glProps['ftp.port'])).to be_listening }
   end
 end
@@ -156,8 +156,8 @@ describe 'Outbound SMTP:' do
     it { expect(glProps).not_to include('mail.smtp.auth' => '') }
   end
   context 'when verifying if the mail server responds correctly at the specified port' do
-    let(:outbound) { $outbound ||= Net::SMTP.start(glProps["mail.host"], glProps["mail.port"], glProps["mail.username"],
-                                                   glProps["mail.username"], glProps["mail.password"], :login) }
+    let(:outbound) { $outbound ||= Net::SMTP.start(glProps['mail.host'], glProps['mail.port'], glProps['mail.username'],
+                                                   glProps['mail.username'], glProps['mail.password'], :login) }
     it { expect(outbound.started?).to be true }
     it 'smtp connection can be terminated ' do
       outbound.finish
@@ -179,7 +179,7 @@ describe 'Imbound mail:' do
     it { expect(glProps).not_to include('email.inbound.unknownUser' => '') }
   end
   context 'when verifying if the Alfresco mail server responds correctly at the specified port' do
-    let(:imbound) { $imbound ||= Net::SMTP.start(target_host, glProps["email.server.port"]) }
+    let(:imbound) { $imbound ||= Net::SMTP.start(target_host, glProps['email.server.port']) }
     it { expect(imbound.started?).to be true }
     it 'smtp connection can be terminated ' do
       imbound.finish
@@ -203,7 +203,7 @@ describe 'IMAP/IMAPS:' do
     it { expect(glProps).not_to include('javax.net.ssl.keyStorePassword' => '') }
   end
   context 'when verifying if the Alfresco imap server responds correctly at the specified port' do
-    let(:imap) { $imap ||= Net::IMAP.new(target_host, port_or_options=glProps["imap.server.port"]) }
+    let(:imap) { $imap ||= Net::IMAP.new(target_host, port_or_options=glProps['imap.server.port']) }
 
     it 'can login as admin/admin' do
       expect(imap.login('admin', 'admin')[3]).to include('LOGIN completed')
@@ -215,7 +215,7 @@ describe 'IMAP/IMAPS:' do
   end
 
   context 'when verifying if the Alfresco imap secure server responds correctly at the specified port' do
-    let(:imaps) { $imaps ||= Net::IMAP.new(target_host, options={'port' => glProps["imap.server.imaps.port"], 'ssl' => 'true'}) }
+    let(:imaps) { $imaps ||= Net::IMAP.new(target_host, options={'port' => glProps['imap.server.imaps.port'], 'ssl' => 'true'}) }
 
     it 'can login as admin/admin' do
       expect(imaps.login('admin', 'admin')[3]).to include('LOGIN completed')
@@ -237,7 +237,7 @@ describe 'IMAP/IMAPS:' do
   end
 
   context 'when verifying the alfresco log file' do
-    it { expect(logfile).to include("[repo.imap.AlfrescoImapServer] [localhost-startStop-1] IMAP service started on host:port #{glProps["imap.server.host"]}:#{glProps["imap.server.port"]}") }
+    it { expect(logfile).to include("[repo.imap.AlfrescoImapServer] [localhost-startStop-1] IMAP service started on host:port #{glProps['imap.server.host']}:#{glProps['imap.server.port']}") }
     it { expect(logfile).to include('[management.subsystems.ChildApplicationContextFactory] [localhost-startStop-1] Startup of \'imap\' subsystem, ID: [imap, default] complete') }
   end
 end
@@ -274,10 +274,10 @@ describe 'Transformation Services:' do
   describe 'office transformation tools:' do
 
     it 'jod converter and office should not be enabled or disabled at the same time' do
-      expect(glProps["jodconverter.enabled"]).not_to equal(glProps["ooo.enabled"])
+      expect(glProps['jodconverter.enabled']).not_to equal(glProps['ooo.enabled'])
     end
 
-    if glProps["jodconverter.enabled"] == 'true'
+    if glProps['jodconverter.enabled'] == 'true'
 
       describe 'JodConvertor:' do
 
@@ -287,8 +287,8 @@ describe 'Transformation Services:' do
           it { expect(glProps).not_to include('jodconverter.portNumbers' => '') }
         end
 
-        it "port specified: #{glProps["jodconverter.portNumbers"]}" do
-          expect(port(glProps["jodconverter.portNumbers"])).to be_listening
+        it "port specified: #{glProps['jodconverter.portNumbers']}" do
+          expect(port(glProps['jodconverter.portNumbers'])).to be_listening
         end
 
         context 'when verifying the admin console' do
@@ -308,8 +308,8 @@ describe 'Transformation Services:' do
           it { expect(glProps).not_to include('ooo.port' => '') }
         end
 
-        it "port specified: #{glProps["ooo.port"]}" do
-          expect(port(glProps["ooo.port"])).to be_listening
+        it "port specified: #{glProps['ooo.port']}" do
+          expect(port(glProps['ooo.port'])).to be_listening
         end
 
         context 'when verifying the log file' do
@@ -342,18 +342,24 @@ end
 
 describe 'JMX settings:' do
   context 'when verifying the alfresco global properties file' do
-    it { expect(glProps).not_to include('alfresco.rmi.services.port' => '') }
-    it { expect(glProps).not_to include('alfresco.rmi.services.host' => '') }
-    it { expect(glProps).not_to include('monitor.rmi.service.port' => '') }
-    it { expect(glProps).not_to include('avm.rmi.service.port' => '') }
-    it { expect(glProps).not_to include('avmsync.rmi.service.port' => '') }
-    it { expect(glProps).not_to include('attribute.rmi.service.port' => '') }
-    it { expect(glProps).not_to include('authentication.rmi.service.port' => '') }
-    it { expect(glProps).not_to include('repo.rmi.service.port' => '') }
-    it { expect(glProps).not_to include('action.rmi.service.port' => '') }
-    it { expect(glProps).not_to include('deployment.rmi.service.port' => '') }
+    jmx = %w(alfresco.rmi.services.port
+              alfresco.rmi.services.host
+              monitor.rmi.service.port
+              avm.rmi.service.port
+              avmsync.rmi.service.port
+              attribute.rmi.service.port
+              authentication.rmi.service.port
+              repo.rmi.service.port
+              action.rmi.service.port
+              deployment.rmi.service.port)
+    jmx.each do |property|
+      it property do
+        expect(glProps.key?(property)).to eq true
+        expect(glProps[property]).not_to be_nil
+      end
+    end
     it 'we can connect to the specified host and port' do
-      expect(Net::Telnet::new('Host' => glProps["alfresco.rmi.services.host"], 'Port' => glProps["alfresco.rmi.services.port"])).not_to be_nil
+      expect(Net::Telnet::new('Host' => glProps['alfresco.rmi.services.host'], 'Port' => glProps['alfresco.rmi.services.port'])).not_to be_nil
     end
   end
 end
@@ -362,7 +368,7 @@ describe 'Alfresco License:' do
   context 'when verifying the alfresco global properties file' do
     it { expect(glProps).not_to include('dir.license.external' => '') }
     it 'license exists at the location specified in properties' do
-      expect(command("ls #{glProps["dir.license.external"]} | grep .lic.installed").exit_status).to equal(0)
+      expect(command("ls #{glProps['dir.license.external']} | grep .lic.installed").exit_status).to equal(0)
     end
   end
   context 'when verifying the log file' do
@@ -423,29 +429,31 @@ end
 describe 'CIFS: ' do
   context 'when verifying the alfresco global properties file' do
     it { expect(glProps['cifs.enabled']).to eq 'true' }
-    it { expect(glProps.key?('cifs.serverName')).to eq true
-         expect(glProps['cifs.serverName']).not_to be_nil }
     it { expect(glProps['cifs.hostannounce']).to eq 'true' }
     it { expect(glProps.key?('cifs.domain')).to eq true}
-    it { expect(glProps.key?('cifs.tcpipSMB.port')).to eq true
-         expect(glProps['cifs.tcpipSMB.port']).not_to be_nil }
-    it { expect(glProps.key?('cifs.netBIOSSMB.namePort')).to eq true
-         expect(glProps['cifs.netBIOSSMB.namePort']).not_to be_nil }
-    it { expect(glProps.key?('cifs.netBIOSSMB.datagramPort')).to eq true
-         expect(glProps['cifs.netBIOSSMB.datagramPort']).not_to be_nil }
-    it { expect(glProps.key?('cifs.netBIOSSMB.sessionPort')).to eq true
-         expect(glProps['cifs.netBIOSSMB.sessionPort']).not_to be_nil }
-    it "port specified: #{glProps["cifs.tcpipSMB.port"]}" do
-      expect(port(glProps["cifs.tcpipSMB.port"])).to be_listening
+
+    cifs = %w(cifs.serverName
+              cifs.tcpipSMB.port
+              cifs.netBIOSSMB.datagramPort
+              cifs.netBIOSSMB.sessionPort)
+    cifs.each do |property|
+      it property do
+        expect(glProps.key?(property)).to eq true
+        expect(glProps[property]).not_to be_nil
+      end
     end
-    it "port specified: #{glProps["cifs.netBIOSSMB.namePort"]}" do
-      expect(port(glProps["cifs.netBIOSSMB.namePort"])).to be_listening
+
+    it "port specified: #{glProps['cifs.tcpipSMB.port']}" do
+      expect(port(glProps['cifs.tcpipSMB.port'])).to be_listening
     end
-    it "port specified: #{glProps["cifs.netBIOSSMB.datagramPort"]}" do
-      expect(port(glProps["cifs.netBIOSSMB.datagramPort"])).to be_listening
+    it "port specified: #{glProps['cifs.netBIOSSMB.namePort']}" do
+      expect(port(glProps['cifs.netBIOSSMB.namePort'])).to be_listening
     end
-    it "port specified: #{glProps["cifs.netBIOSSMB.sessionPort"]}" do
-      expect(port(glProps["cifs.netBIOSSMB.sessionPort"])).to be_listening
+    it "port specified: #{glProps['cifs.netBIOSSMB.datagramPort']}" do
+      expect(port(glProps['cifs.netBIOSSMB.datagramPort'])).to be_listening
+    end
+    it "port specified: #{glProps['cifs.netBIOSSMB.sessionPort']}" do
+      expect(port(glProps['cifs.netBIOSSMB.sessionPort'])).to be_listening
     end
     it { expect(port(445)).to be_listening }
     it { expect(port(139)).to be_listening }
@@ -474,4 +482,46 @@ describe 'WCMQS :' do
     its(:stdout) { is_expected.to include('Module \'org_alfresco_module_wcmquickstartshare\' installed') }
   end
 
+end
+
+
+describe 'NFS :' do
+  context 'when verifying the alfresco global properties file :' do
+    nfs = %w(nfs.mountServerPort
+            nfs.nfsServerPort
+            nfs.rpcRegisterPort
+            nfs.portMapperPort
+            nfs.user.mappings.value.admin.uid
+            nfs.user.mappings.value.admin.gid
+            nfs.user.mappings.value.corinaz.uid
+            nfs.user.mappings.value.corinaz.gid)
+    nfs.each do |property|
+      it property do
+        expect(glProps.key?(property)).to eq true
+        expect(glProps[property]).not_to be_nil
+      end
+    end
+
+    nfsbooleans = %w(nfs.enabled
+                    nfs.portMapperEnabled
+                    nfs.mountServerDebug)
+    nfsbooleans.each do |property|
+      it property do
+        expect(glProps[property]).to eq 'true'
+      end
+    end
+
+    it { expect(glProps['nfs.sessionDebug']).to eq 'ERROR' }
+    it { expect(glProps['nfs.user.mappings']).to eq 'admin' }
+
+    nfsports = %w(nfs.mountServerPort
+            nfs.nfsServerPort
+            nfs.rpcRegisterPort
+            nfs.portMapperPort)
+    nfsports.each do |property|
+      it "port specified for #{property}: #{glProps[property]}" do
+        expect(port(glProps[property])).to be_listening
+      end
+    end
+  end
 end
