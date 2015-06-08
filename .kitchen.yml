@@ -57,10 +57,12 @@ suites:
     - checklist
   run_list:
   - recipe[java-wrapper::java8]
-  - recipe[alfresco-dbwrapper::postgres]
   - recipe[alfresco-chef::installer]
-  attributes: { localPath: false, START_SERVICES: true}
-
+  attributes: {
+                localPath: false,
+                START_SERVICES: true,
+                installer: { disable-components: 'javaalfresco' }
+              }
 
 - name: replication
   excludes:
