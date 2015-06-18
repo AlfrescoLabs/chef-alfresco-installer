@@ -6,14 +6,15 @@ require 'net/ftp'
 require 'faraday'
 require 'nokogiri'
 require 'net/telnet'
+require 'yarjuf'
 
 set :backend, :ssh
 
 currentDir=Dir.pwd
 
 RSpec.configure do |c|
-  c.output_stream = File.open("#{currentDir}/htmlReport/serverspec.html", 'w')
-  c.formatter = 'html'
+  c.output_stream = File.open("#{currentDir}/htmlReport/serverspec.xml", 'w')
+  c.formatter = 'JUnit'
 end
 
 testProperties="#{currentDir}/test.properties"
