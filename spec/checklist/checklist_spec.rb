@@ -104,13 +104,12 @@ end
 
 puts glProps.values_at('imap.server.imaps.enabled')
 describe 'FTP/FTPS settings:' do
+  let(:ftp) { Net::FTP.new(host = target_host, user='admin', password='admin', acct=nil) }
 
   it 'when verifying the alfresco global properties file' do
     expect(glProps).to include('ftp.enabled' => 'true')
     expect(glProps).not_to include('ftp.port' => '')
   end
-
-  let(:ftp) { Net::FTP.new(host = target_host, user='admin', password='admin', acct=nil) }
 
   it 'can establish a connection at the specified port' do
     expect(ftp.closed?).to be false
@@ -236,7 +235,7 @@ describe 'IMAP/IMAPS:' do
 
   it { expect(glProps['imap.server.enabled']).to eq 'true' }
   it { expect(glProps.key?('imap.server.host')).to eq true
-       expect(glProps['imap.server.host']).not_to be_nil }
+  expect(glProps['imap.server.host']).not_to be_nil }
   it { expect(glProps).not_to include('imap.server.port' => '') }
   it { expect(glProps['imap.server.imaps.enabled']).to eq 'true' }
   it { expect(glProps).not_to include('imap.server.imaps.port' => '') }
@@ -286,7 +285,6 @@ describe 'Replication settings:' do
 end
 
 
-
 describe 'Transformation Services:' do
   let(:authenticatedServerConnection) { getFaradayConnection "http://admin:admin@#{target_host}:8080" }
   let(:transformation) { transformation ||= Nokogiri::HTML(authenticatedServerConnection.get('/alfresco/s/enterprise/admin/admin-transformations').body) }
@@ -295,7 +293,6 @@ describe 'Transformation Services:' do
     expect(logfile).to include('[management.subsystems.ChildApplicationContextFactory] [http-bio-8443-exec-7] Startup of \'Transformers\' subsystem, ID: [Transformers, default] complete')
   end
 end
-
 
 
 describe 'Image Magic:' do
@@ -457,9 +454,9 @@ end
 
 describe 'CIFS: ' do
 
-  it {  expect(glProps['cifs.enabled']).to eq 'true' }
-  it {  expect(glProps['cifs.hostannounce']).to eq 'true' }
-  it {  expect(glProps.key?('cifs.domain')).to eq true }
+  it { expect(glProps['cifs.enabled']).to eq 'true' }
+  it { expect(glProps['cifs.hostannounce']).to eq 'true' }
+  it { expect(glProps.key?('cifs.domain')).to eq true }
 
   cifs = %w(cifs.serverName
             cifs.tcpipSMB.port
@@ -483,7 +480,7 @@ describe 'CIFS: ' do
   end
   it { expect(port(445)).to be_listening }
   it { expect(port(139)).to be_listening }
-  it { expect(port(138)).to be_listening }
+  it { expect(port(137)).to be_listening }
 
   it 'when verifying the log file' do
     expect(logfile).to include('[management.subsystems.ChildApplicationContextFactory] [localhost-startStop-1] Startup of \'fileServers\' subsystem, ID: [fileServers, default] complete')
@@ -536,7 +533,6 @@ describe 'NFS :' do
 
   nfsports = %w(nfs.mountServerPort
                 nfs.nfsServerPort
-                nfs.rpcRegisterPort
                 nfs.portMapperPort)
   nfsports.each do |property|
     it "port specified for #{property}: #{glProps[property]}" do
