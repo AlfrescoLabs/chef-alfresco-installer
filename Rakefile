@@ -1,10 +1,8 @@
 require 'rake'
 require 'rspec/core/rake_task'
-require 'ci/reporter/rake/rspec'
 
 task :spec    => 'spec:all'
-task :default => ['rspec', 'spec']
-task :rspec => 'ci:setup:rspec'
+task :default => ['spec']
 
 namespace :spec do
   targets = []
