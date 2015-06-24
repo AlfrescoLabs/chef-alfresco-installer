@@ -1,4 +1,4 @@
-alfresco-chef Cookbook
+chef-alfresco-installer Cookbook
 ======================
 This is a cookbook for installing alfresco using multiple deployement schemas and platforms
 
