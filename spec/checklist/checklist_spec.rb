@@ -1,14 +1,10 @@
-require 'spec_helper'
+require_relative 'spec_helper'
 
 require_relative '../../spec/helpers'
 
 include Helpers
 
 currentDir=Dir.pwd
-
-# propertiesFile = parsePropertiesFile "#{currentDir}/test.properties"
-
-# puts "\n Running tests on: \n" + command('ifconfig | grep "inet .*"').stdout
 
 puts 'Checking if logfile, properties file, alfresco MMT and alfresco wars exist'
 %w(checklist_target_alf_glob
