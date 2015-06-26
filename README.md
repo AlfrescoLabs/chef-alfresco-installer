@@ -32,7 +32,12 @@ Installs an Apache Load balancer on:
 - redhat 6.5
  
 Will balance the nodes given in the attribute
-`default['lb']['ips_and_nodenames'] = [{:ip=> '172.29.101.97', :nodename=> 'alf1'},{:ip=> '172.29.101.99', :nodename=> 'alf2'}]`
+```
+default['lb']['ips_and_nodenames'] = [
+ {:ip=> '172.29.101.97', :nodename=> 'alf1'},
+ {:ip=> '172.29.101.99', :nodename=> 'alf2'}
+]
+```
 
 #### chef-alfresco-installer::replication_server and replication_client
 
