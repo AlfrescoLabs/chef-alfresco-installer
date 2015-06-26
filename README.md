@@ -2,8 +2,15 @@ chef-alfresco-installer Cookbook
 ======================
 This is a cookbook for installing alfresco using multiple deployement schemas and platforms
 
-This is an experimental cookbook and partially implemented!!!
+Currently supported OS's :
+Rhel 6.5
+Win 2012 r2 server
+Suse 12
+Solaris 11.2
+Ubuntu 12 Server
 
+Alfresco Versions supported :
+5.0.x
 
 Requirements
 ------------
@@ -11,30 +18,33 @@ java
 apt
 chef-client
 
-
 Usage
 -----
-#### alfresco-chef::installer
+#### chef-alfresco-installer::installer
 
-e.g.
-Just include `alfresco-chef` in your node's `run_list`:
+Adding the chef-alfresco-installer::installer recipe and setting the build location on the node attribute
+default['installer']['downloadpath'] will be sufficient to spin up the installation and configuration of alfresco
 
-```json
-{
-  "name":"my_node",
-  "run_list": [
-    "recipe[alfresco_chef::installer]"
-  ]
-}
-```
+#### chef-alfresco-installer::loadbalancer
 
-Contributing
-------------
+This will install apache lb on:
+windows 2012 server
+redhat 6.5
+and will balance the nodes given in the attribute
+default['lb']['ips_and_nodenames'] = [{:ip=> '172.29.101.97', :nodename=> 'alf1'},{:ip=> '172.29.101.99', :nodename=> 'alf2'}]
 
-1. Fork the repository on Github
-2. Create a feature branch corresponding to you change
-3. Commit and test thoroughly
-6. Submit a Pull Request using Github
+#### chef-alfresco-installer::replication_server and replication_client
+
+This will setup nfs server and client components
+windows 2012 server
+redhat 6.5
+
+just set these attributes on the client
+default['replication_remote_ip']='ipaddress of the nfs server' 
+default['replication.enabled']='true'
+
+and these attributes on server
+default['replication.enabled']='true'
 
 License and Authors
 -------------------

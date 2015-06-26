@@ -20,7 +20,7 @@ alfresco.version=<%= node['alfresco.version']%>
 alfresco.host=<%= node['solr.target.alfresco.host']%>
 alfresco.port=<%= node['solr.target.alfresco.port']%>
 <% if !node['disable_solr_ssl'] %>
-    alfresco.port.ssl=<%= node['solr.target.alfresco.port.ssl']%>
+alfresco.port.ssl=<%= node['solr.target.alfresco.port.ssl']%>
 <% end %>
 alfresco.baseUrl=<%= node['solr.target.alfresco.baseUrl']%>
 alfresco.cron=0/15 * * * * ? *
@@ -38,9 +38,9 @@ alfresco.batch.count=1000
 
 # none, https
 <% if node['disable_solr_ssl'] %>
-    alfresco.secureComms=none
+alfresco.secureComms=none
 <% else %>
-    alfresco.secureComms=https
+alfresco.secureComms=https
 <% end %>
 
 
@@ -139,6 +139,8 @@ alfresco.doPermissionChecks=true
 alfresco.metadata.skipDescendantDocsForSpecificTypes=false
 alfresco.metadata.ignore.datatype.0=cm:person
 alfresco.metadata.ignore.datatype.1=app:configurations
+alfresco.metadata.skipDescendantDocsForSpecificAspects=false
+#alfresco.metadata.ignore.aspect.0=
 
 alfresco.topTermSpanRewriteLimit=1000
 

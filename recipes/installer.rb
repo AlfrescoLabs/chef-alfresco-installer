@@ -70,6 +70,16 @@ case node['platform_family']
       :top_level
     end
 
+    template "#{node['installer']['directory']}/tomcat/shared/classes/wqsapi-custom.properties" do
+      source 'wqsapi-custom.properties.erb'
+      rights :read, 'Administrator'
+      rights :write, 'Administrator'
+      rights :full_control, 'Administrator'
+      rights :full_control, 'Administrator', :applies_to_children => true
+      group 'Administrators'
+      :top_level
+    end
+
     template "#{node['installer']['directory']}\\tomcat\\conf\\server.xml" do
       source 'server.xml.erb'
       rights :read, 'Administrator'
@@ -201,6 +211,14 @@ case node['platform_family']
       :top_level
     end
 
+    template "#{node['installer']['directory']}/tomcat/shared/classes/wqsapi-custom.properties" do
+      source 'wqsapi-custom.properties.erb'
+      owner 'root'
+      group 'root'
+      mode '0755'
+      :top_level
+    end
+    
     template "#{node['installer']['directory']}/tomcat/conf/server.xml" do
       source 'server.xml.erb'
       owner 'root'

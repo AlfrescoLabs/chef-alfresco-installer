@@ -114,4 +114,8 @@ imap.server.port=143
 <% end %>
 
 ############### Replication ###############
+replication.enabled=true
+transferservice.receiver.enabled=true
+<% if node['replication.enabled'] == 'true' %>
 <%= render 'ag-replication.erb' %>
+<% end %>

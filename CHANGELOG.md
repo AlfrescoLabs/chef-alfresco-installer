@@ -14,3 +14,7 @@ This file is used to list changes made in each version of the alfresco-chef cook
 0.3.0
 -----
 - Sergiu Vidrascu - Updated recipe to install on solaris by deploying directly to tomcat
+
+1.0.0
+-----
+Berks initial release

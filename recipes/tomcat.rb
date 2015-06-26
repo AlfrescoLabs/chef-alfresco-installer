@@ -234,6 +234,14 @@ template "#{installDir}/tomcat/conf/server.xml" do
   :top_level
 end
 
+template "#{node['installer']['directory']}/tomcat/shared/classes/wqsapi-custom.properties" do
+  source 'wqsapi-custom.properties.erb'
+  owner 'root'
+  group 'root'
+  mode '0755'
+  :top_level
+end
+
 template "#{installDir}/tomcat/conf/context.xml" do
   source 'context.xml.erb'
   owner 'root'
