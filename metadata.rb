@@ -6,10 +6,8 @@ description      'Installs/Configures alfresco-chef'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          '1.0.0'
 
-depends 'chef-client'
-depends 'apt'
-depends 'line'
-suggests 'windows'
-
-#TODO fix dependencies
-depends 'nfs'
+depends 'chef-client',"~> 4.3.0"
+depends 'apt', "~> 2.7.0"
+depends 'line', "~> 0.6.1"
+depends 'windows', "~> 1.37.0"
+depends 'nfs', "~> 2.2.2"

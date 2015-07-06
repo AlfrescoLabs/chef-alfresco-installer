@@ -17,13 +17,13 @@
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
 #/
 
-default['alfresco.version']='5.0.2'
+############ installer attributes ############
+
 default['installer']['alfresco_admin_password']= 'admin'
 default['installer']['enable-components'] = 'alfrescowcmqs'
 default['installer']['disable-components'] = 'javaalfresco,postgres'
 default['installer']['jdbc_username'] = 'alfresco'
 default['installer']['jdbc_password'] = 'alfresco'
-
 case node['platform_family']
 when 'windows'
   default['installer']['local'] = 'C:/alfresco.exe'
@@ -38,15 +38,20 @@ else
   default['installer']['directory'] = '/opt/alf-installation'
 end
 
-default['installer']['nodename']='alf1'
+############ conditional chef attributes ############
+####### Services #######
+default['START_SERVICES']=true
+default['START_POSGRES']=true
 default['install_alfresco_war']=true
 default['install_share_war']=true
 default['install_solr4_war']=true
 default['disable_solr_ssl']=false
 
-####### Services #######
-default['START_SERVICES']=true
-default['START_POSGRES']=true
+
+############ alfresco configuration properties ############
+
+default['alfresco.version']='5.0.2'
+default['installer']['nodename']='alf1'
 
 ### additional settings for wqs
 default['wcmqs']['api']['repositoryPollMilliseconds'] = 500

@@ -31,9 +31,9 @@ platforms:
     port: 5985
     username: Administrator
     password: alfresco
-- name:  checklist
+- name:  poc
   driver_config:
-    hostname: 172.29.101.52
+    hostname: 172.29.101.192
     username: root
     password: alfresco
 
@@ -47,7 +47,7 @@ suites:
     - checklist
   run_list:
   - recipe[java-wrapper::java8]
-  - recipe[alfresco-chef::tomcat]
+  - recipe[chef-alfresco-installer::tomcat]
   attributes: { localPath: false }
 
 
@@ -57,11 +57,18 @@ suites:
     - checklist
   run_list:
   - recipe[java-wrapper::java8]
-  - recipe[alfresco-chef::installer]
+  - recipe[chef-alfresco-installer::installer]
   attributes: {
                 localPath: false,
                 START_SERVICES: true,
-                installer: { disable-components: 'javaalfresco' }
+                replication.enabled: false,
+                alfresco.cluster.enabled: false,
+                disable_solr_ssl: true,
+                installer: {
+                  disable-components: 'javaalfresco',
+                  enable-components: 'alfrescowcmqs'
+                  # downloadpath: 'https://releases.alfresco.com/Enterprise-4.2/4.2.4/PATCH-4.2.4.9/build-00127/ALL/alfresco-enterprise-4.2.4.9-installer-linux-x64.bin'
+                }
               }
 
 - name: replication
@@ -72,8 +79,8 @@ suites:
     - win2012
     - checklist
   run_list:
-  - recipe[alfresco-chef::replication]
-  attributes: 
+  - recipe[chef-alfresco-installer::replication]
+  attributes:
     localPath: false
     NFS_server: true
     dir_server: "/opt/ReplicateServer"
@@ -85,7 +92,7 @@ suites:
     - ubuntu1204
     - checklist
   run_list:
-  - recipe[alfresco-chef::replication_server]
+  - recipe[chef-alfresco-installer::replication_server]
 
 - name: lbwin
   excludes:
@@ -95,9 +102,9 @@ suites:
     - redhat65
     - checklist
   run_list:
-  - recipe[alfresco-chef::loadbalancer]
+  - recipe[chef-alfresco-installer::loadbalancer]
 
-- name: checklist
+- name: poc
   excludes:
     - suse12
     - solaris112
@@ -105,9 +112,20 @@ suites:
     - redhat65
     - win2012
   run_list:
-  - recipe[alfresco-chef::test_helper]
-
-
-
-
-
+    - recipe[java-wrapper::java8]
+    - recipe[chef-alfresco-installer::installer]
+  attributes: {
+                localPath: false,
+                START_SERVICES: false,
+                replication.enabled: false,
+                alfresco.cluster.enabled: false,
+                index.subsystem.name: 'solr',
+                install_solr4_war: true,
+                install_alfresco_war: false,
+                install_share_war: false,
+                installer: {
+                  disable-components: 'javaalfresco',
+                  enable-components: 'alfrescowcmqs',
+                  downloadpath: 'ftp://172.29.101.56/50N/5.0.2/b34/alfresco-enterprise-5.0.2-installer-linux-x64.bin'
+                }
+              }
