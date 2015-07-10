@@ -67,12 +67,20 @@
          APR (HTTP/AJP) Connector: /docs/apr.html
          Define a non-SSL HTTP/1.1 Connector on port 8080
     -->
-    <Connector port="<%=node['share.port']%>" URIEncoding="UTF-8" protocol="HTTP/1.1"
+    <Connector port="<%=node['share.port']%>"
+               URIEncoding="UTF-8"
+               protocol="HTTP/1.1"
                connectionTimeout="20000"
-               redirectPort="<%=node['solr.port.ssl']%>" maxHttpHeaderSize="32768" />
+               redirectPort="<%=node['solr.port.ssl']%>"
+               maxHttpHeaderSize="32768"
+               <% if !node['disable_solr_ssl'] %>
+               secure="true"
+               scheme="https"
+               <% end -%>
+               />
     <!-- A "Connector" using the shared thread pool-->
     <!--
-    <Connector executor="tomcatThreadPool" 
+    <Connector executor="tomcatThreadPool"
                port="8080" URIEncoding="UTF-8" protocol="HTTP/1.1"
                connectionTimeout="20000"
                redirectPort="8443" maxHttpHeaderSize="32768" />
@@ -81,11 +89,22 @@
          This connector uses the JSSE configuration, when using APR, the
          connector should be using the OpenSSL style configuration
          described in the APR documentation -->
-    <!--
-    <Connector port="8443" URIEncoding="UTF-8" protocol="HTTP/1.1" SSLEnabled="true"
-               maxThreads="150" scheme="https" secure="true"
-               clientAuth="false" sslProtocol="TLS" maxHttpHeaderSize="32768" />
-    -->
+<!--
+    <Connector port="8443"
+               SSLEnabled="true"
+               protocol="org.apache.coyote.http11.Http11AprProtocol"
+               keystoreFile="<%= node["alfresco"]["keystore_file"] %>"
+               keystorePass="<%= node["alfresco"]["keystore_password"] %>"
+               keystoreType="<%= node["alfresco"]["keystore_type"] %>"
+               truststoreFile="<%= node["alfresco"]["truststore_file"] %>"
+               truststoreType="<%= node["alfresco"]["truststore_type"] %>"
+               truststorePass="<%= node["alfresco"]["truststore_password"] %>"
+               maxThreads="150"
+               scheme="https"
+               secure="true"
+               clientAuth="false"
+               sslProtocol="TLS" /> -->
+
 
     <!-- Define an AJP 1.3 Connector on port 8009 -->
     <Connector port="<%=node['ajp.port']%>" URIEncoding="UTF-8" protocol="AJP/1.3" redirectPort="<%=node['solr.port.ssl']%>" />
@@ -93,7 +112,7 @@
     <Connector port="<%=node['solr.port.ssl']%>" URIEncoding="UTF-8" protocol="org.apache.coyote.http11.Http11Protocol" SSLEnabled="true"
                maxThreads="150" scheme="https" keystoreFile="<%=node['installer']['directory']%>/alf_data/keystore/ssl.keystore" keystorePass="kT9X6oe68t" keystoreType="JCEKS"
  secure="true" connectionTimeout="240000" truststoreFile="<%=node['installer']['directory']%>/alf_data/keystore/ssl.truststore" truststorePass="kT9X6oe68t" truststoreType="JCEKS"
-               clientAuth="want" sslProtocol="TLS" allowUnsafeLegacyRenegotiation="true" maxHttpHeaderSize="32768" />  
+               clientAuth="want" sslProtocol="TLS" allowUnsafeLegacyRenegotiation="true" maxHttpHeaderSize="32768" />
 
 
     <!-- An Engine represents the entry point (within Catalina) that processes

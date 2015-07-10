@@ -20,29 +20,34 @@
 #Setting derived attributes as needed.
 case node['index.subsystem.name']
 when 'solr4'
-  solrcoreArchive = node['paths']['solrcoreArchive'] || "#{node['installer']['directory']}/solr4/archive-SpacesStore/conf/solrcore.properties"
-  solrcoreWorkspace = node['paths']['solrcoreWorkspace'] || "#{node['installer']['directory']}/solr4/archive-SpacesStore/conf/solrcore.properties"
+  node.default['paths']['solrPath'] = "#{node['installer']['directory']}/solr4"
 when 'solr'
-  solrcoreArchive = node['paths']['solrcoreArchive'] || "#{node['installer']['directory']}/alf_data/solr/archive-SpacesStore/conf/solrcore.properties"
-  solrcoreWorkspace = node['paths']['solrcoreWorkspace'] || "#{node['installer']['directory']}/alf_data/solr/workspace-SpacesStore/conf/solrcore.properties"
+  node.default['paths']['solrPath'] = "#{node['installer']['directory']}/alf_data/solr"
 end
+
+node.default['paths']['solrcoreArchive'] = "#{node['paths']['solrPath']}/archive-SpacesStore/conf/solrcore.properties"
+node.default['paths']['solrcoreWorkspace'] = "#{node['paths']['solrPath']}/workspace-SpacesStore/conf/solrcore.properties"
+
 case node['platform_family']
   when 'windows'
     #uninstall file is required for installation idempotence
-    uninstallFile = node['paths']['uninstallFile'] || "#{node['installer']['directory']}\\uninstall.exe"
-    alfrescoGlobal = node['paths']['alfrescoGlobal'] || "#{node['installer']['directory']}\\tomcat\\shared\\classes\\alfresco-global.properties"
-    wqsCustomProperties = node['paths']['wqsCustomProperties'] || "#{node['installer']['directory']}\\tomcat\\shared\\classes\\wqsapi-custom.properties" do
-    tomcatServerXml = node['paths']['tomcatServerXml'] || "#{node['installer']['directory']}\\tomcat\\conf\\server.xml" do
-    licensePath = node['paths']['licensePath'] || "#{node['installer']['directory']}/qa50.lic"
-    dbDriverLocation = node['paths']['dbDriverLocation'] || "#{node['installer']['directory']}\\tomcat\\lib\\#{node['db.driver.filename']}"
+    node.default['paths']['uninstallFile'] = "#{node['installer']['directory']}\\uninstall.exe"
+    node.default['paths']['alfrescoGlobal'] = "#{node['installer']['directory']}\\tomcat\\shared\\classes\\alfresco-global.properties"
+    node.default['paths']['wqsCustomProperties'] = "#{node['installer']['directory']}\\tomcat\\shared\\classes\\wqsapi-custom.properties"
+    node.default['paths']['tomcatServerXml'] = "#{node['installer']['directory']}\\tomcat\\conf\\server.xml"
+    node.default['paths']['licensePath'] = "#{node['installer']['directory']}/qa50.lic"
+    node.default['paths']['dbDriverLocation'] = "#{node['installer']['directory']}\\tomcat\\lib\\#{node['db.driver.filename']}"
   else
-    uninstallFile = node['paths']['uninstallFile'] || "#{node['installer']['directory']}/alfresco.sh"
-    alfrescoGlobal = node['paths']['alfrescoGlobal'] || "#{node['installer']['directory']}/tomcat/shared/classes/alfresco-global.properties"
-    wqsCustomProperties = node['paths']['wqsCustomProperties'] || "#{node['installer']['directory']}/tomcat/shared/classes/wqsapi-custom.properties" do
-    tomcatServerXml = node['paths']['tomcatServerXml'] || "#{node['installer']['directory']}/tomcat/conf/server.xml" do
-    licensePath = node['paths']['licensePath'] || "#{node['installer']['directory']}/qa50.lic"
-    dbDriverLocation = node['paths']['dbDriverLocation'] || "#{node['installer']['directory']}/tomcat/lib/#{node['db.driver.filename']}"
+    node.default['paths']['uninstallFile'] = "#{node['installer']['directory']}/alfresco.sh"
+    node.default['paths']['alfrescoGlobal'] = "#{node['installer']['directory']}/tomcat/shared/classes/alfresco-global.properties"
+    node.default['paths']['wqsCustomProperties'] = "#{node['installer']['directory']}/tomcat/shared/classes/wqsapi-custom.properties"
+    node.default['paths']['tomcatServerXml'] = "#{node['installer']['directory']}/tomcat/conf/server.xml"
+    node.default['paths']['licensePath'] = "#{node['installer']['directory']}/qa50.lic"
+    node.default['paths']['dbDriverLocation'] = "#{node['installer']['directory']}/tomcat/lib/#{node['db.driver.filename']}"
 end
+node.default["alfresco"]["keystore"] = "#{node['installer']['directory']}/alf_data/keystore"
+node.default["alfresco"]["keystore_file"] = "#{node['alfresco']['keystore']}/ssl.keystore"
+node.default["alfresco"]["truststore_file"] = "#{node['alfresco']['keystore']}/ssl.truststore"
 
 common_remote_file 'download alfresco build' do
   source node['installer']['downloadpath']
@@ -67,18 +72,18 @@ case node['platform_family']
       run_level :highest
       frequency :monthly
       action [:create, :run]
-      not_if { File.exists?(uninstallFile) }
+      not_if { File.exists?(node['paths']['uninstallFile']) }
     end
 
     batch 'Waiting for installation to finish ...' do
       code <<-EOH
-      dir /S /P \"#{uninstallFile}\"
+      dir /S /P \"#{node['paths']['uninstallFile']}\"
       EOH
       action :run
       retries 30
       retry_delay 10
       notifies :delete, 'windows_task[Install Alfresco]', :delayed
-      not_if { File.exists?(uninstallFile) }
+      not_if { File.exists?(node['paths']['uninstallFile']) }
     end
 
     when 'solaris', 'solaris2'
@@ -96,47 +101,81 @@ case node['platform_family']
 
       execute 'Install alfresco' do
         command "#{node['installer']['local']} --mode unattended --alfresco_admin_password #{node['installer']['alfresco_admin_password']} --enable-components #{node['installer']['enable-components']} --disable-components #{node['installer']['disable-components']} --jdbc_username #{node['installer']['jdbc_username']} --jdbc_password #{node['installer']['jdbc_password']} --prefix #{node['installer']['directory']}"
-        not_if { File.exists?(uninstallFile) }
+        not_if { File.exists?(node['paths']['uninstallFile']) }
       end
 
 end
 
-    common_template alfrescoGlobal do
-      source 'alfresco-global.properties.erb'
+    common_template node['paths']['alfrescoGlobal'] do
+      source 'globalProps/alfresco-global.properties.erb'
     end
 
-    common_template wqsCustomProperties do
-      source 'wqsapi-custom.properties.erb'
+    common_template node['paths']['wqsCustomProperties'] do
+      source 'customProps/wqsapi-custom.properties.erb'
     end
 
-    common_template tomcatServerXml do
-      source 'server.xml.erb'
-    end
-
-    common_template solrcoreArchive do
-      source 'solrcore-archive.erb'
-    end
-
-    common_template solrcoreWorkspace do
-      source 'solrcore-workspace.erb'
-    end
-
-    common_remote_file licensePath do
-      source node['alfresco.cluster.prerequisites']
-    end
-
-    common_remote_file dbDriverLocation do
+    common_remote_file node['paths']['dbDriverLocation'] do
       source node['db.driver.url']
     end
 
+    common_remote_file node['paths']['licensePath'] do
+      source node['alfresco.cluster.prerequisites']
+    end
+
+    common_template node['paths']['tomcatServerXml'] do
+      source 'tomcat/server.xml.erb'
+    end
+
+    common_template node['paths']['solrcoreArchive'] do
+      source 'solr/solrcore-archive.erb'
+    end
+
+    common_template node['paths']['solrcoreWorkspace'] do
+      source 'solr/solrcore-workspace.erb'
+    end
+
     remove_wars 'removing unnecesarry wars'
-    solr_ssl_disabler 'disabling solr ssl'
+    # solr_ssl_disabler 'disabling solr ssl'
+
+    %W(#{node['paths']['solrPath']}/templates/store
+    #{node['paths']['solrPath']}/templates/store/conf
+    #{node['certificates']['directory']}).each do |path|
+      directory path do
+        owner 'root'
+        group 'root'
+        mode 00775
+        action :create
+      end
+    end
+
+    %W(browser.p12
+    ssl.keystore
+    ssl.repo.client.crt
+    ssl.repo.client.keystore
+    ssl.repo.client.truststore
+    ssl.repo.crt
+    ssl.truststore).each do |file|
+      common_remote_file 'download certificates' do
+        source "#{node['certificates']['downloadpath']}/#{file}"
+        path "#{node['certificates']['directory']}/#{file}"
+      end
+    end
+
+    common_template "#{node['installer']['directory']}/applicert.sh" do
+      source 'solr/applicert.sh.erb'
+    end
+
+    execute 'Apply Certificates' do
+      command "sh #{node['installer']['directory']}/applicert.sh"
+      action :run
+      returns [0,1]
+    end
 
     case node['platform_family']
       when 'windows'
 
           service 'alfrescoPostgreSQL' do
-            if node['START_SERVICES']
+            if node['START_POSGRES']
               action [:enable, :start]
             else
               action :enable
@@ -152,13 +191,14 @@ end
               action :enable
             end
             supports :status => true, :restart => true, :stop => true, :start => true
+            only_if { node['START_SERVICES'] }
           end
 
     else
 
           service 'alfresco' do
             if node['START_SERVICES']
-              action [:enable, :start]
+              action [:enable, :restart]
             else
               action :enable
             end
@@ -171,6 +211,7 @@ end
             retries 120
             retry_delay 3
             returns 0
+            only_if { node['START_SERVICES'] }
           end
 
     end

@@ -16,7 +16,7 @@ case node['platform_family']
     end
 
     template "#{node['loadbalancer']['rootFolder']}/conf/httpd.conf" do
-      source 'httpd-win.erb'
+      source 'loadBalancer/httpd-win.erb'
       rights :read, 'Administrator'
       rights :write, 'Administrator'
       rights :full_control, 'Administrator'
@@ -53,7 +53,7 @@ case node['platform_family']
     end
 
     template '/etc/httpd/conf/httpd.conf' do
-      source 'httpd.conf.erb'
+      source 'loadBalancer/httpd.conf.erb'
       owner 'root'
       group 'root'
       mode '0755'

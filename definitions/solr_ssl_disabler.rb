@@ -2,6 +2,22 @@ define :solr_ssl_disabler do
 
   if node['disable_solr_ssl']
 
+
+    directory node['installer']['directory'] do
+      case node['platform_family']
+      when 'windows'
+        rights :read, 'Administrator'
+        rights :write, 'Administrator'
+        rights :full_control, 'Administrator'
+        rights :full_control, 'Administrator', :applies_to_children => true
+        group 'Administrators'
+      else
+          owner 'root'
+          group 'root'
+          mode 00775
+      end
+    end
+
     if node['install_alfresco_war']
 
       bash 'unzip alfresco war' do

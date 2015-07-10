@@ -63,7 +63,6 @@ suites:
                 START_SERVICES: true,
                 replication.enabled: false,
                 alfresco.cluster.enabled: false,
-                disable_solr_ssl: true,
                 installer: {
                   disable-components: 'javaalfresco',
                   enable-components: 'alfrescowcmqs'

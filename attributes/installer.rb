@@ -24,6 +24,8 @@ default['installer']['enable-components'] = 'alfrescowcmqs'
 default['installer']['disable-components'] = 'javaalfresco,postgres'
 default['installer']['jdbc_username'] = 'alfresco'
 default['installer']['jdbc_password'] = 'alfresco'
+default['certificates']['downloadpath'] = 'ftp://172.29.103.222/chef-resources/certificates'
+
 case node['platform_family']
 when 'windows'
   default['installer']['local'] = 'C:/alfresco.exe'
@@ -31,12 +33,32 @@ when 'windows'
   default['installer']['checksum'] = 'b635de4849eb9c3c508fcf7492ed1a286c6d231d88318abdfb97242581270d45'
   default['installer']['directory'] = 'C:/alf-installation'
   default['installer']['windirectory'] = 'C:\\\\alf-installation'
+  default['certificates']['directory'] = 'C:/certificates'
 else
   default['installer']['local'] = '/resources/alfresco.bin'
   default['installer']['downloadpath'] = 'ftp://172.29.101.56/50N/5.0.2/b302/alfresco-enterprise-5.0.2-SNAPSHOT-installer-linux-x64.bin'
   default['installer']['checksum'] = '90c61a7d7e73c03d5bfeb78de995d1c4b11959208e927e258b4b9e74b8ecfffa'
   default['installer']['directory'] = '/opt/alf-installation'
+  default['certificates']['directory'] = '/opt/certificates'
 end
+
+# Derived attributes based on conditional assignment. If no value is assigned in the wrapping recipe then the installer recipe will set them.
+# Do not uncomment these attributes. They are shown here just for info.
+# default['paths']['uninstallFile'] = "#{node['installer']['directory']}\\uninstall.exe"
+# default['paths']['alfrescoGlobal'] = "#{node['installer']['directory']}\\tomcat\\shared\\classes\\alfresco-global.properties"
+# default['paths']['wqsCustomProperties'] = "#{node['installer']['directory']}\\tomcat\\shared\\classes\\wqsapi-custom.properties" do
+# default['paths']['tomcatServerXml'] = "#{node['installer']['directory']}\\tomcat\\conf\\server.xml" do
+# default['paths']['licensePath'] = "#{node['installer']['directory']}/qa50.lic"
+# default['paths']['dbDriverLocation'] = "#{node['installer']['directory']}\\tomcat\\lib\\#{node['db.driver.filename']}"
+# default['installer']['dir.keystore'] = "#{node['installer']['directory']}/alf_data"
+
+#ssl attributes
+# default["alfresco"]["keystore_file"] = "#{node['installer']['directory']}/alf_data/ssl.keystore"
+default["alfresco"]["keystore_password"] = "kT9X6oe68t"
+default["alfresco"]["keystore_type"] = "JCEKS"
+# default["alfresco"]["truststore_file"] = "#{node['installer']['directory']}/alf_data/ssl.truststore"
+default["alfresco"]["truststore_password"] = "kT9X6oe68t"
+default["alfresco"]["truststore_type"] = "JCEKS"
 
 ############ conditional chef attributes ############
 ####### Services #######
@@ -46,7 +68,6 @@ default['install_alfresco_war']=true
 default['install_share_war']=true
 default['install_solr4_war']=true
 default['disable_solr_ssl']=false
-
 
 ############ alfresco configuration properties ############
 
@@ -71,6 +92,9 @@ default['solr.target.alfresco.baseUrl']='/alfresco'
 #alfresco and share ports
 default['alfresco.port']='8080'
 default['share.port']='8080'
+default['alfresco.protocol']='http'
+default['share.protocol']='http'
+
 default['shutdown.port']='8005'
 default['ajp.port']='8009'
 
