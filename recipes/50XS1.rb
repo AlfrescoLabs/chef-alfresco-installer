@@ -13,11 +13,11 @@ with_chef_local_server :chef_repo_path => '/tmp/kitchen/cache', :cookbook_path =
 
 machine_batch 'Initial setup on nodes and lb' do
 
-  clusternode1='172.29.101.121'
-  clusternode2='172.29.101.122'
-  loadbalancer='172.29.101.120'
+  clusternode1='172.29.101.52'
+  clusternode2='172.29.101.236'
+  loadbalancer='172.29.101.235'
   username='root'
-  installerPath='ftp://172.29.103.222/50N/5.0.2/alfresco-enterprise-5.0.2-SNAPSHOT-installer-linux-x64.bin'
+  installerPath='ftp://172.29.101.56/50N/5.0.2/b34/alfresco-enterprise-5.0.2-installer-linux-x64.bin'
 
   machine 'node1' do
     action [:ready, :setup, :converge]
@@ -28,7 +28,7 @@ machine_batch 'Initial setup on nodes and lb' do
                             :password => 'alfresco'
                         }
                     }
-    run_list %w(recipe[java-wrapper::java8] recipe[alfresco-chef::installer])
+    run_list %w(recipe[java-wrapper::java8] recipe[chef-alfresco-installer::installer])
     attributes 'installer' =>
                    {'nodename' => 'node1',
                     'disable-components' => 'javaalfresco,postgres',
@@ -43,9 +43,7 @@ machine_batch 'Initial setup on nodes and lb' do
                'install_solr4_war' => false,
                'START_SERVICES' => false,
                'START_POSGRES' => false,
-               'disable_solr_ssl' => true,
                'solr.host' => loadbalancer
-
   end
 
   machine 'node2' do
@@ -57,7 +55,7 @@ machine_batch 'Initial setup on nodes and lb' do
                             :password => 'alfresco'
                         }
                     }
-    run_list %w(recipe[java-wrapper::java8] recipe[alfresco-chef::installer])
+    run_list %w(recipe[java-wrapper::java8] recipe[chef-alfresco-installer::installer])
     attributes 'installer' =>
                    {'nodename' => 'node2',
                     'disable-components' => 'javaalfresco,postgres',
@@ -72,7 +70,6 @@ machine_batch 'Initial setup on nodes and lb' do
                'install_solr4_war' => false,
                'START_SERVICES' => false,
                'START_POSGRES' => false,
-               'disable_solr_ssl' => true,
                'solr.host' => loadbalancer
   end
 
@@ -85,7 +82,7 @@ machine_batch 'Initial setup on nodes and lb' do
                             :password => 'alfresco'
                         }
                     }
-    run_list %w(recipe[java-wrapper::java8] recipe[alfresco-chef::replication_server] recipe[alfresco-chef::loadbalancer] recipe[alfresco-dbwrapper::postgres] recipe[alfresco-chef::installer])
+    run_list %w(recipe[java-wrapper::java8] recipe[chef-alfresco-installer::replication_server] recipe[chef-alfresco-installer::loadbalancer] recipe[alfresco-dbwrapper::postgres] recipe[chef-alfresco-installer::installer])
     attributes 'lb' => {
                    'ips_and_nodenames' => [
                        {
@@ -106,13 +103,13 @@ machine_batch 'Initial setup on nodes and lb' do
                     'createdb' => true},
                'replication.enabled' => 'false',
                'alfresco.cluster.enabled' => 'true',
-               'disable_solr_ssl' => true,
                'install_share_war' => false,
                'install_alfresco_war' => false,
                'START_SERVICES' => false,
                'START_POSGRES' => false,
-               'solr.target.alfresco.host' => loadbalancer,
-               'solr.target.alfresco.port' => '80'
+               'solr.target.alfresco.host' => clusternode1,
+               'solr.target.alfresco.port' => '8080',
+               'solr.target.alfresco.port.ssl' => '8443'
   end
 
 end
@@ -120,7 +117,7 @@ end
 machine_batch 'replication setup' do
   %w(node1 node2).each do |name|
     machine name do
-      recipe 'alfresco-chef::replication_client'
+      recipe 'chef-alfresco-installer::replication_client'
       action :converge
     end
   end
@@ -144,4 +141,3 @@ machine 'node2' do
   action :nothing
   attribute 'START_SERVICES', true
 end
-
