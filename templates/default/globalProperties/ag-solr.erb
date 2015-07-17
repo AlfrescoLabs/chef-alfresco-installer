@@ -1,9 +1,0 @@
-index.subsystem.name=<%= node['index.subsystem.name']%>
-dir.keystore=<%= node['dir.keystore']%>
-solr.host=<%= node['solr.host']%>
-solr.port=<%= node['solr.port']%>
-<% if node['disable_solr_ssl'] %>
-solr.secureComms=none
-<% else %>
-solr.port.ssl=<%= node['solr.port.ssl']%>
-<% end %>

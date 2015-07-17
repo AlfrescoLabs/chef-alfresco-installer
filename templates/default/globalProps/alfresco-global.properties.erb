@@ -29,7 +29,11 @@ ftp.enabled=true
 
 ############### RMI registry port for JMX ###############
 alfresco.rmi.services.port=50500
+
+<% if node['alfresco.version'].start_with?("5.") %>
 alfresco.rmi.services.host=<%= node['ipaddress']%>
+<% end %>
+
 monitor.rmi.service.port=0
 avm.rmi.service.port=0
 avmsync.rmi.service.port=0

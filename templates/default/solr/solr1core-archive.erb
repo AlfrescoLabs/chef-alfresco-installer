@@ -5,11 +5,13 @@
 #
 # data is in ${data.dir.root}/${data.dir.store}
 
-data.dir.root=<%= node['paths']['solrPath']%>/index
+data.dir.root=<%= node['paths']['solrPath']%>
 data.dir.store=archive/SpacesStore
 enable.alfresco.tracking=true
 cache.alfresco.size=100
 max.field.length=2147483647
+
+alfresco.version=<%= node['alfresco.version']%>
 
 #
 # Properties loaded during alfresco tracking

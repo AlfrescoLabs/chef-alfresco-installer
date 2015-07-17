@@ -49,13 +49,6 @@ node.default["alfresco"]["keystore"] = "#{node['installer']['directory']}/alf_da
 node.default["alfresco"]["keystore_file"] = "#{node['alfresco']['keystore']}/ssl.keystore"
 node.default["alfresco"]["truststore_file"] = "#{node['alfresco']['keystore']}/ssl.truststore"
 
-directory '/resources' do
-  owner 'root'
-  group 'root'
-  mode '0775'
-  action :create
-end
-
 common_remote_file 'download alfresco build' do
   source node['installer']['downloadpath']
   path node['installer']['local']
@@ -114,8 +107,10 @@ end
       source 'customProps/wqsapi-custom.properties.erb'
     end
 
-    common_remote_file node['paths']['dbDriverLocation'] do
-      source node['db.driver.url']
+    if node['installer.database-version'] != 'none'
+      common_remote_file node['paths']['dbDriverLocation'] do
+        source node['db.driver.url']
+      end
     end
 
     common_remote_file node['paths']['licensePath'] do

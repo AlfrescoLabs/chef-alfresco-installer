@@ -35,7 +35,7 @@ when 'windows'
   default['installer']['windirectory'] = 'C:\\\\alf-installation'
   default['certificates']['directory'] = 'C:/certificates'
 else
-  default['installer']['local'] = '/resources/alfresco.bin'
+  default['installer']['local'] = '/opt/alfresco.bin'
   default['installer']['downloadpath'] = 'ftp://172.29.101.56/50N/5.0.2/b302/alfresco-enterprise-5.0.2-SNAPSHOT-installer-linux-x64.bin'
   default['installer']['checksum'] = '90c61a7d7e73c03d5bfeb78de995d1c4b11959208e927e258b4b9e74b8ecfffa'
   default['installer']['directory'] = '/opt/alf-installation'
@@ -187,6 +187,10 @@ case node['installer.database-type']
 
   when 'postgres'
 
+    default['db.driver']='org.postgresql.Driver'
+    default['db.pool.max']='275'
+    default['db.pool.validate.query']='SELECT 1'
+
     case node['installer.database-version']
 
       when '9.3.5'
@@ -208,11 +212,15 @@ case node['installer.database-type']
 
         end
 
-        default['db.driver']='org.postgresql.Driver'
-        default['db.pool.max']='275'
-        default['db.pool.validate.query']='SELECT 1'
         default['db.driver.url']='ftp://172.29.101.56/databases/postgresql-9.4-1201-jdbc41.jar'
         default['db.driver.filename']='postgresql-9.4-1201-jdbc41.jar'
+
+    when 'none'
+
+      default['db.username']='alfresco'
+      default['db.password']='admin'
+      default['db.name']='alfresco'
+      default['db.url']='jdbc:postgresql://localhost:5432/${db.name}'
 
     end
 
