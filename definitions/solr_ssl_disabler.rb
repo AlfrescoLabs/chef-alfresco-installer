@@ -2,7 +2,6 @@ define :solr_ssl_disabler do
 
   if node['disable_solr_ssl']
 
-
     directory node['installer']['directory'] do
       case node['platform_family']
       when 'windows'
@@ -117,5 +116,7 @@ define :solr_ssl_disabler do
       end
 
     end
+
   end
+
 end

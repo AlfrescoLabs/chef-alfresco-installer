@@ -73,10 +73,6 @@
                connectionTimeout="20000"
                redirectPort="<%=node['solr.port.ssl']%>"
                maxHttpHeaderSize="32768"
-               <% if !node['disable_solr_ssl'] %>
-               secure="true"
-               scheme="https"
-               <% end -%>
                />
     <!-- A "Connector" using the shared thread pool-->
     <!--

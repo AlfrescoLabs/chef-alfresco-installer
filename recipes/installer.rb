@@ -49,6 +49,13 @@ node.default["alfresco"]["keystore"] = "#{node['installer']['directory']}/alf_da
 node.default["alfresco"]["keystore_file"] = "#{node['alfresco']['keystore']}/ssl.keystore"
 node.default["alfresco"]["truststore_file"] = "#{node['alfresco']['keystore']}/ssl.truststore"
 
+directory '/resources' do
+  owner 'root'
+  group 'root'
+  mode '0775'
+  action :create
+end
+
 common_remote_file 'download alfresco build' do
   source node['installer']['downloadpath']
   path node['installer']['local']
@@ -92,13 +99,6 @@ case node['platform_family']
 
     else
 
-      directory '/resources' do
-        owner 'root'
-        group 'root'
-        mode '0775'
-        action :create
-      end
-
       execute 'Install alfresco' do
         command "#{node['installer']['local']} --mode unattended --alfresco_admin_password #{node['installer']['alfresco_admin_password']} --enable-components #{node['installer']['enable-components']} --disable-components #{node['installer']['disable-components']} --jdbc_username #{node['installer']['jdbc_username']} --jdbc_password #{node['installer']['jdbc_password']} --prefix #{node['installer']['directory']}"
         not_if { File.exists?(node['paths']['uninstallFile']) }
@@ -127,49 +127,58 @@ end
     end
 
     common_template node['paths']['solrcoreArchive'] do
+      case node['index.subsystem.name']
+      when 'solr4'
       source 'solr/solrcore-archive.erb'
+      when 'solr'
+      source 'solr/solr1core-archive.erb'
+      end
     end
 
     common_template node['paths']['solrcoreWorkspace'] do
+      case node['index.subsystem.name']
+      when 'solr4'
       source 'solr/solrcore-workspace.erb'
+      when 'solr'
+      source 'solr/solr1core-workspace.erb'
+      end
     end
 
     remove_wars 'removing unnecesarry wars'
-    # solr_ssl_disabler 'disabling solr ssl'
+    solr_ssl_disabler 'disabling solr ssl'
 
-    %W(#{node['paths']['solrPath']}/templates/store
-    #{node['paths']['solrPath']}/templates/store/conf
-    #{node['certificates']['directory']}).each do |path|
-      directory path do
-        owner 'root'
-        group 'root'
-        mode 00775
-        action :create
-      end
-    end
-
-    %W(browser.p12
-    ssl.keystore
-    ssl.repo.client.crt
-    ssl.repo.client.keystore
-    ssl.repo.client.truststore
-    ssl.repo.crt
-    ssl.truststore).each do |file|
-      common_remote_file 'download certificates' do
-        source "#{node['certificates']['downloadpath']}/#{file}"
-        path "#{node['certificates']['directory']}/#{file}"
-      end
-    end
-
-    common_template "#{node['installer']['directory']}/applicert.sh" do
-      source 'solr/applicert.sh.erb'
-    end
-
-    execute 'Apply Certificates' do
-      command "sh #{node['installer']['directory']}/applicert.sh"
-      action :run
-      returns [0,1]
-    end
+    # %W(#{node['paths']['solrPath']}/templates/store
+    # #{node['paths']['solrPath']}/templates/store/conf
+    # #{node['certificates']['directory']}).each do |path|
+    #   directory path do
+    #     owner 'root'
+    #     group 'root'
+    #     mode 00775
+    #     action :create
+    #   end
+    # end
+    #
+    # %W(browser.p12
+    # ssl.keystore
+    # ssl.repo.client.crt
+    # ssl.repo.client.keystore
+    # ssl.repo.client.truststore
+    # ssl.repo.crt
+    # ssl.truststore).each do |file|
+    #   common_remote_file 'download certificates' do
+    #     source "#{node['certificates']['downloadpath']}/#{file}"
+    #     path "#{node['certificates']['directory']}/#{file}"
+    #   end
+    # end
+    #
+    # common_template "#{node['installer']['directory']}/applicert.sh" do
+    #   source 'solr/applicert.sh.erb'
+    # end
+    #
+    # execute 'Apply Certificates' do
+    #   command "sh #{node['installer']['directory']}/applicert.sh"
+    #   action :run
+    # end
 
     case node['platform_family']
       when 'windows'

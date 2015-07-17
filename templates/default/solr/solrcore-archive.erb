@@ -5,7 +5,7 @@
 #
 # data is in ${data.dir.root}/${data.dir.store}
 
-data.dir.root=<%= node['installer']['directory']%>/alf_data/solr4/index
+data.dir.root=<%= node['paths']['solrPath']%>/index
 data.dir.store=archive/SpacesStore
 enable.alfresco.tracking=true
 
@@ -21,9 +21,7 @@ alfresco.version=<%= node['alfresco.version']%>
 
 alfresco.host=<%= node['solr.target.alfresco.host']%>
 alfresco.port=<%= node['solr.target.alfresco.port']%>
-<% if !node['disable_solr_ssl'] %>
 alfresco.port.ssl=<%= node['solr.target.alfresco.port.ssl']%>
-<% end %>
 alfresco.baseUrl=<%= node['solr.target.alfresco.baseUrl']%>
 alfresco.cron=0/15 * * * * ? *
 alfresco.stores=archive://SpacesStore
