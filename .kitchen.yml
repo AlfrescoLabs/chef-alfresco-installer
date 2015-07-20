@@ -31,27 +31,21 @@ platforms:
     port: 5985
     username: Administrator
     password: alfresco
-- name:  poc
-  driver_config:
-    hostname: 172.29.101.192
-    username: root
-    password: alfresco
 
 suites:
+
 - name: tomcat
   excludes:
     - suse12
     - redhat65
     - ubuntu1204
     - win2012
-    - checklist
   run_list:
   - recipe[java-wrapper::java8]
   - recipe[chef-alfresco-installer::tomcat]
   attributes: { localPath: false }
 
-
-- name: installer
+- name: installer5
   excludes:
     - solaris112
     - checklist
@@ -65,8 +59,63 @@ suites:
                 alfresco.cluster.enabled: false,
                 installer: {
                   disable-components: 'javaalfresco',
-                  enable-components: 'alfrescowcmqs'
-                  # downloadpath: 'https://releases.alfresco.com/Enterprise-4.2/4.2.4/PATCH-4.2.4.9/build-00127/ALL/alfresco-enterprise-4.2.4.9-installer-linux-x64.bin'
+                  enable-components: 'alfrescowcmqs',
+                  downloadpath: 'https://releases.alfresco.com/Enterprise-4.2/4.2.4/PATCH-4.2.4.9/build-00127/ALL/alfresco-enterprise-4.2.4.9-installer-linux-x64.bin'
+                }
+              }
+
+- name: installer41
+  excludes:
+    - solaris112
+    - suse12
+    - ubuntu1204
+    - win2012
+  run_list:
+  - recipe[java-wrapper::java6]
+  - recipe[chef-alfresco-installer::installer]
+  attributes: {
+                localPath: false,
+                index.subsystem.name: 'solr',
+                installer.database-version: 'none',
+                alfresco.version: '4.2.4.9',
+                START_SERVICES: true,
+                replication.enabled: false,
+                alfresco.cluster.enabled: false,
+                installer: {
+                  enable-components: 'alfrescowcmqs',
+                  disable-components: 'javaalfresco',
+                  downloadpath: 'https://releases.alfresco.com/Enterprise-4.1/4.1.10/build-00030/ALL/alfresco-enterprise-4.1.10-installer-linux-x64.bin'
+                }
+              }
+
+- name: installer42
+  excludes:
+    - solaris112
+    - suse12
+    - ubuntu1204
+    - win2012
+  run_list:
+  - recipe[java]
+  - recipe[chef-alfresco-installer::installer]
+  attributes: {
+                java: {
+                  install_flavor: 'oracle',
+                  jdk_version: 7,
+                  oracle: {
+                    accept_oracle_download_terms: true
+                    }
+                  },
+                index.subsystem.name: 'solr',
+                installer.database-version: 'none',
+                alfresco.version: '4.2.4.9',
+                localPath: false,
+                START_SERVICES: true,
+                replication.enabled: false,
+                alfresco.cluster.enabled: false,
+                installer: {
+                  disable-components: 'javaalfresco',
+                  enable-components: 'alfrescowcmqs',
+                  downloadpath: 'https://releases.alfresco.com/Enterprise-4.2/4.2.4/PATCH-4.2.4.9/build-00127/ALL/alfresco-enterprise-4.2.4.9-installer-linux-x64.bin'
                 }
               }
 
@@ -102,29 +151,3 @@ suites:
     - checklist
   run_list:
   - recipe[chef-alfresco-installer::loadbalancer]
-
-- name: poc
-  excludes:
-    - suse12
-    - solaris112
-    - ubuntu1204
-    - redhat65
-    - win2012
-  run_list:
-    - recipe[java-wrapper::java8]
-    - recipe[chef-alfresco-installer::installer]
-  attributes: {
-                localPath: false,
-                START_SERVICES: false,
-                replication.enabled: false,
-                alfresco.cluster.enabled: false,
-                index.subsystem.name: 'solr',
-                install_solr4_war: true,
-                install_alfresco_war: false,
-                install_share_war: false,
-                installer: {
-                  disable-components: 'javaalfresco',
-                  enable-components: 'alfrescowcmqs',
-                  downloadpath: 'ftp://172.29.101.56/50N/5.0.2/b34/alfresco-enterprise-5.0.2-installer-linux-x64.bin'
-                }
-              }

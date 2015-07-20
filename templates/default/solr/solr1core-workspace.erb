@@ -19,9 +19,7 @@ alfresco.version=<%= node['alfresco.version']%>
 
 alfresco.host=<%= node['solr.target.alfresco.host']%>
 alfresco.port=<%= node['solr.target.alfresco.port']%>
-<% if !node['disable_solr_ssl'] %>
 alfresco.port.ssl=<%= node['solr.target.alfresco.port.ssl']%>
-<% end %>
 alfresco.baseUrl=<%= node['solr.target.alfresco.baseUrl']%>
 alfresco.cron=0/15 * * * * ? *
 alfresco.stores=workspace://SpacesStore

@@ -23,7 +23,7 @@ case node['platform_family']
   when 'solaris', 'solaris2'
 
     template '/opt/opencsw.sh' do
-      source 'opencsw.sh.erb'
+      source 'machinePreps/opencsw.sh.erb'
       owner 'root'
       group 'root'
       mode 00755
@@ -219,7 +219,7 @@ end
 end
 
 template "#{installDir}/tomcat/conf/catalina.properties" do
-  source 'catalina.properties.erb'
+  source 'tomcat/catalina.properties.erb'
   owner 'root'
   group 'root'
   mode 00755
@@ -227,7 +227,7 @@ template "#{installDir}/tomcat/conf/catalina.properties" do
 end
 
 template "#{installDir}/tomcat/conf/server.xml" do
-  source 'server.xml.erb'
+  source 'tomcat/server.xml.erb'
   owner 'root'
   group 'root'
   mode 00755
@@ -235,7 +235,7 @@ template "#{installDir}/tomcat/conf/server.xml" do
 end
 
 template "#{node['installer']['directory']}/tomcat/shared/classes/wqsapi-custom.properties" do
-  source 'wqsapi-custom.properties.erb'
+  source 'customProps/wqsapi-custom.properties.erb'
   owner 'root'
   group 'root'
   mode '0755'
@@ -243,7 +243,7 @@ template "#{node['installer']['directory']}/tomcat/shared/classes/wqsapi-custom.
 end
 
 template "#{installDir}/tomcat/conf/context.xml" do
-  source 'context.xml.erb'
+  source 'tomcat/context.xml.erb'
   owner 'root'
   group 'root'
   mode 00755
@@ -251,7 +251,7 @@ template "#{installDir}/tomcat/conf/context.xml" do
 end
 
 template "#{installDir}/tomcat/conf/Catalina/localhost/solr4.xml" do
-  source 'solr4.xml.erb'
+  source 'solr/solr4.xml.erb'
   owner 'root'
   group 'root'
   mode 00755
@@ -259,7 +259,7 @@ template "#{installDir}/tomcat/conf/Catalina/localhost/solr4.xml" do
 end
 
 template "#{installDir}/tomcat/conf/tomcat-users.xml" do
-  source 'tomcat-users.xml.erb'
+  source 'tomcat/tomcat-users.xml.erb'
   owner 'root'
   group 'root'
   mode 00755
@@ -288,7 +288,7 @@ bash 'place alfresco in tomcat folder' do
 end
 
 template "#{installDir}/tomcat/shared/classes/alfresco-global.properties" do
-  source 'alfresco-global.properties.erb'
+  source 'globalProps/alfresco-global.properties.erb'
   owner 'root'
   group 'root'
   mode 00755
@@ -331,7 +331,7 @@ case node['platform_family']
     end
 
     template "#{installDir}tomcat.xml" do
-      source 'solaris-tomcat-service.xml.erb'
+      source 'machinePreps/solaris-tomcat-service.xml.erb'
       owner 'root'
       group 'root'
       mode 00755
