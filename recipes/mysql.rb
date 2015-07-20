@@ -25,6 +25,16 @@ bash 'Install package repos' do
 	EOH
 end
 
+bash 'setting repo for mysql55' do
+	user 'root'
+	cwd '/tmp'
+	code <<-EOH
+	yum-config-manager --disable mysql56-community
+	yum-config-manager --enable mysql55-community
+	EOH
+  only_if { "#{node['mysql']['yum']['version']}".start_with?("5.5") }
+end
+
 package 'mysql-libs' do
 	action :remove
 end
@@ -67,4 +77,3 @@ bash 'Drop db' do
 	EOH
 	only_if { node['mysql']['dropdb'] }
 end
-	

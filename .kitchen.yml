@@ -10,6 +10,11 @@ platforms:
     username: root
     password: alfresco
     hostname: 172.29.101.52
+- name:  redhat61
+  driver_config:
+    username: root
+    password: alfresco
+    hostname: 172.29.102.3
 - name:  solaris112
   driver_config:
     hostname: 172.29.101.64
