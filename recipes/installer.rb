@@ -1,3 +1,4 @@
+# ~FC005
 #
 # Copyright (C) 2005-2015 Alfresco Software Limited.
 #
@@ -107,11 +108,11 @@ end
       source 'customProps/wqsapi-custom.properties.erb'
     end
 
-    if node['installer.database-version'] != 'none'
-      common_remote_file node['paths']['dbDriverLocation'] do
-        source node['db.driver.url']
-      end
-    end
+if node['installer.database-version'] != 'none'
+  common_remote_file node['paths']['dbDriverLocation'] do
+    source node['db.driver.url']
+  end
+end
 
     common_remote_file node['paths']['licensePath'] do
       source node['alfresco.cluster.prerequisites']
@@ -121,25 +122,45 @@ end
       source 'tomcat/server.xml.erb'
     end
 
-    common_template node['paths']['solrcoreArchive'] do
-      case node['index.subsystem.name']
-      when 'solr4'
-      source 'solr/solrcore-archive.erb'
-      when 'solr'
-      source 'solr/solr1core-archive.erb'
+    solrcoreProps = {
+      "data.dir.root=" => node['paths']['solrPath'],
+      "alfresco.version=" => node['alfresco.version'],
+      "alfresco.host=" => node['solr.target.alfresco.host'],
+      "alfresco.port=" => node['solr.target.alfresco.port'],
+      "alfresco.port.ssl=" => node['solr.target.alfresco.port.ssl'],
+      "alfresco.baseUrl=" => node['solr.target.alfresco.baseUrl']
+    }
+
+    solrcoreProps.each do |key,value|
+
+      replace_or_add 'replace in solrcoreArchive' do
+        path node['paths']['solrcoreArchive']
+        pattern "#{key}.*"
+        line "#{key}#{value}"
       end
+
+      replace_or_add 'replace in solrcoreWorkspace' do
+        path node['paths']['solrcoreWorkspace']
+        pattern "#{key}.*"
+        line "#{key}#{value}"
+      end
+
     end
 
-    common_template node['paths']['solrcoreWorkspace'] do
-      case node['index.subsystem.name']
-      when 'solr4'
-      source 'solr/solrcore-workspace.erb'
-      when 'solr'
-      source 'solr/solr1core-workspace.erb'
-      end
+    replace_or_add node['paths']['solrcoreArchive'] do
+      pattern "alfresco.secureComms=.*"
+      line "data.dir.root=none"
+      only_if { node['disable_solr_ssl'] }
+    end
+
+    replace_or_add node['paths']['solrcoreWorkspace'] do
+      pattern "alfresco.secureComms=.*"
+      line "data.dir.root=none"
+      only_if { node['disable_solr_ssl'] }
     end
 
     remove_wars 'removing unnecesarry wars'
+
     solr_ssl_disabler 'disabling solr ssl'
 
     # %W(#{node['paths']['solrPath']}/templates/store

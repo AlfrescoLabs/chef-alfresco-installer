@@ -8,6 +8,6 @@ version          '1.0.0'
 
 depends 'chef-client',"~> 4.3.0"
 depends 'apt', "~> 2.7.0"
-depends 'line', "~> 0.6.1"
+depends 'line', "~> 0.6.2"
 depends 'windows', "~> 1.37.0"
 depends 'nfs', "~> 2.2.2"
