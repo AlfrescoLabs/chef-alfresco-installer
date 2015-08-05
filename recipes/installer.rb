@@ -113,7 +113,10 @@ if node['installer.database-version'] != 'none'
     source node['db.driver.url']
   end
 end
-    if node['paths']['licensePath']
+
+    Chef::Log.warn("LicensePath: #{node['paths']['licensePath']}")
+    
+    if node['paths']['licensePath'] and node['paths']['licensePath'].length > 0
       common_remote_file node['paths']['licensePath'] do
         source node['alfresco.cluster.prerequisites']
       end
