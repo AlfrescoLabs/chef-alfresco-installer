@@ -113,9 +113,10 @@ if node['installer.database-version'] != 'none'
     source node['db.driver.url']
   end
 end
-
-    common_remote_file node['paths']['licensePath'] do
-      source node['alfresco.cluster.prerequisites']
+    if node['paths']['licensePath']
+      common_remote_file node['paths']['licensePath'] do
+        source node['alfresco.cluster.prerequisites']
+      end
     end
 
     common_template node['paths']['tomcatServerXml'] do
