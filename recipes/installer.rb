@@ -114,8 +114,10 @@ if node['installer.database-version'] != 'none'
   end
 end
 
-    common_remote_file node['paths']['licensePath'] do
-      source node['alfresco.cluster.prerequisites']
+    if node['paths']['licensePath'] and node['paths']['licensePath'].length > 0
+      common_remote_file node['paths']['licensePath'] do
+        source node['alfresco.cluster.prerequisites']
+      end
     end
 
     common_template node['paths']['tomcatServerXml'] do
