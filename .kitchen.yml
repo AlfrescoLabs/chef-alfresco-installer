@@ -37,7 +37,13 @@ platforms:
     hostname: 172.29.102.2
 - name:  win2012
   driver_config:
-    hostname: 172.29.101.51
+    hostname: 172.29.102.7
+    port: 5985
+    username: Administrator
+    password: alfresco
+- name:  win2008
+  driver_config:
+    hostname: 172.29.102.10
     port: 5985
     username: Administrator
     password: alfresco
@@ -73,8 +79,7 @@ suites:
                 alfresco.cluster.enabled: false,
                 installer: {
                   disable-components: 'javaalfresco',
-                  enable-components: 'alfrescowcmqs',
-                  downloadpath: 'https://releases.alfresco.com/Enterprise-4.2/4.2.4/PATCH-4.2.4.9/build-00127/ALL/alfresco-enterprise-4.2.4.9-installer-linux-x64.bin'
+                  enable-components: 'alfrescowcmqs'
                 }
               }
 
@@ -87,20 +92,20 @@ suites:
     - ubuntu1204
     - win2012
   run_list:
-  - recipe[java-wrapper::java6]
+  - recipe[java-wrapper::java8]
   - recipe[chef-alfresco-installer::installer]
   attributes: {
                 localPath: false,
                 index.subsystem.name: 'solr',
                 installer.database-version: 'none',
-                alfresco.version: '4.2.4.9',
+                alfresco.version: '4.1.10',
                 START_SERVICES: true,
                 replication.enabled: false,
                 alfresco.cluster.enabled: false,
                 installer: {
                   enable-components: 'alfrescowcmqs',
                   disable-components: 'javaalfresco',
-                  downloadpath: 'https://releases.alfresco.com/Enterprise-4.1/4.1.10/build-00030/ALL/alfresco-enterprise-4.1.10-installer-linux-x64.bin'
+                  downloadpath: 'ftp://172.29.101.56/41N/4.1.10_build30/alfresco-enterprise-4.1.10-installer-win-x64.exe'
                 }
               }
 
@@ -111,18 +116,10 @@ suites:
     - solaris112
     - suse12
     - ubuntu1204
-    - win2012
   run_list:
-  - recipe[java]
+  - recipe[java-wrapper::java8]
   - recipe[chef-alfresco-installer::installer]
   attributes: {
-                java: {
-                  install_flavor: 'oracle',
-                  jdk_version: 7,
-                  oracle: {
-                    accept_oracle_download_terms: true
-                    }
-                  },
                 index.subsystem.name: 'solr',
                 installer.database-version: 'none',
                 alfresco.version: '4.2.4.9',
@@ -133,7 +130,7 @@ suites:
                 installer: {
                   disable-components: 'javaalfresco',
                   enable-components: 'alfrescowcmqs',
-                  downloadpath: 'https://releases.alfresco.com/Enterprise-4.2/4.2.4/PATCH-4.2.4.9/build-00127/ALL/alfresco-enterprise-4.2.4.9-installer-linux-x64.bin'
+                  downloadpath: 'https://releases.alfresco.com/Enterprise-4.2/4.2.4/PATCH-4.2.4.9/build-00127/ALL/alfresco-enterprise-4.2.4.9-installer-win-x64.exe'
                 }
               }
 
