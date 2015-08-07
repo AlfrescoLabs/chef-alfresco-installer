@@ -25,12 +25,19 @@ Usage
 Adding the chef-alfresco-installer::installer recipe and setting the build location on the node attribute
 `default['installer']['downloadpath']` will be sufficient to spin up the installation and configuration of alfresco
 
+If you want to add additional amps to your installation then set their URL in the fallowing arrays:
+```
+default['amps']['alfresco']=[]
+default['amps']['share']=[]
+#example default['amps']['alfresco']=['ftp://location/chef-resources/alfresco-rm-server-2.3-SNAPSHOT-amp.amp','ftp://location/chef-resources/alfresco-cmm-server-1.0-SNAPSHOT-amp.amp']
+```
+
 #### chef-alfresco-installer::loadbalancer
 
 Installs an Apache Load balancer on:
 - windows 2012 server
 - redhat 6.5
- 
+
 Will balance the nodes given in the attribute
 ```
 default['lb']['ips_and_nodenames'] = [
@@ -47,7 +54,7 @@ This will setup nfs server and client components
 
 just set these attributes on the client
 ```
-default['replication_remote_ip']='ipaddress of the nfs server' 
+default['replication_remote_ip']='ipaddress of the nfs server'
 default['replication.enabled']='true'
 ```
 

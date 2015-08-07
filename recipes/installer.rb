@@ -55,16 +55,44 @@ common_remote_file 'download alfresco build' do
   path node['installer']['local']
 end
 
+%W(#{node['installer']['directory']}
+#{node['installer']['directory']}/amps
+#{node['installer']['directory']}/amps_share).each do |dir|
+  directory dir do
+    case node['platform_family']
+      when 'windows'
+        rights :read, 'Administrator'
+        rights :write, 'Administrator'
+        rights :full_control, 'Administrator'
+        rights :full_control, 'Administrator', :applies_to_children => true
+        group 'Administrators'
+      else
+        owner 'root'
+        group 'root'
+        mode 00755
+        :top_level
+    end
+  end
+end
+
+if node['amps']['alfresco'] and node['amps']['alfresco'].length > 0
+  node['amps']['alfresco'].each do |url|
+    common_remote_file "#{node['installer']['directory']}/amps/#{::File.basename(url)}" do
+      source url
+    end
+  end
+end
+
+if node['amps']['share'] and node['amps']['share'].length > 0
+  node['amps']['share'].each do |url|
+    common_remote_file "#{node['installer']['directory']}/amps_share/#{::File.basename(url)}" do
+      source url
+    end
+  end
+end
+
 case node['platform_family']
   when 'windows'
-
-    directory node['installer']['directory'] do
-      rights :read, 'Administrator'
-      rights :write, 'Administrator'
-      rights :full_control, 'Administrator'
-      rights :full_control, 'Administrator', :applies_to_children => true
-      group 'Administrators'
-    end
 
     windows_task 'Install Alfresco' do
       user 'Administrator'
@@ -108,11 +136,11 @@ end
       source 'customProps/wqsapi-custom.properties.erb'
     end
 
-if node['installer.database-version'] != 'none'
-  common_remote_file node['paths']['dbDriverLocation'] do
-    source node['db.driver.url']
-  end
-end
+    if node['installer.database-version'] != 'none'
+      common_remote_file node['paths']['dbDriverLocation'] do
+        source node['db.driver.url']
+      end
+    end
 
     if node['paths']['licensePath'] and node['paths']['licensePath'].length > 0
       common_remote_file node['paths']['licensePath'] do
