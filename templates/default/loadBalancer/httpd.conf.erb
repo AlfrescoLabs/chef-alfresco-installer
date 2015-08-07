@@ -1022,6 +1022,7 @@ BrowserMatch "^Dreamweaver-WebDAV-SCM1" redirect-carefully
         BalancerMember ajp://<%= @item[:ip] %>:8009 route=<%= @item[:nodename] %>
     <% end %>
     </Proxy>
+    RewriteEngine on
     RewriteRule ^/$ share [R]
     
     <Location /balancer-manager>
