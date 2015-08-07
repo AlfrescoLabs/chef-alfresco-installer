@@ -22,10 +22,16 @@ platforms:
     password: alfresco1
 - name:  win2012
   driver_config:
-    hostname: 172.29.101.51
+    hostname: 172.29.102.12
     port: 5985
     username: 'Administrator'
     password: 'alfresco'
+- name:  win2008
+  driver_config:
+    hostname: 172.29.102.10
+    port: 5985
+    username: Administrator
+    password: alfresco
 
 suites:
 - name: postgres
@@ -52,3 +58,15 @@ suites:
     - solaris112
   run_list:
   - recipe[alfresco-dbwrapper::mariadb]
+- name: sqlserver
+  excludes:
+    - redhat61
+    - redhat65
+    - solaris112
+  run_list:
+  - recipe[alfresco-dbwrapper::sqlserver]
+  attributes: {
+                sql_server: {
+                  version: '2008R2'
+                }
+              }

@@ -32,7 +32,7 @@ bash 'setting repo for mysql55' do
 	yum-config-manager --disable mysql56-community
 	yum-config-manager --enable mysql55-community
 	EOH
-  only_if { "#{node['mysql']['yum']['version']}".start_with?("5.5") }
+  only_if { node['mysql']['yum']['version'].start_with?('5.5') }
 end
 
 package 'mysql-libs' do
