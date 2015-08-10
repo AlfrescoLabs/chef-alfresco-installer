@@ -229,8 +229,3 @@ case node['installer.database-type']
     end
 
 end
-
-default['sync.cloud.url']='TBD'
-default['outbound.mail.host']='TBD'
-default['outbound.mail.username']='TBD'
-default['outbound.mail.password']='TBD'
