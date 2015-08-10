@@ -80,7 +80,11 @@ suites:
                 installer: {
                   disable-components: 'javaalfresco',
                   enable-components: 'alfrescowcmqs'
-                }
+                },
+                sync.cloud.url: 'https://mmhfcloud40a.alfresco.me/alfresco/a/{network}/',
+                outbound.mail.host: '172.29.100.164',
+                outbound.mail.username: 'qalabtest@alfness.com',
+                outbound.mail.password: 'Alf1234'
               }
 
 - name: installer41
@@ -106,7 +110,11 @@ suites:
                   enable-components: 'alfrescowcmqs',
                   disable-components: 'javaalfresco',
                   downloadpath: 'ftp://172.29.101.56/41N/4.1.10_build30/alfresco-enterprise-4.1.10-installer-win-x64.exe'
-                }
+                },
+                sync.cloud.url: 'https://mmhfcloud40a.alfresco.me/alfresco/a/{network}/',
+                outbound.mail.host: '172.29.100.164',
+                outbound.mail.username: 'qalabtest@alfness.com',
+                outbound.mail.password: 'Alf1234'
               }
 
 - name: installer42
@@ -131,7 +139,11 @@ suites:
                   disable-components: 'javaalfresco',
                   enable-components: 'alfrescowcmqs',
                   downloadpath: 'https://releases.alfresco.com/Enterprise-4.2/4.2.4/PATCH-4.2.4.9/build-00127/ALL/alfresco-enterprise-4.2.4.9-installer-win-x64.exe'
-                }
+                },
+                sync.cloud.url: 'https://mmhfcloud40a.alfresco.me/alfresco/a/{network}/',
+                outbound.mail.host: '172.29.100.164',
+                outbound.mail.username: 'qalabtest@alfness.com',
+                outbound.mail.password: 'Alf1234'
               }
 
 - name: replication
