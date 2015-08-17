@@ -74,6 +74,10 @@ node.default["alfresco"]["truststore_file"] = "#{node['alfresco']['keystore']}/s
 common_remote_file 'download alfresco build' do
   source node['installer']['downloadpath']
   path node['installer']['local']
+  win_user win_user
+  win_group win_group
+  unix_user unix_user
+  unix_group unix_group
 end
 
 %W(#{node['installer']['directory']}
@@ -100,6 +104,10 @@ if node['amps']['alfresco'] and node['amps']['alfresco'].length > 0
   node['amps']['alfresco'].each do |url|
     common_remote_file "#{node['installer']['directory']}/amps/#{::File.basename(url)}" do
       source url
+      win_user win_user
+      win_group win_group
+      unix_user unix_user
+      unix_group unix_group
     end
   end
 end
@@ -108,6 +116,10 @@ if node['amps']['share'] and node['amps']['share'].length > 0
   node['amps']['share'].each do |url|
     common_remote_file "#{node['installer']['directory']}/amps_share/#{::File.basename(url)}" do
       source url
+      win_user win_user
+      win_group win_group
+      unix_user unix_user
+      unix_group unix_group
     end
   end
 end
@@ -153,26 +165,46 @@ end
 
     common_template node['paths']['alfrescoGlobal'] do
       source 'globalProps/alfresco-global.properties.erb'
+      win_user win_user
+      win_group win_group
+      unix_user unix_user
+      unix_group unix_group
     end
 
     common_template node['paths']['wqsCustomProperties'] do
       source 'customProps/wqsapi-custom.properties.erb'
+      win_user win_user
+      win_group win_group
+      unix_user unix_user
+      unix_group unix_group
     end
 
     if node['installer.database-version'] != 'none'
       common_remote_file node['paths']['dbDriverLocation'] do
         source node['db.driver.url']
+        win_user win_user
+        win_group win_group
+        unix_user unix_user
+        unix_group unix_group
       end
     end
 
     if node['paths']['licensePath'] and node['paths']['licensePath'].length > 0
       common_remote_file node['paths']['licensePath'] do
         source node['alfresco.cluster.prerequisites']
+        win_user win_user
+        win_group win_group
+        unix_user unix_user
+        unix_group unix_group
       end
     end
 
     common_template node['paths']['tomcatServerXml'] do
       source 'tomcat/server.xml.erb'
+      win_user win_user
+      win_group win_group
+      unix_user unix_user
+      unix_group unix_group
     end
 
     solrcoreProps = {
@@ -214,7 +246,12 @@ end
 
     remove_wars 'removing unnecesarry wars'
 
-    solr_ssl_disabler 'disabling solr ssl'
+    solr_ssl_disabler 'disabling solr ssl' do
+      win_user win_user
+      win_group win_group
+      unix_user unix_user
+      unix_group unix_group
+    end
 
     # %W(#{node['paths']['solrPath']}/templates/store
     # #{node['paths']['solrPath']}/templates/store/conf

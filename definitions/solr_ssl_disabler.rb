@@ -18,11 +18,6 @@
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
 #
 
-win_user = node['installer']['win_user']
-win_group = node['installer']['win_group']
-unix_user = node['installer']['unix_user']
-unix_group = node['installer']['unix_group']
-
 define :solr_ssl_disabler do
 
   if node['disable_solr_ssl']
@@ -30,14 +25,14 @@ define :solr_ssl_disabler do
     directory node['installer']['directory'] do
       case node['platform_family']
       when 'windows'
-        rights :read, win_user
-        rights :write, win_user
-        rights :full_control, win_user
-        rights :full_control, win_user, :applies_to_children => true
-        group win_group
+        rights :read, param[:win_user]
+        rights :write, param[:win_user]
+        rights :full_control, param[:win_user]
+        rights :full_control, param[:win_user], :applies_to_children => true
+        group param[:win_group]
       else
-          owner unix_user
-          group unix_group
+          owner param[:unix_user]
+          group param[:unix_group]
           mode 00775
       end
     end
@@ -45,7 +40,13 @@ define :solr_ssl_disabler do
     if node['install_alfresco_war']
 
       bash 'unzip alfresco war' do
-        user 'root'
+        case node['platform_family']
+          when 'windows'
+            user param[:win_user]
+          else
+            user param[:unix_user]
+          end
+        end
         cwd '/opt'
         code <<-EOH
     mkdir /opt/tmp-alfrescowar
@@ -60,8 +61,15 @@ define :solr_ssl_disabler do
       template 'set web.xml for alfresco.war' do
         source 'globalProps/web.xml-alfresco.erb'
         path '/opt/tmp-alfrescowar/WEB-INF/web.xml'
-        owner 'root'
-        group 'root'
+        case node['platform_family']
+          when 'windows'
+            user param[:win_user]
+            group param[:win_group]
+          else
+            user param[:unix_user]
+            group param[:unix_group]
+          end
+        end
         mode 00755
         :top_level
         not_if { ::File.exist?("#{node['installer']['directory']}/tomcat/webapps/alfresco/WEB-INF/web.xml") }
@@ -71,15 +79,28 @@ define :solr_ssl_disabler do
       template 'set web.xml for alfresco' do
         source 'globalProps/web.xml-alfresco.erb'
         path "#{node['installer']['directory']}/tomcat/webapps/alfresco/WEB-INF/web.xml"
-        owner 'root'
-        group 'root'
+        case node['platform_family']
+          when 'windows'
+            user param[:win_user]
+            group param[:win_group]
+          else
+            user param[:unix_user]
+            group param[:unix_group]
+          end
+        end
         mode 00755
         :top_level
         only_if { ::File.exist?("#{node['installer']['directory']}/tomcat/webapps/alfresco/WEB-INF/web.xml") }
       end
 
       bash 'archive and move alfresco war' do
-        user 'root'
+        case node['platform_family']
+          when 'windows'
+            user param[:win_user]
+          else
+            user param[:unix_user]
+          end
+        end
         cwd '/opt'
         code <<-EOH
     jar -cvf alfresco.war -C tmp-alfrescowar/ .
@@ -95,7 +116,13 @@ define :solr_ssl_disabler do
     if node['install_solr4_war']
 
       bash 'unzip solr4 war' do
-        user 'root'
+        case node['platform_family']
+          when 'windows'
+            user param[:win_user]
+          else
+            user param[:unix_user]
+          end
+        end
         cwd '/opt'
         code <<-EOH
     mkdir /opt/tmp-solr4war
@@ -110,8 +137,15 @@ define :solr_ssl_disabler do
       template 'set web.xml for solr4.war' do
         source 'solr/web.xml-solr4.erb'
         path '/opt/tmp-solr4war/WEB-INF/web.xml'
-        owner 'root'
-        group 'root'
+        case node['platform_family']
+          when 'windows'
+            user param[:win_user]
+            group param[:win_group]
+          else
+            user param[:unix_user]
+            group param[:unix_group]
+          end
+        end
         mode 00755
         :top_level
         not_if { ::File.exist?("#{node['installer']['directory']}/tomcat/webapps/solr4/WEB-INF/web.xml") }
@@ -121,15 +155,28 @@ define :solr_ssl_disabler do
       template 'set web.xml for solr4' do
         source 'solr/web.xml-solr4.erb'
         path "#{node['installer']['directory']}/tomcat/webapps/solr4/WEB-INF/web.xml"
-        owner 'root'
-        group 'root'
+        case node['platform_family']
+          when 'windows'
+            user param[:win_user]
+            group param[:win_group]
+          else
+            user param[:unix_user]
+            group param[:unix_group]
+          end
+        end
         mode 00755
         :top_level
         only_if { ::File.exist?("#{node['installer']['directory']}/tomcat/webapps/solr4/WEB-INF/web.xml") }
       end
 
       bash 'archive and move alfresco war' do
-        user 'root'
+        case node['platform_family']
+          when 'windows'
+            user param[:win_user]
+          else
+            user param[:unix_user]
+          end
+        end
         cwd '/opt'
         code <<-EOH
     jar -cvf solr4.war -C tmp-solr4war/ .
