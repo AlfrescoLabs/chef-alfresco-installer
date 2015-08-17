@@ -20,6 +20,11 @@
 
 define :common_remote_file, :path => nil, :source => nil do
   params[:path] ||= params[:name]
+  params[:win_user] ||= params[:win_user]
+  params[:win_group] ||= params[:win_group]
+  params[:unix_user] ||= params[:unix_user]
+  params[:unix_group] ||= params[:unix_group]
+
     remote_file params[:path] do
       source params[:source]
       case node['platform_family']

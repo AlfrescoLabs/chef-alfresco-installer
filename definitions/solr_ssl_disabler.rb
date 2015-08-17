@@ -19,6 +19,10 @@
 #
 
 define :solr_ssl_disabler do
+  params[:win_user] ||= params[:win_user]
+  params[:win_group] ||= params[:win_group]
+  params[:unix_user] ||= params[:unix_user]
+  params[:unix_group] ||= params[:unix_group]
 
   if node['disable_solr_ssl']
 
