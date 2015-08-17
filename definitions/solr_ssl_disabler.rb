@@ -18,6 +18,11 @@
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
 #
 
+win_user = node['installer']['win_user']
+win_group = node['installer']['win_group']
+unix_user = node['installer']['unix_user']
+unix_group = node['installer']['unix_group']
+
 define :solr_ssl_disabler do
 
   if node['disable_solr_ssl']
@@ -25,14 +30,14 @@ define :solr_ssl_disabler do
     directory node['installer']['directory'] do
       case node['platform_family']
       when 'windows'
-        rights :read, 'Administrator'
-        rights :write, 'Administrator'
-        rights :full_control, 'Administrator'
-        rights :full_control, 'Administrator', :applies_to_children => true
-        group 'Administrators'
+        rights :read, win_user
+        rights :write, win_user
+        rights :full_control, win_user
+        rights :full_control, win_user, :applies_to_children => true
+        group win_group
       else
-          owner 'root'
-          group 'root'
+          owner unix_user
+          group unix_group
           mode 00775
       end
     end

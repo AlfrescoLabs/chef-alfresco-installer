@@ -18,6 +18,27 @@
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
 #/
 
+win_user = node['installer']['win_user']
+win_group = node['installer']['win_group']
+unix_user = node['installer']['unix_user']
+unix_group = node['installer']['unix_group']
+
+if node['platform_family'] == 'windows' and win_user != 'Administrator'
+  user win_user
+  group win_group do
+    members win_user
+    append true
+  end
+elsif unix_user != 'root'
+  user unix_user do
+    only_if
+  end
+  group unix_group do
+    members unix_user
+    append true
+  end
+end
+
 #Setting derived attributes as needed.
 case node['index.subsystem.name']
 when 'solr4'
@@ -61,14 +82,14 @@ end
   directory dir do
     case node['platform_family']
       when 'windows'
-        rights :read, 'Administrator'
-        rights :write, 'Administrator'
-        rights :full_control, 'Administrator'
-        rights :full_control, 'Administrator', :applies_to_children => true
-        group 'Administrators'
+        rights :read, win_user
+        rights :write, win_user
+        rights :full_control, win_user
+        rights :full_control, win_user, :applies_to_children => true
+        group win_group
       else
-        owner 'root'
-        group 'root'
+        owner unix_user
+        group unix_group
         mode 00755
         :top_level
     end
@@ -95,7 +116,7 @@ case node['platform_family']
   when 'windows'
 
     windows_task 'Install Alfresco' do
-      user 'Administrator'
+      user win_user
       password 'alfresco'
       command "#{node['installer']['local']} --mode unattended --alfresco_admin_password #{node['installer']['alfresco_admin_password']} --enable-components #{node['installer']['enable-components']} --disable-components #{node['installer']['disable-components']} --jdbc_username #{node['installer']['jdbc_username']} --jdbc_password #{node['installer']['jdbc_password']} --prefix #{node['installer']['directory']}"
       run_level :highest
@@ -109,6 +130,7 @@ case node['platform_family']
       dir /S /P \"#{node['paths']['uninstallFile']}\"
       EOH
       action :run
+      user win_user
       retries 30
       retry_delay 10
       notifies :delete, 'windows_task[Install Alfresco]', :delayed
@@ -123,6 +145,7 @@ case node['platform_family']
 
       execute 'Install alfresco' do
         command "#{node['installer']['local']} --mode unattended --alfresco_admin_password #{node['installer']['alfresco_admin_password']} --enable-components #{node['installer']['enable-components']} --disable-components #{node['installer']['disable-components']} --jdbc_username #{node['installer']['jdbc_username']} --jdbc_password #{node['installer']['jdbc_password']} --prefix #{node['installer']['directory']}"
+        user unix_user
         not_if { File.exists?(node['paths']['uninstallFile']) }
       end
 
