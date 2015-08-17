@@ -29,15 +29,15 @@ define :common_template, :path => nil, :source => nil do
       source params[:source]
       case node['platform_family']
         when 'windows'
-          rights :read, param[:win_user]
-          rights :write, param[:win_user]
-          rights :full_control, param[:win_user]
-          rights :full_control, param[:win_user], :applies_to_children => true
-          group param[:win_group]
+          rights :read, params[:win_user]
+          rights :write, params[:win_user]
+          rights :full_control, params[:win_user]
+          rights :full_control, params[:win_user], :applies_to_children => true
+          group params[:win_group]
           :top_level
         else
-          owner param[:unix_user]
-          group param[:unix_group]
+          owner params[:unix_user]
+          group params[:unix_group]
           mode 00755
           :top_level
         end

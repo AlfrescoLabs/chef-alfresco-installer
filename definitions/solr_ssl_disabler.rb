@@ -29,14 +29,14 @@ define :solr_ssl_disabler do
     directory node['installer']['directory'] do
       case node['platform_family']
       when 'windows'
-        rights :read, param[:win_user]
-        rights :write, param[:win_user]
-        rights :full_control, param[:win_user]
-        rights :full_control, param[:win_user], :applies_to_children => true
-        group param[:win_group]
+        rights :read, params[:win_user]
+        rights :write, params[:win_user]
+        rights :full_control, params[:win_user]
+        rights :full_control, params[:win_user], :applies_to_children => true
+        group params[:win_group]
       else
-          owner param[:unix_user]
-          group param[:unix_group]
+          owner params[:unix_user]
+          group params[:unix_group]
           mode 00775
       end
     end
@@ -46,9 +46,9 @@ define :solr_ssl_disabler do
       bash 'unzip alfresco war' do
         case node['platform_family']
         when 'windows'
-          user param[:win_user]
+          user params[:win_user]
         else
-          user param[:unix_user]
+          user params[:unix_user]
         end
         cwd '/opt'
         code <<-EOH
@@ -66,11 +66,11 @@ define :solr_ssl_disabler do
         path '/opt/tmp-alfrescowar/WEB-INF/web.xml'
         case node['platform_family']
         when 'windows'
-          user param[:win_user]
-          group param[:win_group]
+          user params[:win_user]
+          group params[:win_group]
         else
-          user param[:unix_user]
-          group param[:unix_group]
+          user params[:unix_user]
+          group params[:unix_group]
         end
         mode 00755
         :top_level
@@ -83,11 +83,11 @@ define :solr_ssl_disabler do
         path "#{node['installer']['directory']}/tomcat/webapps/alfresco/WEB-INF/web.xml"
         case node['platform_family']
         when 'windows'
-          user param[:win_user]
-          group param[:win_group]
+          user params[:win_user]
+          group params[:win_group]
         else
-          user param[:unix_user]
-          group param[:unix_group]
+          user params[:unix_user]
+          group params[:unix_group]
         end
         mode 00755
         :top_level
@@ -97,9 +97,9 @@ define :solr_ssl_disabler do
       bash 'archive and move alfresco war' do
         case node['platform_family']
         when 'windows'
-          user param[:win_user]
+          user params[:win_user]
         else
-          user param[:unix_user]
+          user params[:unix_user]
         end
         cwd '/opt'
         code <<-EOH
@@ -118,9 +118,9 @@ define :solr_ssl_disabler do
       bash 'unzip solr4 war' do
         case node['platform_family']
         when 'windows'
-          user param[:win_user]
+          user params[:win_user]
         else
-          user param[:unix_user]
+          user params[:unix_user]
         end
         cwd '/opt'
         code <<-EOH
@@ -138,11 +138,11 @@ define :solr_ssl_disabler do
         path '/opt/tmp-solr4war/WEB-INF/web.xml'
         case node['platform_family']
         when 'windows'
-          user param[:win_user]
-          group param[:win_group]
+          user params[:win_user]
+          group params[:win_group]
         else
-          user param[:unix_user]
-          group param[:unix_group]
+          user params[:unix_user]
+          group params[:unix_group]
         end
         mode 00755
         :top_level
@@ -155,11 +155,11 @@ define :solr_ssl_disabler do
         path "#{node['installer']['directory']}/tomcat/webapps/solr4/WEB-INF/web.xml"
         case node['platform_family']
         when 'windows'
-          user param[:win_user]
-          group param[:win_group]
+          user params[:win_user]
+          group params[:win_group]
         else
-          user param[:unix_user]
-          group param[:unix_group]
+          user params[:unix_user]
+          group params[:unix_group]
         end
         mode 00755
         :top_level
@@ -169,9 +169,9 @@ define :solr_ssl_disabler do
       bash 'archive and move alfresco war' do
         case node['platform_family']
         when 'windows'
-          user param[:win_user]
+          user params[:win_user]
         else
-          user param[:unix_user]
+          user params[:unix_user]
         end
         cwd '/opt'
         code <<-EOH
