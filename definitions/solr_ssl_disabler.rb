@@ -41,11 +41,10 @@ define :solr_ssl_disabler do
 
       bash 'unzip alfresco war' do
         case node['platform_family']
-          when 'windows'
-            user param[:win_user]
-          else
-            user param[:unix_user]
-          end
+        when 'windows'
+          user param[:win_user]
+        else
+          user param[:unix_user]
         end
         cwd '/opt'
         code <<-EOH
@@ -62,13 +61,12 @@ define :solr_ssl_disabler do
         source 'globalProps/web.xml-alfresco.erb'
         path '/opt/tmp-alfrescowar/WEB-INF/web.xml'
         case node['platform_family']
-          when 'windows'
-            user param[:win_user]
-            group param[:win_group]
-          else
-            user param[:unix_user]
-            group param[:unix_group]
-          end
+        when 'windows'
+          user param[:win_user]
+          group param[:win_group]
+        else
+          user param[:unix_user]
+          group param[:unix_group]
         end
         mode 00755
         :top_level
@@ -80,13 +78,12 @@ define :solr_ssl_disabler do
         source 'globalProps/web.xml-alfresco.erb'
         path "#{node['installer']['directory']}/tomcat/webapps/alfresco/WEB-INF/web.xml"
         case node['platform_family']
-          when 'windows'
-            user param[:win_user]
-            group param[:win_group]
-          else
-            user param[:unix_user]
-            group param[:unix_group]
-          end
+        when 'windows'
+          user param[:win_user]
+          group param[:win_group]
+        else
+          user param[:unix_user]
+          group param[:unix_group]
         end
         mode 00755
         :top_level
@@ -95,11 +92,10 @@ define :solr_ssl_disabler do
 
       bash 'archive and move alfresco war' do
         case node['platform_family']
-          when 'windows'
-            user param[:win_user]
-          else
-            user param[:unix_user]
-          end
+        when 'windows'
+          user param[:win_user]
+        else
+          user param[:unix_user]
         end
         cwd '/opt'
         code <<-EOH
@@ -117,11 +113,10 @@ define :solr_ssl_disabler do
 
       bash 'unzip solr4 war' do
         case node['platform_family']
-          when 'windows'
-            user param[:win_user]
-          else
-            user param[:unix_user]
-          end
+        when 'windows'
+          user param[:win_user]
+        else
+          user param[:unix_user]
         end
         cwd '/opt'
         code <<-EOH
@@ -138,13 +133,12 @@ define :solr_ssl_disabler do
         source 'solr/web.xml-solr4.erb'
         path '/opt/tmp-solr4war/WEB-INF/web.xml'
         case node['platform_family']
-          when 'windows'
-            user param[:win_user]
-            group param[:win_group]
-          else
-            user param[:unix_user]
-            group param[:unix_group]
-          end
+        when 'windows'
+          user param[:win_user]
+          group param[:win_group]
+        else
+          user param[:unix_user]
+          group param[:unix_group]
         end
         mode 00755
         :top_level
@@ -156,13 +150,12 @@ define :solr_ssl_disabler do
         source 'solr/web.xml-solr4.erb'
         path "#{node['installer']['directory']}/tomcat/webapps/solr4/WEB-INF/web.xml"
         case node['platform_family']
-          when 'windows'
-            user param[:win_user]
-            group param[:win_group]
-          else
-            user param[:unix_user]
-            group param[:unix_group]
-          end
+        when 'windows'
+          user param[:win_user]
+          group param[:win_group]
+        else
+          user param[:unix_user]
+          group param[:unix_group]
         end
         mode 00755
         :top_level
@@ -171,11 +164,10 @@ define :solr_ssl_disabler do
 
       bash 'archive and move alfresco war' do
         case node['platform_family']
-          when 'windows'
-            user param[:win_user]
-          else
-            user param[:unix_user]
-          end
+        when 'windows'
+          user param[:win_user]
+        else
+          user param[:unix_user]
         end
         cwd '/opt'
         code <<-EOH
