@@ -74,7 +74,7 @@ suites:
   - recipe[chef-alfresco-installer::installer]
   attributes: {
                 localPath: false,
-                START_SERVICES: true,
+                start.service.actions: [:enable,:restart]
                 replication.enabled: false,
                 alfresco.cluster.enabled: false,
                 installer: {
@@ -103,7 +103,7 @@ suites:
                 index.subsystem.name: 'solr',
                 installer.database-version: 'none',
                 alfresco.version: '4.1.10',
-                START_SERVICES: true,
+                start.service.actions: [:enable,:restart]
                 replication.enabled: false,
                 alfresco.cluster.enabled: false,
                 installer: {
@@ -132,7 +132,7 @@ suites:
                 installer.database-version: 'none',
                 alfresco.version: '4.2.4.9',
                 localPath: false,
-                START_SERVICES: true,
+                start.service.actions: [:enable,:restart]
                 replication.enabled: false,
                 alfresco.cluster.enabled: false,
                 installer: {

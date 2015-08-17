@@ -71,7 +71,7 @@ default["alfresco"]["truststore_type"] = "JCEKS"
 
 ############ conditional chef attributes ############
 ####### Services #######
-default['START_SERVICES']=true
+default['start.service.actions'] = [:enable,:restart]
 default['START_POSGRES']=true
 default['install_alfresco_war']=true
 default['install_share_war']=true
