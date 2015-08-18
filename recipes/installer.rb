@@ -176,7 +176,7 @@ case node['platform_family']
 
       execute 'hacking-alfresco-startup-script-ty-installer' do
         command "sed -i '3,7d' #{node['installer']['directory']}/alfresco.sh"
-        not_if "cat #{node['installer']['directory']}/alfresco.sh | grep 'This script requires root privileges'"
+        only_if "cat #{node['installer']['directory']}/alfresco.sh | grep 'This script requires root privileges'"
       end
 
       # This is how it should be done, though it doesn't work due the error below
