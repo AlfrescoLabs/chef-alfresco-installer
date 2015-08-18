@@ -178,6 +178,16 @@ case node['platform_family']
         command "sed -i '3,7d' #{node['installer']['directory']}/alfresco.sh"
         not_if "cat #{node['installer']['directory']}/alfresco.sh | grep 'This script requires root privileges'"
       end
+
+      replace_or_add '/etc/init.d/alfresco' do
+        pattern "alfresco.sh start"
+        line "su - <%= node['installer']['unix_user'] %> -c \"/alfresco/4.2.0/alfresco.sh start \\\"$2\\\"\""
+      end
+
+      replace_or_add '/etc/init.d/alfresco' do
+        pattern "alfresco.sh stop"
+        line "su - <%= node['installer']['unix_user'] %> -c \"/alfresco/4.2.0/alfresco.sh stop \\\"$2\\\"\""
+      end
 end
 
     common_template node['paths']['alfrescoGlobal'] do
