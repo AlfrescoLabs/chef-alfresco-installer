@@ -179,14 +179,22 @@ case node['platform_family']
         not_if "cat #{node['installer']['directory']}/alfresco.sh | grep 'This script requires root privileges'"
       end
 
-      replace_or_add '/etc/init.d/alfresco' do
-        pattern "alfresco.sh\ start"
-        line "su - #{unix_user} -c \"/alfresco/4.2.0/alfresco.sh start \\\"$2\\\"\""
-      end
-
-      replace_or_add '/etc/init.d/alfresco' do
-        pattern "alfresco.sh\ stop"
-        line "su - #{unix_user} -c \"/alfresco/4.2.0/alfresco.sh stop \\\"$2\\\"\""
+      # This is how it should be done, though it doesn't work due the error below
+      # Using templates/init/alfresco.erb instead
+      #
+      # TypeError: no implicit conversion of nil into String
+      #
+      # replace_or_add '/etc/init.d/alfresco' do
+      #   pattern "alfresco.sh\ start"
+      #   line "su - #{unix_user} -c \"/alfresco/4.2.0/alfresco.sh start \\\"$2\\\"\""
+      # end
+      #
+      # replace_or_add '/etc/init.d/alfresco' do
+      #   pattern "alfresco.sh\ stop"
+      #   line "su - #{unix_user} -c \"/alfresco/4.2.0/alfresco.sh stop \\\"$2\\\"\""
+      # end
+      template '/etc/init.d/alfresco' do
+        source 'init/alfresco.erb'
       end
 end
 
