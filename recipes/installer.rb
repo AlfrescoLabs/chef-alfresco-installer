@@ -181,12 +181,12 @@ case node['platform_family']
 
       replace_or_add '/etc/init.d/alfresco' do
         pattern "alfresco.sh start"
-        line "su - <%= node['installer']['unix_user'] %> -c \"/alfresco/4.2.0/alfresco.sh start \\\"$2\\\"\""
+        line "su - #{unix_user} -c \"/alfresco/4.2.0/alfresco.sh start \\\"$2\\\"\""
       end
 
       replace_or_add '/etc/init.d/alfresco' do
         pattern "alfresco.sh stop"
-        line "su - <%= node['installer']['unix_user'] %> -c \"/alfresco/4.2.0/alfresco.sh stop \\\"$2\\\"\""
+        line "su - #{unix_user} -c \"/alfresco/4.2.0/alfresco.sh stop \\\"$2\\\"\""
       end
 end
 
