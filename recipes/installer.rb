@@ -160,7 +160,7 @@ case node['platform_family']
       end
 
       execute 'chown-alfresco-files-ty-installer' do
-        command "cd #{node['installer']['directory']}; shopt -s extglob; chown #{unix_user}: -R !(postgresql)"
+        command "cd #{node['installer']['directory']}; chown #{unix_user}:#{unix_group} alf_data alfresco.sh amps amps_share apps bin common libreoffice licenses scripts solr4 tomcat *.*"
         not_if "ls -lrt #{node['installer']['directory']}/LICENSE | grep #{unix_user}"
       end
 
