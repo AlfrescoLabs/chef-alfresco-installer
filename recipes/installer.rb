@@ -315,7 +315,7 @@ end
     else
           service 'alfresco' do
             if node['START_SERVICES']
-              action [:enable, :start]
+              action [:enable, :restart]
             else
               action :enable
             end
