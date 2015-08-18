@@ -160,18 +160,14 @@ case node['platform_family']
       end
 
       %w(alf_data alfresco.sh amps amps_share apps bin common libreoffice licenses scripts solr4 tomcat).each do |folderName|
-        directory "#{node['installer']['directory']}/#{folderName}" do
-          owner unix_user
-          group unix_group
-          recursive true
+        execute "chown-#{folderName}-to-#{unix_user}" do
+          command "chown -R #{unix_user}:#{unix_group} #{node['installer']['directory']}/#{folderName}"
         end
       end
 
       # postgresql.log must be writeable by non-root user
-      directory "#{node['installer']['directory']}/postgresql" do
-        owner unix_user
-        group unix_group
-        recursive false
+      execute "chown-#{folderName}-to-#{unix_user}" do
+        command "chown -R #{unix_user}:#{unix_group} #{node['installer']['directory']}/#{postgresql}"
       end
 
       execute 'hacking-alfresco-startup-script-ty-installer' do
