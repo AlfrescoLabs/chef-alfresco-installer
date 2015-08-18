@@ -300,14 +300,22 @@ end
           end
 
           service 'alfrescoTomcat' do
-            action node['start.service.actions']
+            if node['START_SERVICES']
+              action [:enable, :start]
+            else
+              action :enable
+            end
             supports :status => true, :restart => true, :stop => true, :start => true
-            only_if { node['start.service.actions'] }
+            only_if { node['START_SERVICES'] }
           end
 
     else
           service 'alfresco' do
-            action node['start.service.actions']
+            if node['START_SERVICES']
+              action [:enable, :start]
+            else
+              action :enable
+            end
             supports :status => false, :restart => true
           end
 
@@ -317,7 +325,7 @@ end
             retries 120
             retry_delay 3
             returns 0
-            only_if { node['start.service.actions'] }
+            only_if { node['START_SERVICES'] }
           end
 
     end
