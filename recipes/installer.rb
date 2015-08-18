@@ -166,7 +166,7 @@ case node['platform_family']
       end
 
       # postgresql.log must be writeable by non-root user
-      execute "chown-#{folderName}-to-#{unix_user}" do
+      execute "chown-postgresql-to-#{unix_user}" do
         command "chown -R #{unix_user}:#{unix_group} #{node['installer']['directory']}/#{postgresql}"
       end
 
