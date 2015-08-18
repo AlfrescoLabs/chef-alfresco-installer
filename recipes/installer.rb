@@ -74,10 +74,10 @@ node.default["alfresco"]["truststore_file"] = "#{node['alfresco']['keystore']}/s
 common_remote_file 'download alfresco build' do
   source node['installer']['downloadpath']
   path node['installer']['local']
-  win_user win_user
-  win_group win_group
-  unix_user unix_user
-  unix_group unix_group
+  win_user "Administrator"
+  win_group "Administrators"
+  unix_user "root"
+  unix_group "root"
 end
 
 %W(#{node['installer']['directory']}
@@ -86,14 +86,14 @@ end
   directory dir do
     case node['platform_family']
       when 'windows'
-        rights :read, win_user
-        rights :write, win_user
-        rights :full_control, win_user
-        rights :full_control, win_user, :applies_to_children => true
-        group win_group
+        rights :read, "Administrator"
+        rights :write, "Administrator"
+        rights :full_control, "Administrator"
+        rights :full_control, "Administrator", :applies_to_children => true
+        group "Administrators"
       else
-        owner unix_user
-        group unix_group
+        owner "root"
+        group "root"
         mode 00755
         :top_level
     end
@@ -128,7 +128,6 @@ case node['platform_family']
   when 'windows'
 
     windows_task 'Install Alfresco' do
-      user win_user
       password 'alfresco'
       command "#{node['installer']['local']} --mode unattended --alfresco_admin_password #{node['installer']['alfresco_admin_password']} --enable-components #{node['installer']['enable-components']} --disable-components #{node['installer']['disable-components']} --jdbc_username #{node['installer']['jdbc_username']} --jdbc_password #{node['installer']['jdbc_password']} --prefix #{node['installer']['directory']}"
       run_level :highest
@@ -142,7 +141,6 @@ case node['platform_family']
       dir /S /P \"#{node['paths']['uninstallFile']}\"
       EOH
       action :run
-      user win_user
       retries 30
       retry_delay 10
       notifies :delete, 'windows_task[Install Alfresco]', :delayed
@@ -155,10 +153,15 @@ case node['platform_family']
 
     else
 
+      # Must be done by root, otherwise alfresco cannot be installed as a service (enabled by default)
       execute 'Install alfresco' do
         command "#{node['installer']['local']} --mode unattended --alfresco_admin_password #{node['installer']['alfresco_admin_password']} --enable-components #{node['installer']['enable-components']} --disable-components #{node['installer']['disable-components']} --jdbc_username #{node['installer']['jdbc_username']} --jdbc_password #{node['installer']['jdbc_password']} --prefix #{node['installer']['directory']}"
-        user unix_user
         not_if { File.exists?(node['paths']['uninstallFile']) }
+      end
+
+      execute 'chown-alfresco-files-ty-installer' do
+        command "cd #{node['installer']['directory']}; shopt -s extglob; chown #{unix_user}: -R !(postgresql)"
+        not_if "ls -lrt #{node['installer']['directory']}/LICENSE | grep #{unix_user}"
       end
 
 end
