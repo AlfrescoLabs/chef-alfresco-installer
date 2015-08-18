@@ -61,7 +61,9 @@ system.workflow.engine.jbpm.definitions.visible=true
 
 ############### Cloud ###############
 hybridworkflow.enabled=true
+<% if node['sync.cloud.url'] -%>
 sync.cloud.url=<%= node['sync.cloud.url']%>
+<% end -%>
 sync.mode=ON_PREMISE
 system.serverMode=PRODUCTION
 
