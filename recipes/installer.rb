@@ -159,11 +159,25 @@ case node['platform_family']
         not_if { File.exists?(node['paths']['uninstallFile']) }
       end
 
-      execute 'chown-alfresco-files-ty-installer' do
-        command "cd #{node['installer']['directory']}; chown #{unix_user}:#{unix_group} alf_data alfresco.sh amps amps_share apps bin common libreoffice licenses scripts solr4 tomcat *.*"
-        not_if "ls -lrt #{node['installer']['directory']}/LICENSE | grep #{unix_user}"
+      %w(alf_data alfresco.sh amps amps_share apps bin common libreoffice licenses scripts solr4 tomcat).each do |folderName|
+        directory "#{node['installer']['directory']}/#{folderName}" do
+          owner unix_user
+          group unix_group
+          recursive true
+        end
       end
 
+      # postgresql.log must be writeable by non-root user
+      directory "#{node['installer']['directory']}/postgresql" do
+        owner unix_user
+        group unix_group
+        recursive false
+      end
+
+      execute 'hacking-alfresco-startup-script-ty-installer' do
+        command "sed -i '3,7d' #{node['installer']['directory']}/alfresco.sh"
+        not_if "cat #{node['installer']['directory']}/alfresco.sh | grep 'This script requires root privileges'"
+      end
 end
 
     common_template node['paths']['alfrescoGlobal'] do
