@@ -167,7 +167,7 @@ case node['platform_family']
 
       # postgresql.log must be writeable by non-root user
       execute "chown-postgresql-to-#{unix_user}" do
-        command "chown -R #{unix_user}:#{unix_group} #{node['installer']['directory']}/#{postgresql}"
+        command "chown -R #{unix_user}:#{unix_group} #{node['installer']['directory']}/postgresql"
       end
 
       execute 'hacking-alfresco-startup-script-ty-installer' do
