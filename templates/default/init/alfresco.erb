@@ -18,7 +18,7 @@
 RETVAL=0
 
 start () {
-    su - <%= node['installer']['unix_user'] %> -c "/alfresco/4.2.0/alfresco.sh start \"$2\""
+    su - <%= node['installer']['unix_user'] %> -c "<%= node['installer']['directory'] %>/alfresco.sh start \"$2\""
     RETVAL=$?
     if [ -d "/var/lock/subsys" ] && [ `id -u` = 0 ] && [ $RETVAL -eq 0 ] ; then
         touch /var/lock/subsys/alfresco
@@ -27,7 +27,7 @@ start () {
 }
 
 stop () {
-    su - <%= node['installer']['unix_user'] %> -c "/alfresco/4.2.0/alfresco.sh stop \"$2\""
+    su - <%= node['installer']['unix_user'] %> -c "<%= node['installer']['directory'] %>/alfresco.sh stop \"$2\""
     RETVAL=$?
 }
 
