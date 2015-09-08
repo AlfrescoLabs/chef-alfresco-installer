@@ -155,6 +155,23 @@ default['installer.database-version']='9.3.5'
 
 case node['installer.database-type']
 
+  when 'oracle'
+
+  case node['installer.database-version']
+
+    when '12c'
+
+      default['db.driver']='oracle.jdbc.OracleDriver'
+      default['db.username']='alfresco'
+      default['db.password']='alfresco'
+      default['db.name']='alfresco'
+      default['db.url']='jdbc:oracle:thin:@localhost:5432:${db.name}'
+      default['db.pool.max']='275'
+      default['db.driver.url']='ftp://172.29.101.56/databases/ojdbc7.jar'
+      default['db.driver.filename']='ojdbc7.jar'
+
+  end
+
   when 'mariadb'
 
     case node['installer.database-version']
