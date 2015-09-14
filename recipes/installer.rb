@@ -18,6 +18,27 @@
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
 #/
 
+win_user = node['installer']['win_user']
+win_group = node['installer']['win_group']
+unix_user = node['installer']['unix_user']
+unix_group = node['installer']['unix_group']
+
+if node['platform_family'] == 'windows' and win_user != 'Administrator'
+  user win_user
+  group win_group do
+    members win_user
+    append true
+  end
+elsif unix_user != 'root'
+  user unix_user do
+    only_if
+  end
+  group unix_group do
+    members unix_user
+    append true
+  end
+end
+
 #Setting derived attributes as needed.
 case node['index.subsystem.name']
 when 'solr4'
@@ -53,6 +74,10 @@ node.default["alfresco"]["truststore_file"] = "#{node['alfresco']['keystore']}/s
 common_remote_file 'download alfresco build' do
   source node['installer']['downloadpath']
   path node['installer']['local']
+  win_user "Administrator"
+  win_group "Administrators"
+  unix_user "root"
+  unix_group "root"
 end
 
 %W(#{node['installer']['directory']}
@@ -61,14 +86,14 @@ end
   directory dir do
     case node['platform_family']
       when 'windows'
-        rights :read, 'Administrator'
-        rights :write, 'Administrator'
-        rights :full_control, 'Administrator'
-        rights :full_control, 'Administrator', :applies_to_children => true
-        group 'Administrators'
+        rights :read, "Administrator"
+        rights :write, "Administrator"
+        rights :full_control, "Administrator"
+        rights :full_control, "Administrator", :applies_to_children => true
+        group "Administrators"
       else
-        owner 'root'
-        group 'root'
+        owner "root"
+        group "root"
         mode 00755
         :top_level
     end
@@ -79,6 +104,10 @@ if node['amps']['alfresco'] and node['amps']['alfresco'].length > 0
   node['amps']['alfresco'].each do |url|
     common_remote_file "#{node['installer']['directory']}/amps/#{::File.basename(url)}" do
       source url
+      win_user win_user
+      win_group win_group
+      unix_user unix_user
+      unix_group unix_group
     end
   end
 end
@@ -87,6 +116,10 @@ if node['amps']['share'] and node['amps']['share'].length > 0
   node['amps']['share'].each do |url|
     common_remote_file "#{node['installer']['directory']}/amps_share/#{::File.basename(url)}" do
       source url
+      win_user win_user
+      win_group win_group
+      unix_user unix_user
+      unix_group unix_group
     end
   end
 end
@@ -95,7 +128,6 @@ case node['platform_family']
   when 'windows'
 
     windows_task 'Install Alfresco' do
-      user 'Administrator'
       password 'alfresco'
       command "#{node['installer']['local']} --mode unattended --alfresco_admin_password #{node['installer']['alfresco_admin_password']} --enable-components #{node['installer']['enable-components']} --disable-components #{node['installer']['disable-components']} --jdbc_username #{node['installer']['jdbc_username']} --jdbc_password #{node['installer']['jdbc_password']} --prefix #{node['installer']['directory']}"
       run_level :highest
@@ -126,30 +158,83 @@ case node['platform_family']
         not_if { File.exists?(node['paths']['uninstallFile']) }
       end
 
+      %w(alf_data alfresco.sh amps amps_share apps bin common libreoffice licenses scripts solr4 tomcat).each do |folderName|
+        execute "chown-#{folderName}-to-#{unix_user}" do
+          command "chown -R #{unix_user}:#{unix_group} #{node['installer']['directory']}/#{folderName}"
+        end
+      end
+
+      # postgresql.log must be writeable by non-root user
+      execute "chown-postgresql-to-#{unix_user}" do
+        command "chown -R #{unix_user}:#{unix_group} #{node['installer']['directory']}/postgresql"
+      end
+
+      execute 'hacking-alfresco-startup-script-ty-installer' do
+        command "sed -i '3,7d' #{node['installer']['directory']}/alfresco.sh"
+        only_if "cat #{node['installer']['directory']}/alfresco.sh | grep 'This script requires root privileges'"
+      end
+
+      # This is how it should be done, though it doesn't work due the error below
+      # Using templates/init/alfresco.erb instead
+      #
+      # TypeError: no implicit conversion of nil into String
+      #
+      # replace_or_add '/etc/init.d/alfresco' do
+      #   pattern "alfresco.sh\ start"
+      #   line "su - #{unix_user} -c \"/alfresco/4.2.0/alfresco.sh start \\\"$2\\\"\""
+      # end
+      #
+      # replace_or_add '/etc/init.d/alfresco' do
+      #   pattern "alfresco.sh\ stop"
+      #   line "su - #{unix_user} -c \"/alfresco/4.2.0/alfresco.sh stop \\\"$2\\\"\""
+      # end
+      template '/etc/init.d/alfresco' do
+        source 'init/alfresco.erb'
+      end
 end
 
     common_template node['paths']['alfrescoGlobal'] do
       source 'globalProps/alfresco-global.properties.erb'
+      win_user win_user
+      win_group win_group
+      unix_user unix_user
+      unix_group unix_group
     end
 
     common_template node['paths']['wqsCustomProperties'] do
       source 'customProps/wqsapi-custom.properties.erb'
+      win_user win_user
+      win_group win_group
+      unix_user unix_user
+      unix_group unix_group
     end
 
     if node['installer.database-version'] != 'none'
       common_remote_file node['paths']['dbDriverLocation'] do
         source node['db.driver.url']
+        win_user win_user
+        win_group win_group
+        unix_user unix_user
+        unix_group unix_group
       end
     end
 
     if node['paths']['licensePath'] and node['paths']['licensePath'].length > 0
       common_remote_file node['paths']['licensePath'] do
         source node['alfresco.cluster.prerequisites']
+        win_user win_user
+        win_group win_group
+        unix_user unix_user
+        unix_group unix_group
       end
     end
 
     common_template node['paths']['tomcatServerXml'] do
       source 'tomcat/server.xml.erb'
+      win_user win_user
+      win_group win_group
+      unix_user unix_user
+      unix_group unix_group
     end
 
     solrcoreProps = {
@@ -191,7 +276,12 @@ end
 
     remove_wars 'removing unnecesarry wars'
 
-    solr_ssl_disabler 'disabling solr ssl'
+    solr_ssl_disabler 'disabling solr ssl' do
+      win_user win_user
+      win_group win_group
+      unix_user unix_user
+      unix_group unix_group
+    end
 
     # %W(#{node['paths']['solrPath']}/templates/store
     # #{node['paths']['solrPath']}/templates/store/conf
@@ -250,7 +340,6 @@ end
           end
 
     else
-
           service 'alfresco' do
             if node['START_SERVICES']
               action [:enable, :restart]

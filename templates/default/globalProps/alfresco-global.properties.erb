@@ -61,7 +61,9 @@ system.workflow.engine.jbpm.definitions.visible=true
 
 ############### Cloud ###############
 hybridworkflow.enabled=true
-sync.cloud.url=https://mmhfcloud40a.alfresco.me/alfresco/a/{network}/
+<% if node['sync.cloud.url'] -%>
+sync.cloud.url=<%= node['sync.cloud.url']%>
+<% end -%>
 sync.mode=ON_PREMISE
 system.serverMode=PRODUCTION
 
@@ -95,11 +97,11 @@ nfs.user.mappings.value.corinaz.uid=1200
 nfs.user.mappings.value.corinaz.gid=1200
 
 ############### Mail config ###############
-mail.host=172.29.100.164
+mail.host=<%= node['outbound.mail.host']%>
 mail.port=587
 mail.transport.protocol=smtp
-mail.username=qalabtest@alfness.com
-mail.password=Alf1234
+mail.username=<%= node['outbound.mail.username']%>
+mail.password=<%= node['outbound.mail.password']%>
 mail.smtp.auth=true
 
 email.inbound.enabled=true
