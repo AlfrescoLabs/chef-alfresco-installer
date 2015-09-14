@@ -128,6 +128,7 @@ case node['platform_family']
   when 'windows'
 
     windows_task 'Install Alfresco' do
+      user 'Administrator'
       password 'alfresco'
       command "#{node['installer']['local']} --mode unattended --alfresco_admin_password #{node['installer']['alfresco_admin_password']} --enable-components #{node['installer']['enable-components']} --disable-components #{node['installer']['disable-components']} --jdbc_username #{node['installer']['jdbc_username']} --jdbc_password #{node['installer']['jdbc_password']} --prefix #{node['installer']['directory']}"
       run_level :highest
