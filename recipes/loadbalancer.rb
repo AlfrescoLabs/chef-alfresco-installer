@@ -73,7 +73,11 @@ case node['platform_family']
     end
 
     template '/etc/httpd/conf/httpd.conf' do
-      source 'loadBalancer/httpd.conf.erb'
+      if node['platform_version'] == "7.1"
+        source 'loadBalancer/httpd24.conf.erb'
+      else
+        source 'loadBalancer/httpd.conf.erb'
+      end
       owner 'root'
       group 'root'
       mode '0755'
