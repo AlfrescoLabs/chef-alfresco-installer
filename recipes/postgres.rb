@@ -25,9 +25,9 @@ bash 'install package repos' do
 	rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
 	rpm -Uvh http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm
 	rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
-	rm -rf /etc/yum.repos.d/dvd.repo
 	EOH
 end
+#TODO fix package installations when dealing with redhat 7
 
 %w{gcc readline-devel zlib zlib-devel}.each do |pkg|
   package pkg do
@@ -66,7 +66,7 @@ bash 'Startup postgres' do
 	/usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data
 	echo "host all all 0.0.0.0/0 trust" >> /usr/local/pgsql/data/pg_hba.conf
 	echo "listen_addresses = '*'" >> /usr/local/pgsql/data/postgresql.conf
-	/usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l logfile start 
+	/usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l logfile start
 	sleep 5
 	/usr/local/pgsql/bin/createuser #{node['postgres']['user']}
 	EOH

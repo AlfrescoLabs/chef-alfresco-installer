@@ -9,7 +9,7 @@ platforms:
   driver_config:
     username: root
     password: alfresco
-    hostname: 172.29.101.52
+    hostname: 172.29.102.42
 - name:  redhat61
   driver_config:
     username: root
@@ -40,15 +40,38 @@ suites:
     - win2012
   run_list:
   - recipe[alfresco-dbwrapper::postgres]
+  attributes: {
+                url: {
+                  postgresql: 'ftp://172.29.101.56/databases/postgresql-9.4.4.tar.gz',
+                  package: 'postgresql-9.4.4'
+                }
+              }
+
 - name: mysql
   excludes:
     - solaris112
     - win2012
   run_list:
   - recipe[alfresco-dbwrapper::mysql]
+
+- name: mysql56
+  excludes:
+    - solaris112
+    - win2012
+  run_list:
+  - recipe[alfresco-dbwrapper::mysql]
+  attributes: {
+                mysql: {
+                  yum: {
+                      version: 5.6.26-2.el7',
+                      repository: 'http://dev.mysql.com/get/mysql-community-release-el7-5.noarch.rpm'
+                    }
+                }
+              }
+
+
 - name: oracle
   excludes:
-    - redhat65
     - win2012
   run_list:
   - recipe[alfresco-dbwrapper::oracle]
@@ -67,6 +90,6 @@ suites:
   - recipe[alfresco-dbwrapper::sqlserver]
   attributes: {
                 sql_server: {
-                  version: '2008R2'
+                  version: '2014'
                 }
               }

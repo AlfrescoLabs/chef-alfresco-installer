@@ -3,7 +3,11 @@
 <% if node['sql_server']['version'] == '2012' %>
 [OPTIONS]
 <% else %>
+  <% if node['sql_server']['version'] == '2014' %>
+[OPTIONS]
+  <% else %>
 [SQLSERVER2008]
+  <% end %>
 <% end %>
 
 ; Auto accept the license terms

@@ -21,7 +21,6 @@ bash 'Install package repos' do
 	cwd '/tmp'
 	code <<-EOH
 	rpm -Uvh #{node['mysql']['yum']['repository']}
-	rm -rf /etc/yum.repos.d/dvd.repo
 	EOH
 end
 
@@ -43,6 +42,7 @@ package 'mysql-community-server' do
   action :install
   version node['mysql']['yum']['version']
 end
+#TODO Accomodate with mysql56
 
 service 'mysqld' do
 	supports :status => true, :restart => true, :reload => true
