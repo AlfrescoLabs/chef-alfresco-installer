@@ -3,12 +3,13 @@ alfresco-installer Cookbook
 This is a cookbook for installing alfresco using multiple deployement schemas and platforms
 
 Currently supported OS's and Alfresco versions:
-| Alfresco Version | RHEL 6.1 | RHEL 6.4 | RHEL 6.5 | RHEL 7.1 | WinServer 2008 R2 | WinServer 2012 R2 | Solaris 11.2 | Ubuntu 12.04 | Suse 11.3 | Suse 12 |
-|:----------------:|:--------:|:--------:|:--------:|:--------:|:-----------------:|:-----------------:|:------------:|:------------:|:---------:|:-------:|
-|        5.1       |          |          |     X    |     X    |                   |                   |              |              |           |         |
-|        5.0       |          |          |     X    |          |                   |                   |       X      |       X      |     X     |    X    |
-|        4.2       |          |     X    |          |          |         X         |         X         |              |       X      |     X     |         |
-|        4.1       |     X    |          |          |          |         X         |                   |              |              |           |         |
+
+Alfresco Version | RHEL 6.1 | RHEL 6.4 | RHEL 6.5 | RHEL 7.1 | WinServer 2008 R2 | WinServer 2012 R2 | Solaris 11.2 | Ubuntu 12.04 | Suse 11.3 | Suse 12
+---|---|---|---|---|---|---|---|---|---|---
+        5.1       |          |          |     X    |     X    |                   |                   |              |              |           |         |
+        5.0       |          |          |     X    |          |                   |                   |       X      |       X      |     X     |    X    |
+        4.2       |          |     X    |          |          |         X         |         X         |              |       X      |     X     |         |
+        4.1       |     X    |          |          |          |         X         |                   |              |              |           |         |
 
 Requirements
 ------------
