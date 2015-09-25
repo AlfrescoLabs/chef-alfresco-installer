@@ -100,7 +100,7 @@ end
   end
 end
 
-if node['amps']['alfresco'] and node['amps']['alfresco'].length > 0
+if node['amps']['alfresco']
   node['amps']['alfresco'].each do |ampName,url|
     common_remote_file "#{node['installer']['directory']}/amps/#{::File.basename(url)}" do
       source url
@@ -112,7 +112,7 @@ if node['amps']['alfresco'] and node['amps']['alfresco'].length > 0
   end
 end
 
-if node['amps']['share'] and node['amps']['share'].length > 0
+if node['amps']['share']
   node['amps']['share'].each do |ampName,url|
     common_remote_file "#{node['installer']['directory']}/amps_share/#{::File.basename(url)}" do
       source url
