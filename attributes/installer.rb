@@ -31,9 +31,9 @@ default['installer']['jdbc_username'] = 'alfresco'
 default['installer']['jdbc_password'] = 'alfresco'
 default['certificates']['downloadpath'] = 'ftp://172.29.103.222/chef-resources/certificates'
 
-#use these arrays to apply amps example: default['amps']['alfresco']=['ftp://location/chef-resources/alfresco-rm-server-2.3-SNAPSHOT-amp.amp','ftp://location/chef-resources/alfresco-cmm-server-1.0-SNAPSHOT-amp.amp']
-default['amps']['alfresco']=[]
-default['amps']['share']=[]
+# If you want to add your own AMPs:
+# default['amps']['alfresco']['my-amp'] = "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/alfresco-rm/2.3.c/alfresco-rm-2.3.c.amp"
+# default['amps']['share']['my-share-amp'] = "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/alfresco-rm-share/2.3.c/alfresco-rm-share-2.3.c.amp"
 
 case node['platform_family']
 when 'windows'
