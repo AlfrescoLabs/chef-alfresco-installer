@@ -128,6 +128,7 @@ case node['platform_family']
   when 'windows'
 
     windows_task 'Install Alfresco' do
+      user 'Administrator'
       password 'alfresco'
       command "#{node['installer']['local']} --mode unattended --alfresco_admin_password #{node['installer']['alfresco_admin_password']} --enable-components #{node['installer']['enable-components']} --disable-components #{node['installer']['disable-components']} --jdbc_username #{node['installer']['jdbc_username']} --jdbc_password #{node['installer']['jdbc_password']} --prefix #{node['installer']['directory']}"
       run_level :highest
@@ -158,21 +159,31 @@ case node['platform_family']
         not_if { File.exists?(node['paths']['uninstallFile']) }
       end
 
-      %w(alf_data alfresco.sh amps amps_share apps bin common libreoffice licenses scripts solr4 tomcat).each do |folderName|
-        execute "chown-#{folderName}-to-#{unix_user}" do
-          command "chown -R #{unix_user}:#{unix_group} #{node['installer']['directory']}/#{folderName}"
+      if unix_user != 'root'
+        if node['alfresco.version'].start_with?('5')
+          chownFolders = ['alf_data', 'alfresco.sh', 'amps', 'amps_share', 'bin', 'common', 'libreoffice', 'licenses', 'scripts', 'solr4', 'tomcat']
+        else
+          chownFolders = ['alf_data', 'alfresco.sh', 'amps', 'amps_share', 'bin', 'common', 'libreoffice', 'licenses', 'scripts', 'tomcat']
+        end
+
+        chownFolders.each do |folderName|
+          execute "chown-#{folderName}-to-#{unix_user}" do
+            command "chown -R #{unix_user}:#{unix_group} #{node['installer']['directory']}/#{folderName}"
+          end
+        end
+
+        # postgresql.log must be writeable by non-root user
+        execute "chown-postgresql-to-#{unix_user}" do
+          command "chown -R #{unix_user}:#{unix_group} #{node['installer']['directory']}/postgresql"
+          not_if { node['installer.database-type'] != 'postgres'}
+        end
+
+        execute 'hacking-alfresco-startup-script-ty-installer' do
+          command "sed -i '3,7d' #{node['installer']['directory']}/alfresco.sh"
+          only_if "cat #{node['installer']['directory']}/alfresco.sh | grep 'This script requires root privileges'"
         end
       end
 
-      # postgresql.log must be writeable by non-root user
-      execute "chown-postgresql-to-#{unix_user}" do
-        command "chown -R #{unix_user}:#{unix_group} #{node['installer']['directory']}/postgresql"
-      end
-
-      execute 'hacking-alfresco-startup-script-ty-installer' do
-        command "sed -i '3,7d' #{node['installer']['directory']}/alfresco.sh"
-        only_if "cat #{node['installer']['directory']}/alfresco.sh | grep 'This script requires root privileges'"
-      end
 
       # This is how it should be done, though it doesn't work due the error below
       # Using templates/init/alfresco.erb instead
@@ -352,7 +363,7 @@ end
           execute 'Waiting for tomcat to start' do
             command "tail -n2 #{node['installer']['directory']}/tomcat/logs/catalina.out | grep \"Server startup in .* ms\""
             action :run
-            retries 120
+            retries 150
             retry_delay 3
             returns 0
             only_if { node['START_SERVICES'] }
