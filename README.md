@@ -1,16 +1,14 @@
-chef-alfresco-installer Cookbook
+alfresco-installer Cookbook
 ======================
 This is a cookbook for installing alfresco using multiple deployement schemas and platforms
 
-Currently supported OSes:
-- Rhel 6.5
-- Win 2012 r2 server
-- Suse 12
-- Solaris 11.2
-- Ubuntu 12 Server
-
-Supported Alfresco versions:
-- 5.0.x
+Currently supported OS's and Alfresco versions:
+| Alfresco Version | RHEL 6.1 | RHEL 6.4 | RHEL 6.5 | RHEL 7.1 | WinServer 2008 R2 | WinServer 2012 R2 | Solaris 11.2 | Ubuntu 12.04 | Suse 11.3 | Suse 12 |
+|:----------------:|:--------:|:--------:|:--------:|:--------:|:-----------------:|:-----------------:|:------------:|:------------:|:---------:|:-------:|
+|        5.1       |          |          |     X    |     X    |                   |                   |              |              |           |         |
+|        5.0       |          |          |     X    |          |                   |                   |       X      |       X      |     X     |    X    |
+|        4.2       |          |     X    |          |          |         X         |         X         |              |       X      |     X     |         |
+|        4.1       |     X    |          |          |          |         X         |                   |              |              |           |         |
 
 Requirements
 ------------
@@ -20,19 +18,19 @@ Requirements
 
 Usage
 -----
-#### chef-alfresco-installer::installer
+#### alfresco-installer::installer
 
-Adding the chef-alfresco-installer::installer recipe and setting the build location on the node attribute
+Adding the alfresco-installer::installer recipe and setting the build location on the node attribute
 `default['installer']['downloadpath']` will be sufficient to spin up the installation and configuration of alfresco
 
-If you want to add additional amps to your installation then set their URL in the fallowing arrays:
+If you want to add additional amps to your installation then add additional attributes as follows:
 ```
-default['amps']['alfresco']=[]
-default['amps']['share']=[]
-#example default['amps']['alfresco']=['ftp://location/chef-resources/alfresco-rm-server-2.3-SNAPSHOT-amp.amp','ftp://location/chef-resources/alfresco-cmm-server-1.0-SNAPSHOT-amp.amp']
+# default['amps']['alfresco']['my-amp'] = "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/alfresco-rm/2.3.c/alfresco-rm-2.3.c.amp"
+# default['amps']['share']['my-share-amp'] = "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/alfresco-rm-share/2.3.c/alfresco-rm-share-2.3.c.amp"
+
 ```
 
-#### chef-alfresco-installer::loadbalancer
+#### alfresco-installer::loadbalancer
 
 Installs an Apache Load balancer on:
 - windows 2012 server
@@ -46,7 +44,7 @@ default['lb']['ips_and_nodenames'] = [
 ]
 ```
 
-#### chef-alfresco-installer::replication_server and replication_client
+#### alfresco-installer::replication_server and replication_client
 
 This will setup nfs server and client components
 - windows 2012 server
