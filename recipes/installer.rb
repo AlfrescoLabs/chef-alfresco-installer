@@ -363,8 +363,8 @@ end
           execute 'Waiting for tomcat to start' do
             command "tail -n2 #{node['installer']['directory']}/tomcat/logs/catalina.out | grep \"Server startup in .* ms\""
             action :run
-            retries 150
-            retry_delay 3
+            retries 100
+            retry_delay 5
             returns 0
             only_if { node['START_SERVICES'] }
           end
