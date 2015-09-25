@@ -100,26 +100,28 @@ end
   end
 end
 
-if node['amps']['alfresco']
-  node['amps']['alfresco'].each do |ampName,url|
-    common_remote_file "#{node['installer']['directory']}/amps/#{::File.basename(url)}" do
-      source url
-      win_user win_user
-      win_group win_group
-      unix_user unix_user
-      unix_group unix_group
+if node['amps']
+  if node['amps']['alfresco']
+    node['amps']['alfresco'].each do |ampName,url|
+      common_remote_file "#{node['installer']['directory']}/amps/#{::File.basename(url)}" do
+        source url
+        win_user win_user
+        win_group win_group
+        unix_user unix_user
+        unix_group unix_group
+      end
     end
   end
-end
-
-if node['amps']['share']
-  node['amps']['share'].each do |ampName,url|
-    common_remote_file "#{node['installer']['directory']}/amps_share/#{::File.basename(url)}" do
-      source url
-      win_user win_user
-      win_group win_group
-      unix_user unix_user
-      unix_group unix_group
+    
+  if node['amps']['share']
+    node['amps']['share'].each do |ampName,url|
+      common_remote_file "#{node['installer']['directory']}/amps_share/#{::File.basename(url)}" do
+        source url
+        win_user win_user
+        win_group win_group
+        unix_user unix_user
+        unix_group unix_group
+      end
     end
   end
 end
