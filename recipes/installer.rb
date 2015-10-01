@@ -112,7 +112,7 @@ if node['amps']
       end
     end
   end
-    
+
   if node['amps']['share']
     node['amps']['share'].each do |ampName,url|
       common_remote_file "#{node['installer']['directory']}/amps_share/#{::File.basename(url)}" do
@@ -155,6 +155,24 @@ case node['platform_family']
       Chef::Log.error("please use 'chef-alfresco-installer::tomcat' recipe for this platform")
 
     else
+
+      bash 'Set SHMMAX for ubuntu 10.04' do
+        user 'root'
+        cwd '/opt'
+        code <<-EOH
+      sudo sysctl -w kernel.shmmax=1024000000
+        EOH
+        only_if { node['platform'] == 'ubuntu' }
+        only_if { node['platform_version'] == '10.04' }
+      end
+
+      replace_or_add 'make SHMMAX permanent' do
+        path '/etc/sysctl.conf'
+        pattern "kernel.shmmax=.*"
+        line "kernel.shmmax=1024000000"
+        only_if { node['platform'] == 'ubuntu' }
+        only_if { node['platform_version'] == '10.04' }
+      end
 
       execute 'Install alfresco' do
         command "#{node['installer']['local']} --mode unattended --alfresco_admin_password #{node['installer']['alfresco_admin_password']} --enable-components #{node['installer']['enable-components']} --disable-components #{node['installer']['disable-components']} --jdbc_username #{node['installer']['jdbc_username']} --jdbc_password #{node['installer']['jdbc_password']} --prefix #{node['installer']['directory']}"
