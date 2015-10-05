@@ -15,16 +15,26 @@ platforms:
     username: root
     password: alfresco
     hostname: 172.29.101.105
+- name:  redhat55
+  driver_config:
+    username: root
+    password: alfresco
+    hostname: 172.29.100.148
 - name:  redhat65
   driver_config:
     username: root
     password: alfresco
     hostname: 172.29.101.52
+- name:  suse111
+  driver_config:
+    username: root
+    password: alfresco
+    hostname: 172.29.102.81
 - name:  suse113
   driver_config:
     username: root
     password: alfresco
-    hostname: 172.29.102.72
+    hostname: 172.29.102.80
 - name:  suse12
   driver_config:
     username: root
