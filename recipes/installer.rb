@@ -239,7 +239,7 @@ common_template node['paths']['wqsCustomProperties'] do
   unix_group unix_group
 end
 
-if node['installer.database-version'] != 'none'
+if node['installer.database-version'] != 'none' # ~FC023 : Using definitions here, cannot use only_if
   common_remote_file node['paths']['dbDriverLocation'] do
     source node['db.driver.url']
     win_user win_user
@@ -249,7 +249,7 @@ if node['installer.database-version'] != 'none'
   end
 end
 
-if node['paths']['licensePath'] && node['paths']['licensePath'].length > 0
+if node['paths']['licensePath'] && node['paths']['licensePath'].length > 0 # ~FC023 : Using definitions here, cannot use only_if
   common_remote_file node['paths']['licensePath'] do
     source node['alfresco.cluster.prerequisites']
     win_user win_user
