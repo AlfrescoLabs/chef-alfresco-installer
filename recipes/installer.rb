@@ -181,12 +181,12 @@ else
 
   if unix_user != 'root'
     if node['alfresco.version'].start_with?('5')
-      chownFolders = ['alf_data', 'alfresco.sh', 'amps', 'amps_share', 'bin', 'common', 'libreoffice', 'licenses', 'scripts', 'solr4', 'tomcat']
+      chown_folders = ['alf_data', 'alfresco.sh', 'amps', 'amps_share', 'bin', 'common', 'libreoffice', 'licenses', 'scripts', 'solr4', 'tomcat']
     else
-      chownFolders = ['alf_data', 'alfresco.sh', 'amps', 'amps_share', 'bin', 'common', 'libreoffice', 'licenses', 'scripts', 'tomcat']
+      chown_folders = ['alf_data', 'alfresco.sh', 'amps', 'amps_share', 'bin', 'common', 'libreoffice', 'licenses', 'scripts', 'tomcat']
     end
 
-    chownFolders.each do |folderName|
+    chown_folders.each do |folderName|
       execute "chown-#{folderName}-to-#{unix_user}" do
         command "chown -R #{unix_user}:#{unix_group} #{node['installer']['directory']}/#{folderName}"
       end
@@ -267,7 +267,7 @@ common_template node['paths']['tomcatServerXml'] do
   unix_group unix_group
 end
 
-solrcoreProps = {
+solrcore_props = {
   'data.dir.root=' => node['paths']['solrPath'],
   'alfresco.version=' => node['alfresco.version'],
   'alfresco.host=' => node['solr.target.alfresco.host'],
@@ -276,7 +276,7 @@ solrcoreProps = {
   'alfresco.baseUrl=' => node['solr.target.alfresco.baseUrl']
 }
 
-solrcoreProps.each do |key, value|
+solrcore_props.each do |key, value|
   replace_or_add 'replace in solrcoreArchive' do
     path node['paths']['solrcoreArchive']
     pattern "#{key}.*"
