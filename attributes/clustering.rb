@@ -15,7 +15,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
-#/
-default['additional_cluster_members']=['']
-default['alfresco.cluster.enabled']='false'
-default['alfresco.cluster.prerequisites']='ftp://172.29.103.222/chef-resources/qa51.lic'
+# /
+default['additional_cluster_members'] = ['']
+default['alfresco.cluster.enabled'] = 'false'
+default['alfresco.cluster.prerequisites'] = 'ftp://172.29.103.222/chef-resources/qa51.lic'

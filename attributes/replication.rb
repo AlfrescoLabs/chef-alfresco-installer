@@ -15,22 +15,22 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
-#/
+# /
 case node['platform_family']
-  when 'windows'
-    default['dir_client']='M:/'
-    default['windows_drive']='M:'
-    default['dir_server']='/Replicate'
-    default['dir_server_local']='C:\\Replicate'
+when 'windows'
+  default['dir_client'] = 'M:/'
+  default['windows_drive'] = 'M:'
+  default['dir_server'] = '/Replicate'
+  default['dir_server_local'] = 'C:\\Replicate'
 
   normal['nfs']['service_provider']['lock'] = ''
-	normal['nfs']['service_provider']['portmap'] = ''
-	normal['nfs']['service_provider']['server'] = ''
-	normal['nfs']['service_provider']['idmap'] = ''
-  else
-    default['dir_client']='/opt/Replicate'
-    default['dir_server']='/opt/Replicate'
+  normal['nfs']['service_provider']['portmap'] = ''
+  normal['nfs']['service_provider']['server'] = ''
+  normal['nfs']['service_provider']['idmap'] = ''
+else
+  default['dir_client'] = '/opt/Replicate'
+  default['dir_server'] = '/opt/Replicate'
 end
 
-default['replication_remote_ip']=node['ipaddress']
-default['replication.enabled']='false'
+default['replication_remote_ip'] = node['ipaddress']
+default['replication.enabled'] = 'false'

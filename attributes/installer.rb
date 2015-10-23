@@ -17,10 +17,10 @@
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
 #/
 
-default['installer']['win_user'] = "Administrator"
-default['installer']['win_group'] = "Administrators"
-default['installer']['unix_user'] = "root"
-default['installer']['unix_group'] = "root"
+default['installer']['win_user'] = 'Administrator'
+default['installer']['win_group'] = 'Administrators'
+default['installer']['unix_user'] = 'root'
+default['installer']['unix_group'] = 'root'
 
 ############ installer attributes ############
 
@@ -32,8 +32,8 @@ default['installer']['jdbc_password'] = 'alfresco'
 default['certificates']['downloadpath'] = 'ftp://172.29.103.222/chef-resources/certificates'
 
 # If you want to add your own AMPs:
-# default['amps']['alfresco']['my-amp'] = "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/alfresco-rm/2.3.c/alfresco-rm-2.3.c.amp"
-# default['amps']['share']['my-share-amp'] = "https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/alfresco-rm-share/2.3.c/alfresco-rm-share-2.3.c.amp"
+# default['amps']['alfresco']['my-amp'] = 'https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/alfresco-rm/2.3.c/alfresco-rm-2.3.c.amp'
+# default['amps']['share']['my-share-amp'] = 'https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/alfresco-rm-share/2.3.c/alfresco-rm-share-2.3.c.amp'
 
 case node['platform_family']
 when 'windows'
@@ -63,11 +63,11 @@ end
 
 #ssl attributes
 # default["alfresco"]["keystore_file"] = "#{node['installer']['directory']}/alf_data/ssl.keystore"
-default["alfresco"]["keystore_password"] = "kT9X6oe68t"
-default["alfresco"]["keystore_type"] = "JCEKS"
-# default["alfresco"]["truststore_file"] = "#{node['installer']['directory']}/alf_data/ssl.truststore"
-default["alfresco"]["truststore_password"] = "kT9X6oe68t"
-default["alfresco"]["truststore_type"] = "JCEKS"
+default['alfresco']['keystore_password'] = 'kT9X6oe68t'
+default['alfresco']['keystore_type'] = 'JCEKS'
+# default['alfresco']['truststore_file'] = "#{node['installer']['directory']}/alf_data/ssl.truststore"
+default['alfresco']['truststore_password'] = 'kT9X6oe68t'
+default['alfresco']['truststore_type'] = 'JCEKS'
 
 ############ conditional chef attributes ############
 ####### Services #######

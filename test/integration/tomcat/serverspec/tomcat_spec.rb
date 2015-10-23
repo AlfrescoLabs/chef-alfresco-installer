@@ -15,7 +15,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
-#/
+# /
 require 'spec_helper'
 
 describe 'When we check the status of alfresco port it' do
@@ -26,14 +26,14 @@ describe 'When we check the status of SOLR port it' do
   it { expect(port(8443)).to be_listening }
 end
 
-describe 'When alfresco is set to start at boot then the service'  do
+describe 'When alfresco is set to start at boot then the service' do
   it { expect(service('tomcat')).to be_enabled }
 end
 
-connection = Faraday.new(:url => 'http://localhost:8080',
-	:headers => {'Host' => 'localhost'}) do |faraday|
-        faraday.adapter Faraday.default_adapter
-      end
+connection = Faraday.new(url: 'http://localhost:8080',
+                         headers: { 'Host' => 'localhost' }) do |faraday|
+  faraday.adapter Faraday.default_adapter
+end
 
 describe 'When share is up the http status' do
   it { expect(connection.get('/share/page').status).to eq 200 }
@@ -47,16 +47,16 @@ describe 'When we are on the alfresco main page, the body' do
   it { expect(connection.get('/alfresco/').body).to include('Alfresco WebScripts Home') }
 end
 
-connection2 = Faraday.new(:url => 'http://admin:admin@localhost:8080',
-	:headers => {'Host' => 'localhost' }) do |faraday|
-        faraday.adapter Faraday.default_adapter
-      end
+connection2 = Faraday.new(url: 'http://admin:admin@localhost:8080',
+                          headers: { 'Host' => 'localhost' }) do |faraday|
+  faraday.adapter Faraday.default_adapter
+end
 
 describe 'When WebScripts page is up the http status' do
   it { expect(connection2.get('/alfresco/s/index').status).to eq 200 }
 end
 
-describe 'When we are on the Web Scripts main page, the body'  do
+describe 'When we are on the Web Scripts main page, the body' do
   it { expect(connection2.get('/alfresco/s/index').body).to include('Browse all Web Scripts') }
 end
 
@@ -86,4 +86,4 @@ end
 
 describe 'When solr is started correctly, the http status of solrstats' do
   it { expect(connection2.get('/alfresco/s/api/solrstats').status).to eq 200 }
-end 
+end

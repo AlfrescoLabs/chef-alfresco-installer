@@ -16,14 +16,14 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
-#/
+# /
 
 win_user = node['installer']['win_user']
 win_group = node['installer']['win_group']
 unix_user = node['installer']['unix_user']
 unix_group = node['installer']['unix_group']
 
-if node['platform_family'] == 'windows' and win_user != 'Administrator'
+if node['platform_family'] == 'windows' && win_user != 'Administrator'
   user win_user
   group win_group do
     members win_user
@@ -39,7 +39,7 @@ elsif unix_user != 'root'
   end
 end
 
-#Setting derived attributes as needed.
+# Setting derived attributes as needed.
 case node['index.subsystem.name']
 when 'solr4'
   node.default['paths']['solrPath'] = "#{node['installer']['directory']}/solr4"
@@ -51,58 +51,58 @@ node.default['paths']['solrcoreArchive'] = "#{node['paths']['solrPath']}/archive
 node.default['paths']['solrcoreWorkspace'] = "#{node['paths']['solrPath']}/workspace-SpacesStore/conf/solrcore.properties"
 
 case node['platform_family']
-  when 'windows'
-    #uninstall file is required for installation idempotence
-    node.default['paths']['uninstallFile'] = "#{node['installer']['directory']}\\uninstall.exe"
-    node.default['paths']['alfrescoGlobal'] = "#{node['installer']['directory']}\\tomcat\\shared\\classes\\alfresco-global.properties"
-    node.default['paths']['wqsCustomProperties'] = "#{node['installer']['directory']}\\tomcat\\shared\\classes\\wqsapi-custom.properties"
-    node.default['paths']['tomcatServerXml'] = "#{node['installer']['directory']}\\tomcat\\conf\\server.xml"
-    node.default['paths']['licensePath'] = "#{node['installer']['directory']}/qa50.lic"
-    node.default['paths']['dbDriverLocation'] = "#{node['installer']['directory']}\\tomcat\\lib\\#{node['db.driver.filename']}"
-  else
-    node.default['paths']['uninstallFile'] = "#{node['installer']['directory']}/alfresco.sh"
-    node.default['paths']['alfrescoGlobal'] = "#{node['installer']['directory']}/tomcat/shared/classes/alfresco-global.properties"
-    node.default['paths']['wqsCustomProperties'] = "#{node['installer']['directory']}/tomcat/shared/classes/wqsapi-custom.properties"
-    node.default['paths']['tomcatServerXml'] = "#{node['installer']['directory']}/tomcat/conf/server.xml"
-    node.default['paths']['licensePath'] = "#{node['installer']['directory']}/qa50.lic"
-    node.default['paths']['dbDriverLocation'] = "#{node['installer']['directory']}/tomcat/lib/#{node['db.driver.filename']}"
+when 'windows'
+  # uninstall file is required for installation idempotence
+  node.default['paths']['uninstallFile'] = "#{node['installer']['directory']}\\uninstall.exe"
+  node.default['paths']['alfrescoGlobal'] = "#{node['installer']['directory']}\\tomcat\\shared\\classes\\alfresco-global.properties"
+  node.default['paths']['wqsCustomProperties'] = "#{node['installer']['directory']}\\tomcat\\shared\\classes\\wqsapi-custom.properties"
+  node.default['paths']['tomcatServerXml'] = "#{node['installer']['directory']}\\tomcat\\conf\\server.xml"
+  node.default['paths']['licensePath'] = "#{node['installer']['directory']}/qa50.lic"
+  node.default['paths']['dbDriverLocation'] = "#{node['installer']['directory']}\\tomcat\\lib\\#{node['db.driver.filename']}"
+else
+  node.default['paths']['uninstallFile'] = "#{node['installer']['directory']}/alfresco.sh"
+  node.default['paths']['alfrescoGlobal'] = "#{node['installer']['directory']}/tomcat/shared/classes/alfresco-global.properties"
+  node.default['paths']['wqsCustomProperties'] = "#{node['installer']['directory']}/tomcat/shared/classes/wqsapi-custom.properties"
+  node.default['paths']['tomcatServerXml'] = "#{node['installer']['directory']}/tomcat/conf/server.xml"
+  node.default['paths']['licensePath'] = "#{node['installer']['directory']}/qa50.lic"
+  node.default['paths']['dbDriverLocation'] = "#{node['installer']['directory']}/tomcat/lib/#{node['db.driver.filename']}"
 end
-node.default["alfresco"]["keystore"] = "#{node['installer']['directory']}/alf_data/keystore"
-node.default["alfresco"]["keystore_file"] = "#{node['alfresco']['keystore']}/ssl.keystore"
-node.default["alfresco"]["truststore_file"] = "#{node['alfresco']['keystore']}/ssl.truststore"
+node.default['alfresco']['keystore'] = "#{node['installer']['directory']}/alf_data/keystore"
+node.default['alfresco']['keystore_file'] = "#{node['alfresco']['keystore']}/ssl.keystore"
+node.default['alfresco']['truststore_file'] = "#{node['alfresco']['keystore']}/ssl.truststore"
 
 common_remote_file 'download alfresco build' do
   source node['installer']['downloadpath']
   path node['installer']['local']
-  win_user "Administrator"
-  win_group "Administrators"
-  unix_user "root"
-  unix_group "root"
+  win_user 'Administrator'
+  win_group 'Administrators'
+  unix_user 'root'
+  unix_group 'root'
 end
 
 %W(#{node['installer']['directory']}
-#{node['installer']['directory']}/amps
-#{node['installer']['directory']}/amps_share).each do |dir|
+   #{node['installer']['directory']}/amps
+   #{node['installer']['directory']}/amps_share).each do |dir|
   directory dir do
     case node['platform_family']
-      when 'windows'
-        rights :read, "Administrator"
-        rights :write, "Administrator"
-        rights :full_control, "Administrator"
-        rights :full_control, "Administrator", :applies_to_children => true
-        group "Administrators"
-      else
-        owner "root"
-        group "root"
-        mode 00755
-        :top_level
+    when 'windows'
+      rights :read, 'Administrator'
+      rights :write, 'Administrator'
+      rights :full_control, 'Administrator'
+      rights :full_control, 'Administrator', applies_to_children: true
+      group 'Administrators'
+    else
+      owner 'root'
+      group 'root'
+      mode 00755
+      :top_level
     end
   end
 end
 
 if node['amps']
   if node['amps']['alfresco']
-    node['amps']['alfresco'].each do |ampName,url|
+    node['amps']['alfresco'].each do |_ampName, url|
       common_remote_file "#{node['installer']['directory']}/amps/#{::File.basename(url)}" do
         source url
         win_user win_user
@@ -114,7 +114,7 @@ if node['amps']
   end
 
   if node['amps']['share']
-    node['amps']['share'].each do |ampName,url|
+    node['amps']['share'].each do |_ampName, url|
       common_remote_file "#{node['installer']['directory']}/amps_share/#{::File.basename(url)}" do
         source url
         win_user win_user
@@ -127,266 +127,263 @@ if node['amps']
 end
 
 case node['platform_family']
-  when 'windows'
+when 'windows'
 
-    windows_task 'Install Alfresco' do
-      user 'Administrator'
-      password 'alfresco'
-      command "#{node['installer']['local']} --mode unattended --alfresco_admin_password #{node['installer']['alfresco_admin_password']} --enable-components #{node['installer']['enable-components']} --disable-components #{node['installer']['disable-components']} --jdbc_username #{node['installer']['jdbc_username']} --jdbc_password #{node['installer']['jdbc_password']} --prefix #{node['installer']['directory']}"
-      run_level :highest
-      frequency :monthly
-      action [:create, :run]
-      not_if { File.exists?(node['paths']['uninstallFile']) }
-    end
+  windows_task 'Install Alfresco' do
+    user 'Administrator'
+    password 'alfresco'
+    command "#{node['installer']['local']} --mode unattended --alfresco_admin_password #{node['installer']['alfresco_admin_password']} --enable-components #{node['installer']['enable-components']} --disable-components #{node['installer']['disable-components']} --jdbc_username #{node['installer']['jdbc_username']} --jdbc_password #{node['installer']['jdbc_password']} --prefix #{node['installer']['directory']}"
+    run_level :highest
+    frequency :monthly
+    action [:create, :run]
+    not_if { File.exist?(node['paths']['uninstallFile']) }
+  end
 
-    batch 'Waiting for installation to finish ...' do
-      code <<-EOH
+  batch 'Waiting for installation to finish ...' do
+    code <<-EOH
       dir /S /P \"#{node['paths']['uninstallFile']}\"
       EOH
-      action :run
-      retries 30
-      retry_delay 10
-      notifies :delete, 'windows_task[Install Alfresco]', :delayed
-      not_if { File.exists?(node['paths']['uninstallFile']) }
+    action :run
+    retries 30
+    retry_delay 10
+    notifies :delete, 'windows_task[Install Alfresco]', :delayed
+    not_if { File.exist?(node['paths']['uninstallFile']) }
+  end
+
+when 'solaris', 'solaris2'
+
+  Chef::Log.error("please use 'chef-alfresco-installer::tomcat' recipe for this platform")
+
+else
+
+  bash 'Set SHMMAX for ubuntu 10.04' do
+    user 'root'
+    cwd '/opt'
+    code <<-EOH
+  sudo sysctl -w kernel.shmmax=1024000000
+    EOH
+    only_if { node['platform'] == 'ubuntu' }
+    only_if { node['platform_version'] == '10.04' }
+  end
+
+  replace_or_add 'make SHMMAX permanent' do
+    path '/etc/sysctl.conf'
+    pattern 'kernel.shmmax=.*'
+    line 'kernel.shmmax=1024000000'
+    only_if { node['platform'] == 'ubuntu' }
+    only_if { node['platform_version'] == '10.04' }
+  end
+
+  execute 'Install alfresco' do
+    command "#{node['installer']['local']} --mode unattended --alfresco_admin_password #{node['installer']['alfresco_admin_password']} --enable-components #{node['installer']['enable-components']} --disable-components #{node['installer']['disable-components']} --jdbc_username #{node['installer']['jdbc_username']} --jdbc_password #{node['installer']['jdbc_password']} --prefix #{node['installer']['directory']}"
+    not_if { File.exist?(node['paths']['uninstallFile']) }
+  end
+
+  if unix_user != 'root'
+    if node['alfresco.version'].start_with?('5')
+      chownFolders = ['alf_data', 'alfresco.sh', 'amps', 'amps_share', 'bin', 'common', 'libreoffice', 'licenses', 'scripts', 'solr4', 'tomcat']
+    else
+      chownFolders = ['alf_data', 'alfresco.sh', 'amps', 'amps_share', 'bin', 'common', 'libreoffice', 'licenses', 'scripts', 'tomcat']
     end
 
-    when 'solaris', 'solaris2'
-
-      Chef::Log.error("please use 'chef-alfresco-installer::tomcat' recipe for this platform")
-
-    else
-
-      bash 'Set SHMMAX for ubuntu 10.04' do
-        user 'root'
-        cwd '/opt'
-        code <<-EOH
-      sudo sysctl -w kernel.shmmax=1024000000
-        EOH
-        only_if { node['platform'] == 'ubuntu' }
-        only_if { node['platform_version'] == '10.04' }
+    chownFolders.each do |folderName|
+      execute "chown-#{folderName}-to-#{unix_user}" do
+        command "chown -R #{unix_user}:#{unix_group} #{node['installer']['directory']}/#{folderName}"
       end
+    end
 
-      replace_or_add 'make SHMMAX permanent' do
-        path '/etc/sysctl.conf'
-        pattern "kernel.shmmax=.*"
-        line "kernel.shmmax=1024000000"
-        only_if { node['platform'] == 'ubuntu' }
-        only_if { node['platform_version'] == '10.04' }
-      end
+    # postgresql.log must be writeable by non-root user
+    execute "chown-postgresql-to-#{unix_user}" do
+      command "chown -R #{unix_user}:#{unix_group} #{node['installer']['directory']}/postgresql"
+      not_if { node['installer.database-type'] != 'postgres' }
+    end
 
-      execute 'Install alfresco' do
-        command "#{node['installer']['local']} --mode unattended --alfresco_admin_password #{node['installer']['alfresco_admin_password']} --enable-components #{node['installer']['enable-components']} --disable-components #{node['installer']['disable-components']} --jdbc_username #{node['installer']['jdbc_username']} --jdbc_password #{node['installer']['jdbc_password']} --prefix #{node['installer']['directory']}"
-        not_if { File.exists?(node['paths']['uninstallFile']) }
-      end
+    execute 'hacking-alfresco-startup-script-ty-installer' do
+      command "sed -i '3,7d' #{node['installer']['directory']}/alfresco.sh"
+      only_if "cat #{node['installer']['directory']}/alfresco.sh | grep 'This script requires root privileges'"
+    end
+  end
 
-      if unix_user != 'root'
-        if node['alfresco.version'].start_with?('5')
-          chownFolders = ['alf_data', 'alfresco.sh', 'amps', 'amps_share', 'bin', 'common', 'libreoffice', 'licenses', 'scripts', 'solr4', 'tomcat']
-        else
-          chownFolders = ['alf_data', 'alfresco.sh', 'amps', 'amps_share', 'bin', 'common', 'libreoffice', 'licenses', 'scripts', 'tomcat']
-        end
-
-        chownFolders.each do |folderName|
-          execute "chown-#{folderName}-to-#{unix_user}" do
-            command "chown -R #{unix_user}:#{unix_group} #{node['installer']['directory']}/#{folderName}"
-          end
-        end
-
-        # postgresql.log must be writeable by non-root user
-        execute "chown-postgresql-to-#{unix_user}" do
-          command "chown -R #{unix_user}:#{unix_group} #{node['installer']['directory']}/postgresql"
-          not_if { node['installer.database-type'] != 'postgres'}
-        end
-
-        execute 'hacking-alfresco-startup-script-ty-installer' do
-          command "sed -i '3,7d' #{node['installer']['directory']}/alfresco.sh"
-          only_if "cat #{node['installer']['directory']}/alfresco.sh | grep 'This script requires root privileges'"
-        end
-      end
-
-
-      # This is how it should be done, though it doesn't work due the error below
-      # Using templates/init/alfresco.erb instead
-      #
-      # TypeError: no implicit conversion of nil into String
-      #
-      # replace_or_add '/etc/init.d/alfresco' do
-      #   pattern "alfresco.sh\ start"
-      #   line "su - #{unix_user} -c \"/alfresco/4.2.0/alfresco.sh start \\\"$2\\\"\""
-      # end
-      #
-      # replace_or_add '/etc/init.d/alfresco' do
-      #   pattern "alfresco.sh\ stop"
-      #   line "su - #{unix_user} -c \"/alfresco/4.2.0/alfresco.sh stop \\\"$2\\\"\""
-      # end
-      template '/etc/init.d/alfresco' do
-        source 'init/alfresco.erb'
-      end
+  # This is how it should be done, though it doesn't work due the error below
+  # Using templates/init/alfresco.erb instead
+  #
+  # TypeError: no implicit conversion of nil into String
+  #
+  # replace_or_add '/etc/init.d/alfresco' do
+  #   pattern "alfresco.sh\ start"
+  #   line "su - #{unix_user} -c \"/alfresco/4.2.0/alfresco.sh start \\\"$2\\\"\""
+  # end
+  #
+  # replace_or_add '/etc/init.d/alfresco' do
+  #   pattern "alfresco.sh\ stop"
+  #   line "su - #{unix_user} -c \"/alfresco/4.2.0/alfresco.sh stop \\\"$2\\\"\""
+  # end
+  template '/etc/init.d/alfresco' do
+    source 'init/alfresco.erb'
+  end
 end
 
-    common_template node['paths']['alfrescoGlobal'] do
-      source 'globalProps/alfresco-global.properties.erb'
-      win_user win_user
-      win_group win_group
-      unix_user unix_user
-      unix_group unix_group
-    end
+common_template node['paths']['alfrescoGlobal'] do
+  source 'globalProps/alfresco-global.properties.erb'
+  win_user win_user
+  win_group win_group
+  unix_user unix_user
+  unix_group unix_group
+end
 
-    common_template node['paths']['wqsCustomProperties'] do
-      source 'customProps/wqsapi-custom.properties.erb'
-      win_user win_user
-      win_group win_group
-      unix_user unix_user
-      unix_group unix_group
-    end
+common_template node['paths']['wqsCustomProperties'] do
+  source 'customProps/wqsapi-custom.properties.erb'
+  win_user win_user
+  win_group win_group
+  unix_user unix_user
+  unix_group unix_group
+end
 
-    if node['installer.database-version'] != 'none'
-      common_remote_file node['paths']['dbDriverLocation'] do
-        source node['db.driver.url']
-        win_user win_user
-        win_group win_group
-        unix_user unix_user
-        unix_group unix_group
-      end
-    end
+if node['installer.database-version'] != 'none'
+  common_remote_file node['paths']['dbDriverLocation'] do
+    source node['db.driver.url']
+    win_user win_user
+    win_group win_group
+    unix_user unix_user
+    unix_group unix_group
+  end
+end
 
-    if node['paths']['licensePath'] and node['paths']['licensePath'].length > 0
-      common_remote_file node['paths']['licensePath'] do
-        source node['alfresco.cluster.prerequisites']
-        win_user win_user
-        win_group win_group
-        unix_user unix_user
-        unix_group unix_group
-      end
-    end
+if node['paths']['licensePath'] && node['paths']['licensePath'].length > 0
+  common_remote_file node['paths']['licensePath'] do
+    source node['alfresco.cluster.prerequisites']
+    win_user win_user
+    win_group win_group
+    unix_user unix_user
+    unix_group unix_group
+  end
+end
 
-    common_template node['paths']['tomcatServerXml'] do
-      source 'tomcat/server.xml.erb'
-      win_user win_user
-      win_group win_group
-      unix_user unix_user
-      unix_group unix_group
-    end
+common_template node['paths']['tomcatServerXml'] do
+  source 'tomcat/server.xml.erb'
+  win_user win_user
+  win_group win_group
+  unix_user unix_user
+  unix_group unix_group
+end
 
-    solrcoreProps = {
-      "data.dir.root=" => node['paths']['solrPath'],
-      "alfresco.version=" => node['alfresco.version'],
-      "alfresco.host=" => node['solr.target.alfresco.host'],
-      "alfresco.port=" => node['solr.target.alfresco.port'],
-      "alfresco.port.ssl=" => node['solr.target.alfresco.port.ssl'],
-      "alfresco.baseUrl=" => node['solr.target.alfresco.baseUrl']
-    }
+solrcoreProps = {
+  'data.dir.root=' => node['paths']['solrPath'],
+  'alfresco.version=' => node['alfresco.version'],
+  'alfresco.host=' => node['solr.target.alfresco.host'],
+  'alfresco.port=' => node['solr.target.alfresco.port'],
+  'alfresco.port.ssl=' => node['solr.target.alfresco.port.ssl'],
+  'alfresco.baseUrl=' => node['solr.target.alfresco.baseUrl']
+}
 
-    solrcoreProps.each do |key,value|
+solrcoreProps.each do |key, value|
+  replace_or_add 'replace in solrcoreArchive' do
+    path node['paths']['solrcoreArchive']
+    pattern "#{key}.*"
+    line "#{key}#{value}"
+  end
 
-      replace_or_add 'replace in solrcoreArchive' do
-        path node['paths']['solrcoreArchive']
-        pattern "#{key}.*"
-        line "#{key}#{value}"
-      end
+  replace_or_add 'replace in solrcoreWorkspace' do
+    path node['paths']['solrcoreWorkspace']
+    pattern "#{key}.*"
+    line "#{key}#{value}"
+  end
+end
 
-      replace_or_add 'replace in solrcoreWorkspace' do
-        path node['paths']['solrcoreWorkspace']
-        pattern "#{key}.*"
-        line "#{key}#{value}"
-      end
+replace_or_add node['paths']['solrcoreArchive'] do
+  pattern 'alfresco.secureComms=.*'
+  line 'data.dir.root=none'
+  only_if { node['disable_solr_ssl'] }
+end
 
-    end
+replace_or_add node['paths']['solrcoreWorkspace'] do
+  pattern 'alfresco.secureComms=.*'
+  line 'data.dir.root=none'
+  only_if { node['disable_solr_ssl'] }
+end
 
-    replace_or_add node['paths']['solrcoreArchive'] do
-      pattern "alfresco.secureComms=.*"
-      line "data.dir.root=none"
-      only_if { node['disable_solr_ssl'] }
-    end
+remove_wars 'removing unnecesarry wars'
 
-    replace_or_add node['paths']['solrcoreWorkspace'] do
-      pattern "alfresco.secureComms=.*"
-      line "data.dir.root=none"
-      only_if { node['disable_solr_ssl'] }
-    end
+solr_ssl_disabler 'disabling solr ssl' do
+  win_user win_user
+  win_group win_group
+  unix_user unix_user
+  unix_group unix_group
+end
 
-    remove_wars 'removing unnecesarry wars'
+# %W(#{node['paths']['solrPath']}/templates/store
+# #{node['paths']['solrPath']}/templates/store/conf
+# #{node['certificates']['directory']}).each do |path|
+#   directory path do
+#     owner 'root'
+#     group 'root'
+#     mode 00775
+#     action :create
+#   end
+# end
+#
+# %W(browser.p12
+# ssl.keystore
+# ssl.repo.client.crt
+# ssl.repo.client.keystore
+# ssl.repo.client.truststore
+# ssl.repo.crt
+# ssl.truststore).each do |file|
+#   common_remote_file 'download certificates' do
+#     source "#{node['certificates']['downloadpath']}/#{file}"
+#     path "#{node['certificates']['directory']}/#{file}"
+#   end
+# end
+#
+# common_template "#{node['installer']['directory']}/applicert.sh" do
+#   source 'solr/applicert.sh.erb'
+# end
+#
+# execute 'Apply Certificates' do
+#   command "sh #{node['installer']['directory']}/applicert.sh"
+#   action :run
+# end
 
-    solr_ssl_disabler 'disabling solr ssl' do
-      win_user win_user
-      win_group win_group
-      unix_user unix_user
-      unix_group unix_group
-    end
+case node['platform_family']
+when 'windows'
 
-    # %W(#{node['paths']['solrPath']}/templates/store
-    # #{node['paths']['solrPath']}/templates/store/conf
-    # #{node['certificates']['directory']}).each do |path|
-    #   directory path do
-    #     owner 'root'
-    #     group 'root'
-    #     mode 00775
-    #     action :create
-    #   end
-    # end
-    #
-    # %W(browser.p12
-    # ssl.keystore
-    # ssl.repo.client.crt
-    # ssl.repo.client.keystore
-    # ssl.repo.client.truststore
-    # ssl.repo.crt
-    # ssl.truststore).each do |file|
-    #   common_remote_file 'download certificates' do
-    #     source "#{node['certificates']['downloadpath']}/#{file}"
-    #     path "#{node['certificates']['directory']}/#{file}"
-    #   end
-    # end
-    #
-    # common_template "#{node['installer']['directory']}/applicert.sh" do
-    #   source 'solr/applicert.sh.erb'
-    # end
-    #
-    # execute 'Apply Certificates' do
-    #   command "sh #{node['installer']['directory']}/applicert.sh"
-    #   action :run
-    # end
-
-    case node['platform_family']
-      when 'windows'
-
-          service 'alfrescoPostgreSQL' do
-            if node['START_POSGRES']
-              action [:enable, :start]
-            else
-              action :enable
-            end
-            supports :status => false, :restart => true, :stop => true, :start => true
-            only_if { node['START_POSGRES'] }
-          end
-
-          service 'alfrescoTomcat' do
-            if node['START_SERVICES']
-              action [:enable, :start]
-            else
-              action :enable
-            end
-            supports :status => true, :restart => true, :stop => true, :start => true
-            only_if { node['START_SERVICES'] }
-          end
-
+  service 'alfrescoPostgreSQL' do
+    if node['START_POSGRES']
+      action [:enable, :start]
     else
-          service 'alfresco' do
-            if node['START_SERVICES']
-              action [:enable, :restart]
-            else
-              action :enable
-            end
-            supports :status => false, :restart => true
-          end
-
-          execute 'Waiting for tomcat to start' do
-            command "tail -n2 #{node['installer']['directory']}/tomcat/logs/catalina.out | grep \"Server startup in .* ms\""
-            action :run
-            retries 100
-            retry_delay 5
-            returns 0
-            only_if { node['START_SERVICES'] }
-          end
-
+      action :enable
     end
+    supports status: false, restart: true, stop: true, start: true
+    only_if { node['START_POSGRES'] }
+  end
+
+  service 'alfrescoTomcat' do
+    if node['START_SERVICES']
+      action [:enable, :start]
+    else
+      action :enable
+    end
+    supports status: true, restart: true, stop: true, start: true
+    only_if { node['START_SERVICES'] }
+  end
+
+else
+  service 'alfresco' do
+    if node['START_SERVICES']
+      action [:enable, :restart]
+    else
+      action :enable
+    end
+    supports status: false, restart: true
+  end
+
+  execute 'Waiting for tomcat to start' do
+    command "tail -n2 #{node['installer']['directory']}/tomcat/logs/catalina.out | grep \"Server startup in .* ms\""
+    action :run
+    retries 100
+    retry_delay 5
+    returns 0
+    only_if { node['START_SERVICES'] }
+  end
+
+end

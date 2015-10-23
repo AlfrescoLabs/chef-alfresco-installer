@@ -15,15 +15,15 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
-#/
+# /
 
 require 'spec_helper'
 
-connection = Faraday.new(:url => 'http://172.29.101.51:8080',
-	:headers => {'Host' => host_inventory['hostname']}) do |faraday|
-        faraday.adapter Faraday.default_adapter
-      end
-     
+connection = Faraday.new(url: 'http://172.29.101.51:8080',
+                         headers: { 'Host' => host_inventory['hostname'] }) do |faraday|
+  faraday.adapter Faraday.default_adapter
+end
+
 describe 'When we are on the root of the server, the body' do
   it { expect(connection.get('').body).to include('Welcome to Alfresco!') }
 end
@@ -40,16 +40,16 @@ describe 'When we are on the alfresco main page, the body' do
   it { expect(connection.get('/alfresco/').body).to include('Alfresco WebScripts Home') }
 end
 
-connection2 = Faraday.new(:url => 'http://admin:admin@172.29.101.51:8080',
-	:headers => {'Host' => host_inventory['hostname']}) do |faraday|
-        faraday.adapter Faraday.default_adapter
-      end
+connection2 = Faraday.new(url: 'http://admin:admin@172.29.101.51:8080',
+                          headers: { 'Host' => host_inventory['hostname'] }) do |faraday|
+  faraday.adapter Faraday.default_adapter
+end
 
 describe 'When WebScripts page is up the http status' do
   it { expect(connection2.get('/alfresco/s/index').status).to eq 200 }
 end
 
-describe 'When we are on the Web Scripts main page, the body'  do
+describe 'When we are on the Web Scripts main page, the body' do
   it { expect(connection2.get('/alfresco/s/index').body).to include('Browse all Web Scripts') }
 end
 
@@ -79,4 +79,4 @@ end
 
 describe 'When solr is started correctly, the http status of solrstats' do
   it { expect(connection2.get('/alfresco/s/api/solrstats').status).to eq 200 }
-end 
+end

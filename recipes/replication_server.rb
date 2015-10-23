@@ -15,11 +15,11 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
-#/
+# /
 case node['platform_family']
 when 'windows'
 
-  powershell_script "Install-nfs-server" do
+  powershell_script 'Install-nfs-server' do
     code <<-EOH
     Add-WindowsFeature 'FS-NFS-Service'
     EOH
@@ -29,7 +29,7 @@ when 'windows'
     rights :read, 'Administrator'
     rights :write, 'Administrator'
     rights :full_control, 'Administrator'
-    rights :full_control, 'Administrator', :applies_to_children => true
+    rights :full_control, 'Administrator', applies_to_children: true
     group 'Administrators'
   end
 
@@ -40,7 +40,6 @@ when 'windows'
     action :run
     not_if { ::File.directory?(node['dir_server_local']) }
   end
-
 
 else
 

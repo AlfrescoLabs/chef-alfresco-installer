@@ -32,12 +32,12 @@ define :solr_ssl_disabler do
         rights :read, params[:win_user]
         rights :write, params[:win_user]
         rights :full_control, params[:win_user]
-        rights :full_control, params[:win_user], :applies_to_children => true
+        rights :full_control, params[:win_user], applies_to_children: true
         group params[:win_group]
       else
-          owner params[:unix_user]
-          group params[:unix_group]
-          mode 00775
+        owner params[:unix_user]
+        group params[:unix_group]
+        mode 00775
       end
     end
 
@@ -73,7 +73,6 @@ define :solr_ssl_disabler do
           group params[:unix_group]
         end
         mode 00755
-        :top_level
         not_if { ::File.exist?("#{node['installer']['directory']}/tomcat/webapps/alfresco/WEB-INF/web.xml") }
         only_if { ::File.exist?('/opt/tmp-alfrescowar/WEB-INF/web.xml') }
       end
@@ -90,7 +89,6 @@ define :solr_ssl_disabler do
           group params[:unix_group]
         end
         mode 00755
-        :top_level
         only_if { ::File.exist?("#{node['installer']['directory']}/tomcat/webapps/alfresco/WEB-INF/web.xml") }
       end
 
@@ -110,7 +108,6 @@ define :solr_ssl_disabler do
         EOH
         not_if { ::File.exist?("#{node['installer']['directory']}/tomcat/webapps/alfresco/WEB-INF/web.xml") }
       end
-
     end
 
     if node['install_solr4_war']
@@ -145,7 +142,6 @@ define :solr_ssl_disabler do
           group params[:unix_group]
         end
         mode 00755
-        :top_level
         not_if { ::File.exist?("#{node['installer']['directory']}/tomcat/webapps/solr4/WEB-INF/web.xml") }
         only_if { ::File.exist?('/opt/tmp-solr4war/WEB-INF/web.xml') }
       end
@@ -162,7 +158,6 @@ define :solr_ssl_disabler do
           group params[:unix_group]
         end
         mode 00755
-        :top_level
         only_if { ::File.exist?("#{node['installer']['directory']}/tomcat/webapps/solr4/WEB-INF/web.xml") }
       end
 
@@ -182,9 +177,6 @@ define :solr_ssl_disabler do
         EOH
         not_if { ::File.exist?("#{node['installer']['directory']}/tomcat/webapps/solr4/WEB-INF/web.xml") }
       end
-
     end
-
   end
-
 end

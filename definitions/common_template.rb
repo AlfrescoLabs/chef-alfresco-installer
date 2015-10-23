@@ -18,28 +18,28 @@
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
 #
 
-define :common_template, :path => nil, :source => nil do
+define :common_template, path: nil, source: nil do
   params[:path] ||= params[:name]
   params[:win_user] ||= params[:win_user]
   params[:win_group] ||= params[:win_group]
   params[:unix_user] ||= params[:unix_user]
   params[:unix_group] ||= params[:unix_group]
 
-    template params[:path] do
-      source params[:source]
-      case node['platform_family']
-        when 'windows'
-          rights :read, params[:win_user]
-          rights :write, params[:win_user]
-          rights :full_control, params[:win_user]
-          rights :full_control, params[:win_user], :applies_to_children => true
-          group params[:win_group]
-          :top_level
-        else
-          owner params[:unix_user]
-          group params[:unix_group]
-          mode 00755
-          :top_level
-        end
+  template params[:path] do
+    source params[:source]
+    case node['platform_family']
+    when 'windows'
+      rights :read, params[:win_user]
+      rights :write, params[:win_user]
+      rights :full_control, params[:win_user]
+      rights :full_control, params[:win_user], applies_to_children: true
+      group params[:win_group]
+      :top_level
+    else
+      owner params[:unix_user]
+      group params[:unix_group]
+      mode 00755
+      :top_level
     end
+  end
 end
