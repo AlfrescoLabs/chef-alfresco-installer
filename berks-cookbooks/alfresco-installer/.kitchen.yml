@@ -1,0 +1,201 @@
+---
+driver_plugin: ssh
+
+provisioner:
+  name: chef_zero
+
+platforms:
+- name:  ubuntu1004
+  driver_config:
+    username: root
+    password: alfresco
+    hostname: 172.29.102.74
+- name:  ubuntu1204
+  driver_config:
+    username: root
+    password: alfresco
+    hostname: 172.29.101.105
+- name:  redhat55
+  driver_config:
+    username: root
+    password: alfresco
+    hostname: 172.29.100.148
+- name:  redhat65
+  driver_config:
+    username: root
+    password: alfresco
+    hostname: 172.29.101.52
+- name:  suse111
+  driver_config:
+    username: root
+    password: alfresco
+    hostname: 172.29.102.81
+- name:  suse113
+  driver_config:
+    username: root
+    password: alfresco
+    hostname: 172.29.102.80
+- name:  suse12
+  driver_config:
+    username: root
+    password: alfresco
+    hostname: 172.29.101.50
+- name:  solaris112
+  driver_config:
+    hostname: 172.29.101.158
+    username: root
+    password: alfresco1
+- name:  redhat61
+  driver_config:
+    username: root
+    password: alfresco
+    hostname: 172.29.102.3
+- name:  redhat64
+  driver_config:
+    username: root
+    password: alfresco
+    hostname: 172.29.102.2
+- name:  win2012
+  driver_config:
+    hostname: 172.29.102.7
+    port: 5985
+    username: Administrator
+    password: alfresco
+- name:  win2008
+  driver_config:
+    hostname: 172.29.102.10
+    port: 5985
+    username: Administrator
+    password: alfresco
+
+suites:
+
+- name: tomcat
+  excludes:
+    - suse12
+    - redhat61
+    - redhat64
+    - redhat65
+    - ubuntu1204
+    - win2012
+  run_list:
+  - recipe[java-wrapper::java8]
+  - recipe[alfresco-installer::tomcat]
+  attributes: { localPath: false }
+
+- name: installer5
+  excludes:
+    - redhat61
+    - redhat64
+    - solaris112
+    - checklist
+  run_list:
+  - recipe[java-wrapper::java8]
+  - recipe[alfresco-installer::installer]
+  attributes: {
+                localPath: false,
+                START_SERVICES: true,
+                replication.enabled: false,
+                alfresco.cluster.enabled: false,
+                installer: {
+                  disable-components: 'javaalfresco',
+                  enable-components: 'alfrescowcmqs'
+                },
+                sync.cloud.url: 'https://mmhfcloud40a.alfresco.me/alfresco/a/{network}/',
+                outbound.mail.host: '172.29.100.164',
+                outbound.mail.username: 'qalabtest@alfness.com',
+                outbound.mail.password: 'Alf1234'
+              }
+
+- name: installer41
+  excludes:
+    - solaris112
+    - suse12
+    - redhat64
+    - redhat65
+    - ubuntu1204
+    - win2012
+  run_list:
+  - recipe[java-wrapper::java8]
+  - recipe[alfresco-installer::installer]
+  attributes: {
+                localPath: false,
+                index.subsystem.name: 'solr',
+                installer.database-version: 'none',
+                alfresco.version: '4.1.10',
+                START_SERVICES: true,
+                replication.enabled: false,
+                alfresco.cluster.enabled: false,
+                installer: {
+                  enable-components: 'alfrescowcmqs',
+                  disable-components: 'javaalfresco',
+                  downloadpath: 'ftp://172.29.101.56/41N/4.1.10_build30/alfresco-enterprise-4.1.10-installer-linux-x64.bin'
+                },
+                sync.cloud.url: 'https://mmhfcloud40a.alfresco.me/alfresco/a/{network}/',
+                outbound.mail.host: '172.29.100.164',
+                outbound.mail.username: 'qalabtest@alfness.com',
+                outbound.mail.password: 'Alf1234'
+              }
+
+- name: installer42
+  excludes:
+    - redhat61
+    - redhat65
+    - solaris112
+    - suse12
+  run_list:
+  - recipe[java-wrapper::java8]
+  - recipe[alfresco-installer::installer]
+  attributes: {
+                index.subsystem.name: 'solr',
+                installer.database-version: 'none',
+                alfresco.version: '4.2.4.9',
+                localPath: false,
+                START_SERVICES: true,
+                replication.enabled: false,
+                alfresco.cluster.enabled: false,
+                installer: {
+                  disable-components: 'javaalfresco',
+                  enable-components: 'alfrescowcmqs',
+                  downloadpath: 'https://releases.alfresco.com/Enterprise-4.2/4.2.4/PATCH-4.2.4.9/build-00127/ALL/alfresco-enterprise-4.2.4.9-installer-linux-x64.bin'
+                },
+                sync.cloud.url: 'https://mmhfcloud40a.alfresco.me/alfresco/a/{network}/',
+                outbound.mail.host: '172.29.100.164',
+                outbound.mail.username: 'qalabtest@alfness.com',
+                outbound.mail.password: 'Alf1234'
+              }
+
+- name: replication
+  excludes:
+    - suse12
+    - solaris112
+    - ubuntu1204
+    - win2012
+    - checklist
+  run_list:
+  - recipe[alfresco-installer::replication]
+  attributes:
+    localPath: false
+    NFS_server: true
+    dir_server: "/opt/ReplicateServer"
+
+- name: replicationserver
+  excludes:
+    - suse12
+    - solaris112
+    - ubuntu1204
+    - checklist
+  run_list:
+  - recipe[alfresco-installer::replication_server]
+
+- name: lbwin
+  excludes:
+    - suse12
+    - solaris112
+    - ubuntu1204
+    - redhat65
+    - redhat64
+    - redhat61
+    - checklist
+  run_list:
+  - recipe[alfresco-installer::loadbalancer]

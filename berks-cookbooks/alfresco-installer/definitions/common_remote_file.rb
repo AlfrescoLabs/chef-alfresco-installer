@@ -1,0 +1,44 @@
+# ~FC015
+#
+# Copyright (C) 2005-2015 Alfresco Software Limited.
+#
+# This file is part of Alfresco
+#
+# Alfresco is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Alfresco is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
+#
+
+define :common_remote_file, :path => nil, :source => nil do
+  params[:path] ||= params[:name]
+  params[:win_user] ||= params[:win_user]
+  params[:win_group] ||= params[:win_group]
+  params[:unix_user] ||= params[:unix_user]
+  params[:unix_group] ||= params[:unix_group]
+
+    remote_file params[:path] do
+      source params[:source]
+      case node['platform_family']
+        when 'windows'
+          rights :read, params[:win_user]
+          rights :write, params[:win_user]
+          rights :full_control, params[:win_user]
+          rights :full_control, params[:win_user], :applies_to_children => true
+          group params[:win_group]
+        else
+          owner params[:unix_user]
+          group params[:unix_group]
+          mode 00755
+        end
+        action :create_if_missing
+    end
+end

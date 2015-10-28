@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE service_bundle SYSTEM "/usr/share/lib/xml/dtd/service_bundle.dtd.1">
+<service_bundle type='manifest' name='tomcat'>
+<service name='application/tomcat' type='service' version='1'>
+
+   <single_instance />
+
+   <exec_method
+      type='method'
+      name='start'
+      exec='<%=node['installer']['directory']%>/tomcat/bin/startup.sh'
+      timeout_seconds='60' >
+   <method_context>
+      <method_environment>
+         <envvar name="JAVA_OPTS" value="-XX:+DisableExplicitGC -Djava.awt.headless=true -Dalfresco.home=<%=node['installer']['directory']%> -Dcom.sun.management.jmxremote -XX:ReservedCodeCacheSize=128m -XX:MaxPermSize=256M -Xms512M -Xmx2048M" />
+      </method_environment>
+   </method_context>
+   </exec_method>
+
+   <exec_method
+      type='method'
+      name='stop'
+      exec='<%=node['installer']['directory']%>/tomcat/bin/shutdown.sh'
+      timeout_seconds='60' />
+
+   <instance name='default' enabled='false' />
+
+   <stability value='Unstable' />
+
+   <template>
+      <common_name>
+         <loctext xml:lang='C'>Apache Tomcat 7.0.5.3</loctext>
+      </common_name>
+      <documentation>
+         <manpage title='tomcat' section='1' manpath='/usr/man' />
+      </documentation>
+   </template>
+
+</service>
+</service_bundle>

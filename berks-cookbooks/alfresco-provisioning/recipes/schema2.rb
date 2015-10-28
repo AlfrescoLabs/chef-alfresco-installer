@@ -1,23 +1,20 @@
-gem_package 'chef-provisioning-ssh' do
-  action :install
-end
-
 require 'chef/provisioning/ssh_driver/driver'
 
 with_driver 'ssh'
-# with_chef_server "https://chef-node-3/organizations/alfchef",
-#                     :client_name => 'bamboo1',
-#                     :signing_key_filename => '/opt/.chef/bamboo1.pem'
+# with_chef_server "https://chef-node-3:443/organizations/alfchef"
+                    #  :client_name => Chef::Config[:node_name],
+                    #  :signing_key_filename => Chef::Config[:client_key]
 # with_chef_server "http://172.29.101.100:4000"
-with_chef_local_server :chef_repo_path => '/tmp/kitchen/cache', :cookbook_path => '/tmp/kitchen/cache/cookbooks'
+# with_chef_local_server :chef_repo_path => '/tmp/kitchen/cache', :cookbook_path => '/tmp/kitchen/cache/cookbooks'
 
 machine_batch 'Initial setup on nodes and lb' do
 
-  clusternode1='172.29.101.52'
-  clusternode2='172.29.101.236'
-  loadbalancer='172.29.101.235'
+  clusternode1=node['node1']
+  clusternode2=node['node2']
+  loadbalancer=node['loadbalancer']
   username='root'
-  installerPath='ftp://172.29.101.56/50N/5.0.2/b34/alfresco-enterprise-5.0.2-installer-linux-x64.bin'
+
+  installerPath='ftp://172.29.101.56/51/b295/alfresco-enterprise-installer-20150904-SNAPSHOT-295-linux-x64.bin'
 
   machine 'node1' do
     action [:ready, :setup, :converge]
@@ -28,14 +25,14 @@ machine_batch 'Initial setup on nodes and lb' do
                             :password => 'alfresco'
                         }
                     }
-    run_list %w(recipe[java-wrapper::java8] recipe[chef-alfresco-installer::installer])
+    run_list %w(recipe[java-wrapper::java8] recipe[alfresco-installer::installer])
     attributes 'installer' =>
                    {'nodename' => 'node1',
                     'disable-components' => 'javaalfresco,postgres',
                     'downloadpath' => installerPath},
-               'db.url' => "jdbc:postgresql://#{loadbalancer}:5432/${db.name}",
-               'db.password' => 'alfresco',
-               'db.username' => 'alfresco',
+               'installer.database-version' => 'oracle',
+               'installer.database-type' => '12c',
+               'db.driver.filename' => 'ojdbc7.jar',
                'replication.enabled' => 'true',
                'alfresco.cluster.enabled' => 'true',
                'additional_cluster_members' => [clusternode2],
@@ -55,14 +52,14 @@ machine_batch 'Initial setup on nodes and lb' do
                             :password => 'alfresco'
                         }
                     }
-    run_list %w(recipe[java-wrapper::java8] recipe[chef-alfresco-installer::installer])
+    run_list %w(recipe[java-wrapper::java8] recipe[alfresco-installer::installer])
     attributes 'installer' =>
                    {'nodename' => 'node2',
                     'disable-components' => 'javaalfresco,postgres',
                     'downloadpath' => installerPath},
-               'db.url' => "jdbc:postgresql://#{loadbalancer}:5432/${db.name}",
-               'db.password' => 'alfresco',
-               'db.username' => 'alfresco',
+               'installer.database-version' => 'oracle',
+               'installer.database-type' => '12c',
+               'db.driver.filename' => 'ojdbc7.jar',
                'replication.enabled' => 'true',
                'alfresco.cluster.enabled' => 'true',
                'additional_cluster_members' => [clusternode1],
@@ -82,7 +79,7 @@ machine_batch 'Initial setup on nodes and lb' do
                             :password => 'alfresco'
                         }
                     }
-    run_list %w(recipe[java-wrapper::java8] recipe[chef-alfresco-installer::replication_server] recipe[chef-alfresco-installer::loadbalancer] recipe[alfresco-dbwrapper::postgres] recipe[chef-alfresco-installer::installer])
+    run_list %w(recipe[java-wrapper::java8] recipe[alfresco-installer::replication_server] recipe[alfresco-installer::loadbalancer] recipe[alfresco-dbwrapper::oracle] recipe[alfresco-installer::installer])
     attributes 'lb' => {
                    'ips_and_nodenames' => [
                        {
@@ -98,9 +95,8 @@ machine_batch 'Initial setup on nodes and lb' do
                    {'nodename' => 'LB',
                     'disable-components' => 'javaalfresco,postgres,alfrescowcmqs,alfrescosolr,alfrescogoogledocs,libreofficecomponent',
                     'downloadpath' => installerPath},
-               'postgres' =>
-                   {'installpostgres' => true,
-                    'createdb' => true},
+               'db.driver.url' => 'ftp://172.29.101.56/databases/ojdbc7.jar',
+               'db.driver.filename' => 'ojdbc7.jar',
                'replication.enabled' => 'false',
                'alfresco.cluster.enabled' => 'true',
                'install_share_war' => false,
@@ -117,7 +113,7 @@ end
 machine_batch 'replication setup' do
   %w(node1 node2).each do |name|
     machine name do
-      recipe 'chef-alfresco-installer::replication_client'
+      recipe 'alfresco-installer::replication_client'
       action :converge
     end
   end

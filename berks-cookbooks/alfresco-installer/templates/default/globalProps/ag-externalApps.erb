@@ -1,0 +1,43 @@
+ooo.enabled=<%= node['ooo.enabled']%>
+ooo.port=<%= node['ooo.port']%>
+<% if node['force_specific_external_apps_path'] %>
+ooo.exe=<%= node['ooo.exe']%>
+img.root=<%= node['img.root']%>
+img.gslib=<%= node['img.gslib']%>
+img.config=${img.root}
+img.coders=<%= node['img.coders']%>
+img.dyn=<%= node['img.dyn']%>
+img.exe=<%= node['img.exe']%>
+swf.exe=<%= node['swf.exe']%>
+swf.languagedir=<%= node['swf.languagedir']%>
+
+jodconverter.officeHome=<%= node['jodconverter.officeHome']%>
+<% else %>
+    <% if node['platform_family'] == 'windows' %>
+ooo.exe=<%= node['installer']['directory']%>/libreoffice/App/libreoffice/program/soffice.exe
+
+img.root=<%= node['installer']['windirectory']%>\\imagemagick
+img.config=${img.root}
+img.coders=<%= node['installer']['windirectory']%>\\imagemagick\\modulers\\coders
+img.gslib=<%= node['installer']['windirectory']%>\\common\\lib
+img.exe=<%= node['installer']['windirectory']%>\\imagemagick\\convert.exe
+
+swf.exe=<%= node['installer']['directory']%>/swftools/pdf2swf.exe
+swf.languagedir=<%= node['installer']['directory']%>/swftools/japanese
+
+jodconverter.officeHome=<%= node['installer']['directory']%>/libreoffice/App/libreoffice
+	<% else %>
+ooo.exe=<%= node['installer']['directory']%>/libreoffice/program/soffice
+
+img.root=<%= node['installer']['directory']%>/common
+img.dyn=<%= node['installer']['directory']%>/common/lib
+img.exe=<%= node['installer']['directory']%>/common/bin/convert
+
+swf.exe=<%= node['installer']['directory']%>/common/bin/pdf2swf
+swf.languagedir=<%= node['installer']['directory']%>/common/japanese
+
+jodconverter.officeHome=<%= node['installer']['directory']%>/libreoffice
+	<% end %>
+<% end %>
+jodconverter.enabled=<%= node['jodconverter.enabled']%>
+jodconverter.portNumbers=<%= node['jodconverter.portNumbers']%>

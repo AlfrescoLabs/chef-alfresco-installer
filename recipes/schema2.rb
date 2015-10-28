@@ -1,13 +1,13 @@
 gem_package 'chef-provisioning-ssh' do
-  action :install
+  action :remove
 end
 
 require 'chef/provisioning/ssh_driver/driver'
 
 with_driver 'ssh'
-# with_chef_server "https://chef-node-3/organizations/alfchef",
-#                      :client_name => Chef::Config[:node_name],
-#                      :signing_key_filename => Chef::Config[:client_key]
+with_chef_server "https://chef-node-3:443/organizations/alfchef"
+                     :client_name => Chef::Config[:node_name],
+                     :signing_key_filename => Chef::Config[:client_key]
 # with_chef_server "http://172.29.101.100:4000"
 # with_chef_local_server :chef_repo_path => '/tmp/kitchen/cache', :cookbook_path => '/tmp/kitchen/cache/cookbooks'
 

@@ -1,0 +1,14 @@
+# set variables
+set prompt1 all
+set prompt2 y
+spawn pkgadd -d http://get.opencsw.org/now
+# Look for first prompt
+expect "?,??,q]:"
+# Send response to first prompt
+send "$prompt1\r"
+# Look for second prompt
+set timeout 3000
+expect "y,n,?]"
+# Send response to second prompt
+send "$prompt2\r"
+expect "successful."

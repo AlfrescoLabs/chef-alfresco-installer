@@ -1,0 +1,15 @@
+db.driver=<%= node['db.driver']%>
+db.username=<%= node['db.username']%>
+db.password=<%= node['db.password']%>
+db.name=<%= node['db.name']%>
+
+#To use encrypted properties for the database uncomment the following line
+# the encrypted value is added into alfresco-encrypted.properties
+#db.password=${db.password.enc}
+#db.username=${db.username.enc}
+
+db.url=<%= node['db.url']%>
+
+# Note: your database must also be able to accept at least this many connections.  Please see your database documentation for instructions on how to configure this.
+db.pool.max=<%= node['db.pool.max']%>
+db.pool.validate.query=<%= node['db.pool.validate.query']%>

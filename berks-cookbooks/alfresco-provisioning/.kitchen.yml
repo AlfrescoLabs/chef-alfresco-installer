@@ -1,0 +1,26 @@
+---
+driver_plugin: ssh
+
+provisioner:
+  name: chef_zero
+
+platforms:
+- name:  provisioner
+  driver_config:
+    hostname: 172.29.101.100
+    username: root
+    password: alfresco
+
+suites:
+- name: 50XS1
+  run_list:
+  - recipe[alfresco-metal::50XS1]
+- name: 50XS5
+  run_list:
+  - recipe[alfresco-metal::50XS5]
+- name: 50XS5
+  run_list:
+  - recipe[alfresco-metal::50XS6]
+- name: singleNode
+  run_list:
+  - recipe[alfresco-metal::singleNode]

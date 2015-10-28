@@ -1,0 +1,51 @@
+#
+# Copyright (C) 2005-2015 Alfresco Software Limited.
+#
+# This file is part of Alfresco
+#
+# Alfresco is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Alfresco is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
+#/
+---
+driver_plugin: ssh
+
+provisioner:
+  name: chef_zero
+
+platforms:
+- name:  ubuntu1204
+  driver_config:
+    username: root
+    password: alfresco
+    hostname: 172.29.101.46
+- name:  redhat65
+  driver_config:
+    username: root
+    password: alfresco
+    hostname: 172.29.101.52
+- name:  solaris112
+  driver_config:
+    hostname: 172.29.101.64
+    username: root
+    password: alfresco1
+- name:  win2012
+  driver_config:
+    hostname: 172.29.101.51
+    port: 5985
+    username: 'Administrator'
+    password: 'alfresco'
+
+suites:
+- name: java8
+  run_list:
+  - recipe[java-wrapper::java8]

@@ -1,0 +1,36 @@
+{
+  "name": "alfresco-installer",
+  "description": "Installs/Configures alfresco-chef",
+  "long_description": "alfresco-installer Cookbook\n======================\nThis is a cookbook for installing alfresco using multiple deployement schemas and platforms\n\nCurrently supported OS's and Alfresco versions:\n\n| OS\\Alfresco Version | 5.1 | 5.0 | 4.2 | 4.1 |\n|-------------------|-----|-----|-----|-----|\n| RHEL 5.5 |  |  |  | X |\n| RHEL 6.1 |  |  |  | X |\n| RHEL 6.4 |  |  | X |  |\n| RHEL 6.5 | X | X |  |  |\n| RHEL 7.1 | X |  |  |  |\n| WinServer 2008 R2 |  |  | X | X |\n| WinServer 2012 R2 |  |  | X |  |\n| Solaris 11.2 |  | X |  |  |\n| Ubuntu 10.04 |  |  |  | X |\n| Ubuntu 12.04 |  | X | X |  |\n| Suse 11.3 |  | X | X | X |\n| Suse 12 |  | X |  |  |\n\nRequirements\n------------\n- java\n- apt\n- chef-client\n\nUsage\n-----\n#### alfresco-installer::installer\n\nAdding the alfresco-installer::installer recipe and setting the build location on the node attribute\n`default['installer']['downloadpath']` will be sufficient to spin up the installation and configuration of alfresco\n\nIf you want to add additional amps to your installation then add additional attributes as follows:\n```\n# default['amps']['alfresco']['my-amp'] = \"https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/alfresco-rm/2.3.c/alfresco-rm-2.3.c.amp\"\n# default['amps']['share']['my-share-amp'] = \"https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/alfresco-rm-share/2.3.c/alfresco-rm-share-2.3.c.amp\"\n\n```\n\n#### alfresco-installer::loadbalancer\n\nInstalls an Apache Load balancer on:\n- windows 2012 server\n- redhat 6.5\n\nWill balance the nodes given in the attribute\n```\ndefault['lb']['ips_and_nodenames'] = [\n {:ip=> '172.29.101.97', :nodename=> 'alf1'},\n {:ip=> '172.29.101.99', :nodename=> 'alf2'}\n]\n```\n\n#### alfresco-installer::replication_server and replication_client\n\nThis will setup nfs server and client components\n- windows 2012 server\n- redhat 6.5\n\njust set these attributes on the client\n```\ndefault['replication_remote_ip']='ipaddress of the nfs server'\ndefault['replication.enabled']='true'\n```\n\nand these attributes on server\n```\ndefault['replication.enabled']='true'\n```\n\nLicense and Authors\n-------------------\nAuthors: Sergiu Vidrascu (vsergiu@hotmail.com)\n",
+  "maintainer": "Alfresco",
+  "maintainer_email": "sergiu.vidrascu@ness.com",
+  "license": "2005-2015 Alfresco Software Limited",
+  "platforms": {
+  },
+  "dependencies": {
+    "chef-client": "~> 4.3.0",
+    "apt": "~> 2.7.0",
+    "line": "~> 0.6.2",
+    "windows": "~> 1.37.0",
+    "nfs": "~> 2.2.2"
+  },
+  "recommendations": {
+  },
+  "suggestions": {
+  },
+  "conflicting": {
+  },
+  "providing": {
+  },
+  "replacing": {
+  },
+  "attributes": {
+  },
+  "groupings": {
+  },
+  "recipes": {
+  },
+  "version": "1.1.4",
+  "source_url": "",
+  "issues_url": ""
+}
