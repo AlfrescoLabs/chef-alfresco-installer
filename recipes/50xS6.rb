@@ -28,7 +28,7 @@ machine_batch 'Initial setup on nodes and lb' do
                             :password => 'alfresco'
                         }
                     }
-    run_list %w(recipe[java-wrapper::java8] recipe[alfresco-chef::installer])
+    run_list %w(recipe[java-wrapper::java8] recipe[alfresco-installer::installer])
     attributes 'installer' =>
                    {'nodename' => 'node1',
                     'disable-components' => 'javaalfresco,postgres'},
@@ -58,7 +58,7 @@ machine_batch 'Initial setup on nodes and lb' do
                             :password => 'alfresco'
                         }
                     }
-    run_list %w(recipe[java-wrapper::java8] recipe[alfresco-chef::installer])
+    run_list %w(recipe[java-wrapper::java8] recipe[alfresco-installer::installer])
     attributes 'installer' =>
                    {'nodename' => 'node2',
                     'disable-components' => 'javaalfresco,postgres'},
@@ -87,7 +87,7 @@ machine_batch 'Initial setup on nodes and lb' do
                             :password => 'alfresco'
                         }
                     }
-    run_list %w(recipe[java-wrapper::java8] recipe[alfresco-chef::replication_server] recipe[alfresco-chef::loadbalancer] recipe[alfresco-dbwrapper::mysql] recipe[alfresco-chef::installer])
+    run_list %w(recipe[java-wrapper::java8] recipe[alfresco-installer::replication_server] recipe[alfresco-installer::loadbalancer] recipe[alfresco-dbwrapper::mysql] recipe[alfresco-installer::installer])
     attributes 'lb' => {
                    'ips_and_nodenames' => [
                        {
@@ -118,7 +118,7 @@ end
 machine_batch 'replication setup' do
   %w(node1 node2).each do |name|
     machine name do
-      recipe 'alfresco-chef::replication_client'
+      recipe 'alfresco-installer::replication_client'
       action :converge
     end
   end
@@ -140,4 +140,3 @@ machine 'node2' do
   action :nothing
   attribute 'START_SERVICES', true
 end
-

@@ -1,48 +1,54 @@
 DEPENDENCIES
   alfresco-dbwrapper
     git: https://github.com/AlfrescoTestAutomation/alfresco-chef.git
-    revision: ea89b5d01ff123380e219a5d7a608f1ae16d9c03
+    revision: 0a965961cf0c04e2c8bbfe2d5fb6f3d3decec207
     branch: alfresco-dbwrapper
-  alfresco-metal
+  alfresco-installer
+    git: https://github.com/AlfrescoTestAutomation/chef-alfresco-installer.git
+    revision: 9986ca893cfadafe6250f43dfda2e4a9cbf9f8e9
+    branch: master
+  alfresco-provisioning
     path: .
     metadata: true
-  chef-alfresco-installer
-    path: ../chef-alfresco-installer
   java-wrapper
     git: https://github.com/AlfrescoTestAutomation/alfresco-chef.git
-    revision: 8b6aa84ddc3e175eff374e501d46ce66ba46279b
+    revision: 4e381b7435afcf9546bf13745c05707e30953fed
     branch: java-wrapper
 
 GRAPH
-  alfresco-dbwrapper (0.1.0)
-  alfresco-metal (0.1.0)
+  alfresco-dbwrapper (0.2.0)
+  alfresco-installer (1.1.4)
+    apt (~> 2.7.0)
+    chef-client (~> 4.3.0)
+    line (~> 0.6.2)
+    nfs (~> 2.2.2)
+    windows (~> 1.37.0)
+  alfresco-provisioning (0.1.0)
     alfresco-dbwrapper (>= 0.0.0)
+    alfresco-installer (>= 0.0.0)
     apt (>= 0.0.0)
-    chef-alfresco-installer (>= 0.0.0)
     chef-client (>= 0.0.0)
     java-wrapper (>= 0.0.0)
   apt (2.7.0)
-  aws (2.7.1)
-  chef-alfresco-installer (1.0.0)
-    apt (~> 2.7.0)
-    chef-client (~> 4.3.0)
-    line (~> 0.6.1)
-    nfs (~> 2.2.2)
-    windows (~> 1.37.0)
-  chef-client (4.3.0)
+  aws (2.7.2)
+  chef-client (4.3.1)
     cron (>= 1.2.0)
     logrotate (>= 1.2.0)
-    windows (~> 1.11)
-  chef_handler (1.1.9)
+    windows (~> 1.37)
+  chef_handler (1.2.0)
   cron (1.6.1)
-  java (1.31.0)
+  java (1.35.0)
   java-wrapper (0.2.5)
     aws (>= 0.0.0)
     java (>= 0.0.0)
     windows (>= 0.0.0)
-  line (0.6.1)
-  logrotate (1.9.1)
-  nfs (2.2.2)
+  line (0.6.2)
+  logrotate (1.9.2)
+  nfs (2.2.5)
     line (>= 0.0.0)
+    sysctl (>= 0.0.0)
+  ohai (2.0.1)
+  sysctl (0.6.2)
+    ohai (>= 0.0.0)
   windows (1.37.0)
     chef_handler (>= 0.0.0)
