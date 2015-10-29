@@ -37,8 +37,8 @@ end
   end
 end
 
-postgres_package_name = ::File.basename(node['url']['postgresql'])
-remote_file "/opt/#{postgres_package_name}" do
+postgres_package_name = ::File.basename(node['url']['postgresql'],".*")
+remote_file "/opt/#{postgres_package_name}.tar.gz" do
     source  node['url']['postgresql']
     owner 'root'
     group 'root'
@@ -50,8 +50,8 @@ bash 'Install postgres' do
     user 'root'
     cwd '/opt'
     code <<-EOH
-    tar xvf #{node['url']['package']}.tar.gz
-    cd #{node['url']['package']} && ./configure && make && make install
+    tar xvf #{postgres_package_name}.tar.gz
+    cd #{postgres_package_name} && ./configure && make && make install
     PATH=/usr/local/pgsql/bin:$PATH
 	export PATH
 	adduser postgres
