@@ -25,7 +25,9 @@ bash 'install package repos' do
 	rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
 	rpm -Uvh http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm
 	rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+  rm -rf /etc/yum.repos.d/dvd
 	EOH
+  not_if { File.exists?('/etc/yum.repos.d/epel.repo') }
 end
 # #TODO fix package installations when dealing with redhat 7
 
