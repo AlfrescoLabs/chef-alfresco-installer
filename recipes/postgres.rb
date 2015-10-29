@@ -37,7 +37,7 @@ end
   end
 end
 
-postgres_package_name = ::File.basename(node['url']['postgresql'],".*")
+postgres_package_name = ::File.basename(node['url']['postgresql'],".tar.gz")
 remote_file "/opt/#{postgres_package_name}.tar.gz" do
     source  node['url']['postgresql']
     owner 'root'
