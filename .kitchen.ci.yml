@@ -7,28 +7,25 @@ provisioner:
 platforms:
 - name:  deploy
   driver_config:
-    username: <%= ENV['Target_VM_Username'] %>
-    password: <%= ENV['Target_VM_Password'] %>
-    hostname: <%= ENV['Target_VM_IP'] %>
+    username: '<%= ENV['Target_VM_Username'] %>'
+    password: '<%= ENV['Target_VM_Password'] %>'
+    hostname: '<%= ENV['Target_VM_IP'] %>'
 
 suites:
 - name: postgres
   run_list:
   - recipe[alfresco-dbwrapper::postgres]
-
-- name: specific_postgres
+- name: specific-postgres
   run_list:
   - recipe[alfresco-dbwrapper::postgres]
   attributes: {
                 url: {
-                  postgresql: <%= ENV['PostgresVersion'] %>
+                  postgresql: '<%= ENV['PostgresVersion'] %>'
                 }
               }
-
 - name: mysql
   run_list:
   - recipe[alfresco-dbwrapper::mysql]
-
 - name: mysql56
   run_list:
   - recipe[alfresco-dbwrapper::mysql]
@@ -40,8 +37,6 @@ suites:
                     }
                 }
               }
-
-
 - name: oracle
   run_list:
   - recipe[alfresco-dbwrapper::oracle]
@@ -53,6 +48,6 @@ suites:
   - recipe[alfresco-dbwrapper::sqlserver]
   attributes: {
                 sql_server: {
-                  version: <%= ENV['SQLserverVersion'] %>
+                  version: '<%= ENV['SQLserverVersion'] %>'
                 }
               }
