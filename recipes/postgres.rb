@@ -16,18 +16,18 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
 #/
-bash 'install package repos' do
-	user 'root'
-	cwd '/tmp'
-	code <<-EOH
-	rpm -Uvh http://repo.webtatic.com/yum/el6/latest.rpm
-	rpm -Uvh http://dl.atrpms.net/all/atrpms-repo-6-7.el6.x86_64.rpm
-	rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
-	rpm -Uvh http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm
-	rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
-	EOH
-end
-#TODO fix package installations when dealing with redhat 7
+# bash 'install package repos' do
+# 	user 'root'
+# 	cwd '/tmp'
+# 	code <<-EOH
+# 	rpm -Uvh http://repo.webtatic.com/yum/el6/latest.rpm
+# 	rpm -Uvh http://dl.atrpms.net/all/atrpms-repo-6-7.el6.x86_64.rpm
+# 	rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
+# 	rpm -Uvh http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm
+# 	rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+# 	EOH
+# end
+# #TODO fix package installations when dealing with redhat 7
 
 %w{gcc readline-devel zlib zlib-devel}.each do |pkg|
   package pkg do
@@ -35,7 +35,8 @@ end
   end
 end
 
-remote_file "/opt/#{node['url']['package']}.tar.gz" do
+postgres_package_name = ::File.basename(node['url']['postgresql'])
+remote_file "/opt/#{postgres_package_name}" do
     source  node['url']['postgresql']
     owner 'root'
     group 'root'

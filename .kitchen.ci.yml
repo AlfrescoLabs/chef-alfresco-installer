@@ -1,0 +1,58 @@
+---
+driver_plugin: ssh
+
+provisioner:
+  name: chef_zero
+
+platforms:
+- name:  deploy
+  driver_config:
+    username: <%= ENV['Target_VM_Username'] %>
+    password: <%= ENV['Target_VM_Password'] %>
+    hostname: <%= ENV['Target_VM_IP'] %>
+
+suites:
+- name: postgres
+  run_list:
+  - recipe[alfresco-dbwrapper::postgres]
+
+- name: specific_postgres
+  run_list:
+  - recipe[alfresco-dbwrapper::postgres]
+  attributes: {
+                url: {
+                  postgresql: <%= ENV['PostgresVersion'] %>
+                }
+              }
+
+- name: mysql
+  run_list:
+  - recipe[alfresco-dbwrapper::mysql]
+
+- name: mysql56
+  run_list:
+  - recipe[alfresco-dbwrapper::mysql]
+  attributes: {
+                mysql: {
+                  yum: {
+                      version: 5.6.26-2.el7',
+                      repository: 'http://dev.mysql.com/get/mysql-community-release-el7-5.noarch.rpm'
+                    }
+                }
+              }
+
+
+- name: oracle
+  run_list:
+  - recipe[alfresco-dbwrapper::oracle]
+- name: mariadb
+  run_list:
+  - recipe[alfresco-dbwrapper::mariadb]
+- name: sqlserver
+  run_list:
+  - recipe[alfresco-dbwrapper::sqlserver]
+  attributes: {
+                sql_server: {
+                  version: <%= ENV['SQLserverVersion'] %>
+                }
+              }
