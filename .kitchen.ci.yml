@@ -1,0 +1,102 @@
+---
+driver_plugin: ssh
+
+provisioner:
+  name: chef_zero
+
+platforms:
+- name:  deploy
+  driver_config:
+    username: '<%= ENV['Target_VM_Username'] %>'
+    password: '<%= ENV['Target_VM_Password'] %>'
+    hostname: '<%= ENV['Target_VM_IP'] %>'
+
+suites:
+
+- name: tomcat
+  run_list:
+  - recipe[java-wrapper::java8]
+  - recipe[alfresco-installer::tomcat]
+  attributes: { localPath: false }
+
+- name: installer5
+  run_list:
+  - recipe[java-wrapper::java8]
+  - recipe[alfresco-installer::installer]
+  attributes: {
+                localPath: false,
+                START_SERVICES: true,
+                replication.enabled: false,
+                alfresco.cluster.enabled: false,
+                installer: {
+                  disable-components: 'javaalfresco',
+                  enable-components: 'alfrescowcmqs',
+                  downloadpath: '<%= ENV['DOWNLOAD_PATH'] %>'
+                },
+                sync.cloud.url: 'https://mmhfcloud40a.alfresco.me/alfresco/a/{network}/',
+                outbound.mail.host: '172.29.100.164',
+                outbound.mail.username: 'qalabtest@alfness.com',
+                outbound.mail.password: 'Alf1234'
+              }
+
+- name: installer41
+  run_list:
+  - recipe[java-wrapper::java6]
+  - recipe[alfresco-installer::installer]
+  attributes: {
+                localPath: false,
+                index.subsystem.name: 'solr',
+                installer.database-version: 'none',
+                alfresco.version: '4.1',
+                START_SERVICES: true,
+                replication.enabled: false,
+                alfresco.cluster.enabled: false,
+                installer: {
+                  enable-components: 'alfrescowcmqs',
+                  disable-components: 'javaalfresco',
+                  downloadpath: '<%= ENV['DOWNLOAD_PATH'] %>'
+                },
+                sync.cloud.url: 'https://mmhfcloud40a.alfresco.me/alfresco/a/{network}/',
+                outbound.mail.host: '172.29.100.164',
+                outbound.mail.username: 'qalabtest@alfness.com',
+                outbound.mail.password: 'Alf1234'
+              }
+
+- name: installer42
+  run_list:
+  - recipe[java-wrapper::java7]
+  - recipe[alfresco-installer::installer]
+  attributes: {
+                index.subsystem.name: 'solr',
+                installer.database-version: 'none',
+                alfresco.version: '4.2',
+                localPath: false,
+                START_SERVICES: true,
+                replication.enabled: false,
+                alfresco.cluster.enabled: false,
+                installer: {
+                  disable-components: 'javaalfresco',
+                  enable-components: 'alfrescowcmqs',
+                  downloadpath: '<%= ENV['DOWNLOAD_PATH'] %>'
+                },
+                sync.cloud.url: 'https://mmhfcloud40a.alfresco.me/alfresco/a/{network}/',
+                outbound.mail.host: '172.29.100.164',
+                outbound.mail.username: 'qalabtest@alfness.com',
+                outbound.mail.password: 'Alf1234'
+              }
+
+- name: replication
+  run_list:
+  - recipe[alfresco-installer::replication]
+  attributes:
+    localPath: false
+    NFS_server: true
+    dir_server: "/opt/ReplicateServer"
+
+- name: replicationserver
+  run_list:
+  - recipe[alfresco-installer::replication_server]
+
+- name: lbwin
+  run_list:
+  - recipe[alfresco-installer::loadbalancer]
