@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/AlfrescoTestAutomation/chef-alfresco-installer.svg?branch=master)](https://travis-ci.org/AlfrescoTestAutomation/chef-alfresco-installer)
+
 alfresco-installer Cookbook
 ======================
 This is a cookbook for installing alfresco using multiple deployement schemas and platforms
