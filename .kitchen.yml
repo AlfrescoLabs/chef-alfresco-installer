@@ -14,7 +14,7 @@ platforms:
   driver_config:
     username: root
     password: alfresco
-    hostname: 172.29.101.105
+    hostname: 172.29.102.114
 - name:  redhat55
   driver_config:
     username: root
@@ -99,7 +99,8 @@ suites:
                 alfresco.cluster.enabled: false,
                 installer: {
                   disable-components: 'javaalfresco',
-                  enable-components: 'alfrescowcmqs'
+                  enable-components: 'alfrescowcmqs',
+                  downloadpath: 'ftp://172.29.101.56/50N/5.0.2/b302/alfresco-enterprise-5.0.2-SNAPSHOT-installer-linux-x64.bin'
                 },
                 sync.cloud.url: 'https://mmhfcloud40a.alfresco.me/alfresco/a/{network}/',
                 outbound.mail.host: '172.29.100.164',

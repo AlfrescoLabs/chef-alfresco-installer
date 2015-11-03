@@ -71,8 +71,8 @@ node.default['alfresco']['keystore'] = "#{node['installer']['directory']}/alf_da
 node.default['alfresco']['keystore_file'] = "#{node['alfresco']['keystore']}/ssl.keystore"
 node.default['alfresco']['truststore_file'] = "#{node['alfresco']['keystore']}/ssl.truststore"
 
-common_remote_file 'download alfresco build' do
-  source node['installer']['downloadpath']
+alfRemoteFile 'download alfresco build' do
+  source_url node['installer']['downloadpath']
   path node['installer']['local']
   win_user 'Administrator'
   win_group 'Administrators'
@@ -103,8 +103,8 @@ end
 if node['amps']
   if node['amps']['alfresco']
     node['amps']['alfresco'].each do |_ampName, url|
-      common_remote_file "#{node['installer']['directory']}/amps/#{::File.basename(url)}" do
-        source url
+      alfRemoteFile "#{node['installer']['directory']}/amps/#{::File.basename(url)}" do
+        source_url url
         win_user win_user
         win_group win_group
         unix_user unix_user
@@ -115,8 +115,8 @@ if node['amps']
 
   if node['amps']['share']
     node['amps']['share'].each do |_ampName, url|
-      common_remote_file "#{node['installer']['directory']}/amps_share/#{::File.basename(url)}" do
-        source url
+      alfRemoteFile "#{node['installer']['directory']}/amps_share/#{::File.basename(url)}" do
+        source_url url
         win_user win_user
         win_group win_group
         unix_user unix_user
@@ -223,16 +223,16 @@ else
   end
 end
 
-common_template node['paths']['alfrescoGlobal'] do
-  source 'globalProps/alfresco-global.properties.erb'
+alfTemplate node['paths']['alfrescoGlobal'] do
+  source_url 'globalProps/alfresco-global.properties.erb'
   win_user win_user
   win_group win_group
   unix_user unix_user
   unix_group unix_group
 end
 
-common_template node['paths']['wqsCustomProperties'] do
-  source 'customProps/wqsapi-custom.properties.erb'
+alfTemplate node['paths']['wqsCustomProperties'] do
+  source_url 'customProps/wqsapi-custom.properties.erb'
   win_user win_user
   win_group win_group
   unix_user unix_user
@@ -240,8 +240,8 @@ common_template node['paths']['wqsCustomProperties'] do
 end
 
 if node['installer.database-version'] != 'none' # ~FC023 : Using definitions here, cannot use only_if
-  common_remote_file node['paths']['dbDriverLocation'] do
-    source node['db.driver.url']
+  alfRemoteFile node['paths']['dbDriverLocation'] do
+    source_url node['db.driver.url']
     win_user win_user
     win_group win_group
     unix_user unix_user
@@ -250,8 +250,8 @@ if node['installer.database-version'] != 'none' # ~FC023 : Using definitions her
 end
 
 if node['paths']['licensePath'] && node['paths']['licensePath'].length > 0 # ~FC023 : Using definitions here, cannot use only_if
-  common_remote_file node['paths']['licensePath'] do
-    source node['alfresco.cluster.prerequisites']
+  alfRemoteFile node['paths']['licensePath'] do
+    source_url node['alfresco.cluster.prerequisites']
     win_user win_user
     win_group win_group
     unix_user unix_user
@@ -259,8 +259,8 @@ if node['paths']['licensePath'] && node['paths']['licensePath'].length > 0 # ~FC
   end
 end
 
-common_template node['paths']['tomcatServerXml'] do
-  source 'tomcat/server.xml.erb'
+alfTemplate node['paths']['tomcatServerXml'] do
+  source_url 'tomcat/server.xml.erb'
   win_user win_user
   win_group win_group
   unix_user unix_user
@@ -329,14 +329,14 @@ end
 # ssl.repo.client.truststore
 # ssl.repo.crt
 # ssl.truststore).each do |file|
-#   common_remote_file 'download certificates' do
-#     source "#{node['certificates']['downloadpath']}/#{file}"
+#   alfRemoteFile 'download certificates' do
+#     source_url "#{node['certificates']['downloadpath']}/#{file}"
 #     path "#{node['certificates']['directory']}/#{file}"
 #   end
 # end
 #
-# common_template "#{node['installer']['directory']}/applicert.sh" do
-#   source 'solr/applicert.sh.erb'
+# alfTemplate "#{node['installer']['directory']}/applicert.sh" do
+#   source_url 'solr/applicert.sh.erb'
 # end
 #
 # execute 'Apply Certificates' do
