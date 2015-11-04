@@ -22,7 +22,6 @@ default['installer']['win_group'] = 'Administrators'
 default['installer']['unix_user'] = 'root'
 default['installer']['unix_group'] = 'root'
 
-
 ############ installer attributes ############
 
 default['installer']['alfresco_admin_password'] = 'admin'
