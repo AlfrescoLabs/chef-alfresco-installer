@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
 # /
+include_recipe 'alfresco-installer::_db_attributes'
+include_recipe 'alfresco-installer::_installer_attributes'
 
 win_user = node['installer']['win_user']
 win_group = node['installer']['win_group']
@@ -37,38 +39,6 @@ elsif unix_user != 'root'
     append true
   end
 end
-
-# Setting derived attributes as needed.
-case node['index.subsystem.name']
-when 'solr4'
-  node.default['paths']['solrPath'] = "#{node['installer']['directory']}/solr4"
-when 'solr'
-  node.default['paths']['solrPath'] = "#{node['installer']['directory']}/alf_data/solr"
-end
-
-node.default['paths']['solrcoreArchive'] = "#{node['paths']['solrPath']}/archive-SpacesStore/conf/solrcore.properties"
-node.default['paths']['solrcoreWorkspace'] = "#{node['paths']['solrPath']}/workspace-SpacesStore/conf/solrcore.properties"
-
-case node['platform_family']
-when 'windows'
-  # uninstall file is required for installation idempotence
-  node.default['paths']['uninstallFile'] = "#{node['installer']['directory']}\\uninstall.exe"
-  node.default['paths']['alfrescoGlobal'] = "#{node['installer']['directory']}\\tomcat\\shared\\classes\\alfresco-global.properties"
-  node.default['paths']['wqsCustomProperties'] = "#{node['installer']['directory']}\\tomcat\\shared\\classes\\wqsapi-custom.properties"
-  node.default['paths']['tomcatServerXml'] = "#{node['installer']['directory']}\\tomcat\\conf\\server.xml"
-  node.default['paths']['licensePath'] = "#{node['installer']['directory']}/qa50.lic"
-  node.default['paths']['dbDriverLocation'] = "#{node['installer']['directory']}\\tomcat\\lib\\#{node['db.driver.filename']}"
-else
-  node.default['paths']['uninstallFile'] = "#{node['installer']['directory']}/alfresco.sh"
-  node.default['paths']['alfrescoGlobal'] = "#{node['installer']['directory']}/tomcat/shared/classes/alfresco-global.properties"
-  node.default['paths']['wqsCustomProperties'] = "#{node['installer']['directory']}/tomcat/shared/classes/wqsapi-custom.properties"
-  node.default['paths']['tomcatServerXml'] = "#{node['installer']['directory']}/tomcat/conf/server.xml"
-  node.default['paths']['licensePath'] = "#{node['installer']['directory']}/qa50.lic"
-  node.default['paths']['dbDriverLocation'] = "#{node['installer']['directory']}/tomcat/lib/#{node['db.driver.filename']}"
-end
-node.default['alfresco']['keystore'] = "#{node['installer']['directory']}/alf_data/keystore"
-node.default['alfresco']['keystore_file'] = "#{node['alfresco']['keystore']}/ssl.keystore"
-node.default['alfresco']['truststore_file'] = "#{node['alfresco']['keystore']}/ssl.truststore"
 
 alfRemoteFile 'download alfresco build' do
   source_url node['installer']['downloadpath']
