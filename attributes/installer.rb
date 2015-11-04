@@ -16,6 +16,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
 # /
+default['build_essential']['compiletime'] = true
 
 default['installer']['win_user'] = 'Administrator'
 default['installer']['win_group'] = 'Administrators'
