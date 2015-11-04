@@ -1,4 +1,3 @@
-# ~FC005
 #
 # Copyright (C) 2005-2015 Alfresco Software Limited.
 #
@@ -100,28 +99,26 @@ end
   end
 end
 
-if node['amps']
-  if node['amps']['alfresco']
-    node['amps']['alfresco'].each do |_ampName, url|
-      alfRemoteFile "#{node['installer']['directory']}/amps/#{::File.basename(url)}" do
-        source_url url
-        win_user win_user
-        win_group win_group
-        unix_user unix_user
-        unix_group unix_group
-      end
+if node['amps'] && node['amps']['alfresco'] && node['amps']['alfresco'].length > 0
+  node['amps']['alfresco'].each do |_ampName, url|
+    alfRemoteFile "#{node['installer']['directory']}/amps/#{::File.basename(url)}" do
+      source_url url
+      win_user win_user
+      win_group win_group
+      unix_user unix_user
+      unix_group unix_group
     end
   end
+end
 
-  if node['amps']['share']
-    node['amps']['share'].each do |_ampName, url|
-      alfRemoteFile "#{node['installer']['directory']}/amps_share/#{::File.basename(url)}" do
-        source_url url
-        win_user win_user
-        win_group win_group
-        unix_user unix_user
-        unix_group unix_group
-      end
+if node['amps'] && node['amps']['share'] && node['amps']['share'].length > 0
+  node['amps']['share'].each do |_ampName, url|
+    alfRemoteFile "#{node['installer']['directory']}/amps_share/#{::File.basename(url)}" do
+      source_url url
+      win_user win_user
+      win_group win_group
+      unix_user unix_user
+      unix_group unix_group
     end
   end
 end
@@ -223,25 +220,13 @@ else
   end
 end
 
-alfTemplate node['paths']['alfrescoGlobal'] do
-  source_url 'globalProps/alfresco-global.properties.erb'
-  win_user win_user
-  win_group win_group
-  unix_user unix_user
-  unix_group unix_group
-end
+templates = { node['paths']['alfrescoGlobal'] => 'globalProps/alfresco-global.properties.erb',
+              node['paths']['wqsCustomProperties'] => 'customProps/wqsapi-custom.properties.erb',
+              node['paths']['tomcatServerXml'] => 'tomcat/server.xml.erb' }
 
-alfTemplate node['paths']['wqsCustomProperties'] do
-  source_url 'customProps/wqsapi-custom.properties.erb'
-  win_user win_user
-  win_group win_group
-  unix_user unix_user
-  unix_group unix_group
-end
-
-if node['installer.database-version'] != 'none' # ~FC023 : Using definitions here, cannot use only_if
-  alfRemoteFile node['paths']['dbDriverLocation'] do
-    source_url node['db.driver.url']
+templates.each do |key, value|
+  alfTemplate key do
+    source_url value
     win_user win_user
     win_group win_group
     unix_user unix_user
@@ -249,22 +234,22 @@ if node['installer.database-version'] != 'none' # ~FC023 : Using definitions her
   end
 end
 
-if node['paths']['licensePath'] && node['paths']['licensePath'].length > 0 # ~FC023 : Using definitions here, cannot use only_if
-  alfRemoteFile node['paths']['licensePath'] do
-    source_url node['alfresco.cluster.prerequisites']
-    win_user win_user
-    win_group win_group
-    unix_user unix_user
-    unix_group unix_group
-  end
-end
-
-alfTemplate node['paths']['tomcatServerXml'] do
-  source_url 'tomcat/server.xml.erb'
+alfRemoteFile node['paths']['dbDriverLocation'] do
+  source_url node['db.driver.url']
   win_user win_user
   win_group win_group
   unix_user unix_user
   unix_group unix_group
+  only_if { node['installer.database-version'] != 'none' }
+end
+
+alfRemoteFile node['paths']['licensePath'] do
+  source_url node['alfresco.cluster.prerequisites']
+  win_user win_user
+  win_group win_group
+  unix_user unix_user
+  unix_group unix_group
+  only_if { node['paths']['licensePath'] && node['paths']['licensePath'].length > 0 }
 end
 
 solrcore_props = {
