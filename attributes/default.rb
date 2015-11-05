@@ -8,7 +8,7 @@ end
 default['singleNode'] = false
 default['clusterSchema'] = '2'
 
-default['node1'] = '172.29.102.108'
-default['node2'] = '172.29.102.110'
-default['loadbalancer'] = '172.29.102.109'
+default['node1'] = '172.29.102.116'
+default['node2'] = '172.29.102.117'
+default['loadbalancer'] = '172.29.102.114'
 default['singleNode'] = ''
