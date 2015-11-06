@@ -5,3 +5,5 @@ rvm:
 
 sudo: false
 bundler_args: --without integration development
+notifications:
+  slack: automaten:lwr9KirSNcIkbrO9wIwexAmx
