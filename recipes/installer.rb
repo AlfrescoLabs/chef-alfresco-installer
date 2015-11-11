@@ -333,7 +333,8 @@ else
   end
 
   execute 'Waiting for tomcat to start' do
-    command "tail -n2 #{node['installer']['directory']}/tomcat/logs/catalina.out | grep \"Server startup in .* ms\""
+    # command "tail -n2 #{node['installer']['directory']}/tomcat/logs/catalina.out | grep \"Server startup in .* ms\""
+    command "curl --silent --show-error --connect-timeout 1 -I http://localhost:8080 | grep 'Coyote'"
     action :run
     retries 100
     retry_delay 5

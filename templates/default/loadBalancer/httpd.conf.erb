@@ -56,7 +56,7 @@ ServerTokens OS
 #
 # Do NOT add a slash at the end of the directory path.
 #
-ServerRoot "/etc/httpd"
+#ServerRoot "/etc/httpd"
 
 #
 # PidFile: The file in which the server should record its process
@@ -64,7 +64,7 @@ ServerRoot "/etc/httpd"
 # /etc/sysconfig/httpd must be set appropriately if this location is
 # changed.
 #
-PidFile run/httpd.pid
+PidFile httpd.pid
 
 #
 # Timeout: The number of seconds before receives and sends time out.
@@ -164,9 +164,9 @@ LoadModule authz_dbm_module modules/mod_authz_dbm.so
 LoadModule authz_default_module modules/mod_authz_default.so
 LoadModule ldap_module modules/mod_ldap.so
 LoadModule authnz_ldap_module modules/mod_authnz_ldap.so
-LoadModule include_module modules/mod_include.so
-LoadModule log_config_module modules/mod_log_config.so
-LoadModule logio_module modules/mod_logio.so
+#LoadModule include_module modules/mod_include.so
+#LoadModule log_config_module modules/mod_log_config.so
+#LoadModule logio_module modules/mod_logio.so
 LoadModule env_module modules/mod_env.so
 LoadModule ext_filter_module modules/mod_ext_filter.so
 LoadModule mime_magic_module modules/mod_mime_magic.so
@@ -200,7 +200,7 @@ LoadModule cache_module modules/mod_cache.so
 LoadModule suexec_module modules/mod_suexec.so
 LoadModule disk_cache_module modules/mod_disk_cache.so
 LoadModule cgi_module modules/mod_cgi.so
-LoadModule version_module modules/mod_version.so
+#LoadModule version_module modules/mod_version.so
 
 #
 # The following modules are not loaded by default:
@@ -241,8 +241,14 @@ Include conf.d/*.conf
 #  when the value of (unsigned)Group is above 60000;
 #  don't use Group #-1 on these systems!
 #
+<% if node['platform_family'] == 'rhel' || node['platform_family'] == 'windows' %>
 User apache
 Group apache
+<% else %>
+User www-data
+Group www-data
+<% end %>
+
 
 ### Section 2: 'Main' server configuration
 #
@@ -291,7 +297,7 @@ UseCanonicalName Off
 # documents. By default, all requests are taken from this directory, but
 # symbolic links and aliases may be used to point to other locations.
 #
-DocumentRoot "/var/www/html"
+#DocumentRoot "/var/www/html"
 
 #
 # Each directory to which Apache has access can be configured with respect
@@ -483,7 +489,12 @@ HostnameLookups Off
 # logged here.  If you *do* define an error logfile for a <VirtualHost>
 # container, that host's errors will be logged there and not here.
 #
+<% if node['platform_family'] == 'rhel' || node['platform_family'] == 'windows' %>
 ErrorLog logs/error_log
+<% else %>
+ErrorLog error_log
+<% end %>
+
 
 #
 # LogLevel: Control the number of messages logged to the error_log.
@@ -496,10 +507,10 @@ LogLevel warn
 # The following directives define some format nicknames for use with
 # a CustomLog directive (see below).
 #
-LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
-LogFormat "%h %l %u %t \"%r\" %>s %b" common
-LogFormat "%{Referer}i -> %U" referer
-LogFormat "%{User-agent}i" agent
+#LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
+#LogFormat "%h %l %u %t \"%r\" %>s %b" common
+#LogFormat "%{Referer}i -> %U" referer
+#LogFormat "%{User-agent}i" agent
 
 # "combinedio" includes actual counts of actual bytes received (%I) and sent (%O); this
 # requires the mod_logio module to be loaded.
@@ -525,7 +536,7 @@ LogFormat "%{User-agent}i" agent
 # For a single logfile with access, agent, and referer information
 # (Combined Logfile Format), use the following directive:
 #
-CustomLog logs/access_log combined
+#CustomLog access_log combined
 
 #
 # Optionally add a line containing the server version and virtual host
@@ -1024,7 +1035,7 @@ BrowserMatch "^Dreamweaver-WebDAV-SCM1" redirect-carefully
     </Proxy>
     RewriteEngine on
     RewriteRule ^/$ share [R]
-    
+
     <Location /balancer-manager>
     SetHandler balancer-manager
     </Location>

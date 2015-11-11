@@ -1,8 +1,7 @@
 alfresco.cluster.enabled=true
 alfresco.cluster.name=alfresco
 alfresco.hazelcast.tcp.config=<members><% for @item in node['additional_cluster_members'] %>
-    <%= @item %>,
-  	<% end %><%= node['ipaddress']%></members>
+    <%= @item %>,<% end %><%= node['ipaddress']%></members>
 alfresco.hazelcast.specify.interface=true
 alfresco.hazelcast.bind.interface=<%= node['ipaddress']%>
 alfresco.hazelcast.port=5701

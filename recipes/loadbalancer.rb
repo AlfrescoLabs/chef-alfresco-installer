@@ -59,10 +59,6 @@ when 'windows'
 
 else
 
-  package 'httpd' do
-    action :install
-  end
-
   directory '/resources' do
     owner 'root'
     group 'root'
@@ -70,20 +66,67 @@ else
     action :create
   end
 
-  template '/etc/httpd/conf/httpd.conf' do
+  package 'Install Apache' do
+    case node[:platform]
+    when 'redhat', 'centos'
+      package_name 'httpd'
+    when 'ubuntu', 'debian'
+      package_name 'apache2'
+    end
+  end
+
+  execute 'backup configuration' do
+    case node[:platform]
+    when 'redhat', 'centos'
+      command 'cp /etc/httpd/conf/httpd.conf /etc/httpd/conf/httpd.conf.original'
+    when 'ubuntu', 'debian'
+      command 'cp /etc/apache2/apache2.conf /etc/apache2/apache2.conf.original'
+    end
+    action :run
+  end
+
+  link '/etc/apache2/modules' do
+    to '/usr/lib/apache2/modules'
+    only_if { node[:platform_family] == 'debian' }
+  end
+
+  execute 'backup configuration' do
+    case node[:platform]
+    when 'redhat', 'centos'
+      command 'cp /etc/httpd/conf/httpd.conf /etc/httpd/conf/httpd.conf.original'
+    when 'ubuntu', 'debian'
+      command 'cp /etc/apache2/apache2.conf /etc/apache2/apache2.conf.original'
+    end
+    action :run
+  end
+
+  template 'configuration file' do
     if node['platform_version'] == '7.1'
       source 'loadBalancer/httpd24.conf.erb'
     else
       source 'loadBalancer/httpd.conf.erb'
+    end
+    case node[:platform_family]
+    when 'rhel'
+      path '/etc/httpd/conf/httpd.conf'
+    when 'debian'
+      path '/etc/apache2/apache2.conf'
     end
     owner 'root'
     group 'root'
     mode '0755'
   end
 
-  service 'httpd' do
+  service 'loadbalancer' do
+    case node[:platform_family]
+    when 'rhel'
+      service_name 'httpd'
+    when 'debian'
+      service_name 'apache2'
+    end
     supports status: true, restart: true, stop: true
     action [:start, :enable]
   end
+
 
 end

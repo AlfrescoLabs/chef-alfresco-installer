@@ -38,7 +38,7 @@ else
   directory node['dir_client'] do
     owner 'root'
     group 'root'
-    mode '0777'
+    mode '0755'
     action :create
   end
 
