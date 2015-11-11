@@ -25,18 +25,34 @@ when 'debian'
 		end
 	end
 else
-	bash 'install package repos' do
-		user 'root'
-		cwd '/tmp'
-		code <<-EOH
-		rpm -Uvh http://repo.webtatic.com/yum/el6/latest.rpm
-		rpm -Uvh http://dl.atrpms.net/all/atrpms-repo-6-7.el6.x86_64.rpm
-		rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
-		rpm -Uvh http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm
-		rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
-		EOH
-	  not_if { File.exists?('/etc/yum.repos.d/epel.repo') }
+
+	yum_repository 'centos_repo' do
+	  description "Centos 6 repo"
+		case
+		when node['platform_version'].start_with?("6")
+		  mirrorlist "http://mirrorlist.centos.org/?release=6&arch=$basearch&repo=os"
+		  gpgkey 'http://mirror.centos.org/centos/RPM-GPG-KEY-CentOS-6'
+		when node['platform_version'].start_with?("7")
+		  mirrorlist "http://mirrorlist.centos.org/?release=7&arch=$basearch&repo=os"
+		  gpgkey 'http://mirror.centos.org/centos/RPM-GPG-KEY-CentOS-7'
+		when node['platform_version'].start_with?("5")
+		  mirrorlist "http://mirrorlist.centos.org/?release=5&arch=$basearch&repo=os"
+		  gpgkey 'http://mirror.centos.org/centos/RPM-GPG-KEY-CentOS-5'
+		end
+	  action :create
 	end
+	# bash 'install package repos' do
+	# 	user 'root'
+	# 	cwd '/tmp'
+	# 	code <<-EOH
+	# 	rpm -Uvh http://repo.webtatic.com/yum/el6/latest.rpm
+	# 	rpm -Uvh http://dl.atrpms.net/all/atrpms-repo-6-7.el6.x86_64.rpm
+	# 	rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
+	# 	rpm -Uvh http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm
+	# 	rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+	# 	EOH
+	#   not_if { File.exists?('/etc/yum.repos.d/epel.repo') }
+	# end
 	# TODO fix package installations when dealing with redhat 7
 
 	%w{gcc readline-devel zlib zlib-devel}.each do |pkg|
