@@ -13,7 +13,7 @@ machine_batch 'Initial setup on nodes and lb' do
   loadbalancer = node['loadbalancer']
   username = 'root'
 
-  installerPath = 'ftp://172.29.101.56/51/b295/alfresco-enterprise-installer-20150904-SNAPSHOT-295-linux-x64.bin'
+  installer_path = 'ftp://172.29.101.56/51/b295/alfresco-enterprise-installer-20150904-SNAPSHOT-295-linux-x64.bin'
 
   machine 'node1' do
     action [:ready, :setup, :converge]
@@ -28,7 +28,7 @@ machine_batch 'Initial setup on nodes and lb' do
     attributes 'installer' =>
                    { 'nodename' => 'node1',
                      'disable-components' => 'javaalfresco,postgres',
-                     'downloadpath' => installerPath },
+                     'downloadpath' => installer_path },
                'installer.database-type' => 'postgres',
                'installer.database-version' => '9.3.5',
                'db.url' => "jdbc:postgresql://#{nodeIp1}:5432/${db.name}",
@@ -58,7 +58,7 @@ machine_batch 'Initial setup on nodes and lb' do
     attributes 'installer' =>
                    { 'nodename' => 'node2',
                      'disable-components' => 'javaalfresco,postgres',
-                     'downloadpath' => installerPath },
+                     'downloadpath' => installer_path },
                'installer.database-type' => 'postgres',
                'installer.database-version' => '9.3.5',
                'db.url' => "jdbc:postgresql://#{nodeIp1}:5432/${db.name}",
@@ -99,7 +99,7 @@ machine_batch 'Initial setup on nodes and lb' do
                'installer' =>
                    { 'nodename' => 'LB',
                      'disable-components' => 'javaalfresco,postgres',
-                     'downloadpath' => installerPath },
+                     'downloadpath' => installer_path },
                'replication.enabled' => 'false',
                'alfresco.cluster.enabled' => 'true',
                'install_alfresco_war' => false,

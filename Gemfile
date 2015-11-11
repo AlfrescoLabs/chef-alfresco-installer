@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby "2.1.5"
+ruby '2.1.5'
 
 gem 'berkshelf', '~> 3.2.3'
 gem 'test-kitchen', '~> 1.4.0'

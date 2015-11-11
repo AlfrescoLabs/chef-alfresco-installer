@@ -1,5 +1,6 @@
-gem_package 'chef-provisioning-ssh' do
+chef_gem 'chef-provisioning-ssh' do
   action :install
+  compile_time true
 end
 
 require 'chef/provisioning/ssh_driver/driver'
@@ -9,29 +10,27 @@ with_driver 'ssh'
 #                     :client_name => 'bamboo1',
 #                     :signing_key_filename => '/opt/.chef/bamboo1.pem'
 # with_chef_server "http://172.29.101.100:4000"
-with_chef_local_server :chef_repo_path => '/tmp/kitchen/cache', :cookbook_path => '/tmp/kitchen/cache/cookbooks'
+with_chef_local_server chef_repo_path: '/tmp/kitchen/cache', cookbook_path: '/tmp/kitchen/cache/cookbooks'
 
-
-clusternode1='172.29.101.126'
-clusternode2='172.29.101.127'
-loadbalancer='172.29.101.51'
-username='Administrator'
+clusternode1 = '172.29.101.126'
+clusternode2 = '172.29.101.127'
+loadbalancer = '172.29.101.51'
+username = 'Administrator'
 
 machine_batch 'Initial setup on nodes and lb' do
-
   machine 'node1' do
     action [:ready, :setup, :converge]
-    machine_options :transport_options => {
-                        :ip_address => clusternode1,
-                        :username => username,
-                        :ssh_options => {
-                            :password => 'alfresco'
-                        }
-                    }
+    machine_options transport_options: {
+      ip_address: clusternode1,
+      username: username,
+      ssh_options: {
+        password: 'alfresco'
+      }
+    }
     run_list %w(recipe[java-wrapper::java8] recipe[alfresco-installer::installer])
     attributes 'installer' =>
-                   {'nodename' => 'node1',
-                    'disable-components' => 'javaalfresco,postgres'},
+                   { 'nodename' => 'node1',
+                     'disable-components' => 'javaalfresco,postgres' },
                'installer.database-type' => 'mariadb',
                'installer.database-version' => '10.0.14',
                'db.url' => "jdbc:mysql://#{loadbalancer}:3306/${db.name}?useUnicode=yes&characterEncoding=UTF-8",
@@ -46,22 +45,21 @@ machine_batch 'Initial setup on nodes and lb' do
                'START_POSGRES' => false,
                'disable_solr_ssl' => true,
                'solr.host' => loadbalancer
-
   end
 
   machine 'node2' do
     action [:ready, :setup, :converge]
-    machine_options :transport_options => {
-                        :ip_address => clusternode2,
-                        :username => username,
-                        :ssh_options => {
-                            :password => 'alfresco'
-                        }
-                    }
+    machine_options transport_options: {
+      ip_address: clusternode2,
+      username: username,
+      ssh_options: {
+        password: 'alfresco'
+      }
+    }
     run_list %w(recipe[java-wrapper::java8] recipe[alfresco-installer::installer])
     attributes 'installer' =>
-                   {'nodename' => 'node2',
-                    'disable-components' => 'javaalfresco,postgres'},
+                   { 'nodename' => 'node2',
+                     'disable-components' => 'javaalfresco,postgres' },
                'installer.database-type' => 'mariadb',
                'installer.database-version' => '10.0.14',
                'db.url' => "jdbc:mysql://#{loadbalancer}:3306/${db.name}?useUnicode=yes&characterEncoding=UTF-8",
@@ -80,28 +78,28 @@ machine_batch 'Initial setup on nodes and lb' do
 
   machine 'LB' do
     action [:ready, :setup, :converge]
-    machine_options :transport_options => {
-                        :ip_address => loadbalancer,
-                        :username => username,
-                        :ssh_options => {
-                            :password => 'alfresco'
-                        }
-                    }
+    machine_options transport_options: {
+      ip_address: loadbalancer,
+      username: username,
+      ssh_options: {
+        password: 'alfresco'
+      }
+    }
     run_list %w(recipe[java-wrapper::java8] recipe[alfresco-installer::replication_server] recipe[alfresco-installer::loadbalancer] recipe[alfresco-dbwrapper::mysql] recipe[alfresco-installer::installer])
     attributes 'lb' => {
-                   'ips_and_nodenames' => [
-                       {
-                           'ip' => clusternode1,
-                           'nodename' => 'node1'
-                       },
-                       {
-                           'ip' => clusternode2,
-                           'nodename' => 'node2'
-                       }
-                   ]},
+      'ips_and_nodenames' => [
+        {
+          'ip' => clusternode1,
+          'nodename' => 'node1'
+        },
+        {
+          'ip' => clusternode2,
+          'nodename' => 'node2'
+        }
+      ] },
                'installer' =>
-                   {'nodename' => 'LB',
-                    'disable-components' => 'javaalfresco,postgres,alfrescowcmqs,alfrescosolr,alfrescogoogledocs,libreofficecomponent'},
+                   { 'nodename' => 'LB',
+                     'disable-components' => 'javaalfresco,postgres,alfrescowcmqs,alfrescosolr,alfrescogoogledocs,libreofficecomponent' },
                'replication.enabled' => 'false',
                'alfresco.cluster.enabled' => 'true',
                'install_share_war' => false,
@@ -112,7 +110,6 @@ machine_batch 'Initial setup on nodes and lb' do
                'solr.target.alfresco.host' => loadbalancer,
                'solr.target.alfresco.port' => '80'
   end
-
 end
 
 machine_batch 'replication setup' do

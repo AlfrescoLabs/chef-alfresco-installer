@@ -14,4 +14,9 @@ platforms:
 suites:
 - name: schema2
   run_list:
-  - recipe[alfresco-provisioning::schema2]
+  - recipe[alfresco-provisioning::default]
+  attributes: {
+                node1: '172.29.102.125',
+                node2: '172.29.102.124',
+                loadbalancer: '172.29.102.123'
+              }
