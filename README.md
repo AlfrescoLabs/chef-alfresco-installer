@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/AlfrescoTestAutomation/chef-alfresco-installer.svg?branch=alfresco-dbwrapper)](https://travis-ci.org/AlfrescoTestAutomation/chef-alfresco-installer)
 # alfresco-dbwrapper-cookbook
 
 ## Supported Platforms

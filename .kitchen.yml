@@ -9,7 +9,7 @@ platforms:
   driver_config:
     username: root
     password: alfresco
-    hostname: 172.29.102.42
+    hostname: 172.29.102.108
 - name:  redhat61
   driver_config:
     username: root
@@ -42,8 +42,8 @@ suites:
   - recipe[alfresco-dbwrapper::postgres]
   attributes: {
                 url: {
-                  postgresql: 'ftp://172.29.101.56/databases/postgresql-9.4.4.tar.gz',
-                  package: 'postgresql-9.4.4'
+                  postgresql: 'https://ftp.postgresql.org/pub/source/v9.4.5/postgresql-9.4.5.tar.gz',
+                  package: 'postgresql-9.4.5'
                 }
               }
 

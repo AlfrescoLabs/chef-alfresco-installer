@@ -15,117 +15,116 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
-#/
+# /
 
 case node['platform_family']
 when 'debian'
-	%w{build-essential libreadline-dev zlib1g-dev flex bison}.each do |pkg|
-		package pkg do
-			action :install
-		end
-	end
+  %w(build-essential libreadline-dev zlib1g-dev flex bison).each do |pkg|
+    package pkg do
+      action :install
+    end
+  end
 else
 
-	yum_repository 'centos_repo' do
-	  description "Centos 6 repo"
-		case
-		when node['platform_version'].start_with?("6")
-		  mirrorlist "http://mirrorlist.centos.org/?release=6&arch=$basearch&repo=os"
-		  gpgkey 'http://mirror.centos.org/centos/RPM-GPG-KEY-CentOS-6'
-		when node['platform_version'].start_with?("7")
-		  mirrorlist "http://mirrorlist.centos.org/?release=7&arch=$basearch&repo=os"
-		  gpgkey 'http://mirror.centos.org/centos/RPM-GPG-KEY-CentOS-7'
-		when node['platform_version'].start_with?("5")
-		  mirrorlist "http://mirrorlist.centos.org/?release=5&arch=$basearch&repo=os"
-		  gpgkey 'http://mirror.centos.org/centos/RPM-GPG-KEY-CentOS-5'
-		end
-	  action :create
-	end
-	# bash 'install package repos' do
-	# 	user 'root'
-	# 	cwd '/tmp'
-	# 	code <<-EOH
-	# 	rpm -Uvh http://repo.webtatic.com/yum/el6/latest.rpm
-	# 	rpm -Uvh http://dl.atrpms.net/all/atrpms-repo-6-7.el6.x86_64.rpm
-	# 	rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
-	# 	rpm -Uvh http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm
-	# 	rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
-	# 	EOH
-	#   not_if { File.exists?('/etc/yum.repos.d/epel.repo') }
-	# end
-	# TODO fix package installations when dealing with redhat 7
+  yum_repository 'centos_repo' do
+    description 'Centos 6 repo'
+    case
+    when node['platform_version'].start_with?('6')
+      mirrorlist 'http://mirrorlist.centos.org/?release=6&arch=$basearch&repo=os'
+      gpgkey 'http://mirror.centos.org/centos/RPM-GPG-KEY-CentOS-6'
+    when node['platform_version'].start_with?('7')
+      mirrorlist 'http://mirrorlist.centos.org/?release=7&arch=$basearch&repo=os'
+      gpgkey 'http://mirror.centos.org/centos/RPM-GPG-KEY-CentOS-7'
+    when node['platform_version'].start_with?('5')
+      mirrorlist 'http://mirrorlist.centos.org/?release=5&arch=$basearch&repo=os'
+      gpgkey 'http://mirror.centos.org/centos/RPM-GPG-KEY-CentOS-5'
+    end
+    action :create
+  end
+  # bash 'install package repos' do
+  # 	user 'root'
+  # 	cwd '/tmp'
+  # 	code <<-EOH
+  # 	rpm -Uvh http://repo.webtatic.com/yum/el6/latest.rpm
+  # 	rpm -Uvh http://dl.atrpms.net/all/atrpms-repo-6-7.el6.x86_64.rpm
+  # 	rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
+  # 	rpm -Uvh http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm
+  # 	rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+  # 	EOH
+  #   not_if { File.exists?('/etc/yum.repos.d/epel.repo') }
+  # end
+  # TODO: fix package installations when dealing with redhat 7
 
-	%w{gcc readline-devel zlib zlib-devel}.each do |pkg|
-	  package pkg do
-	    action :install
-	  end
-	end
+  %w(gcc readline-devel zlib zlib-devel).each do |pkg|
+    package pkg do
+      action :install
+    end
+  end
 end
 
-
-postgres_package_name = ::File.basename(node['url']['postgresql'],".tar.gz")
+postgres_package_name = ::File.basename(node['url']['postgresql'], '.tar.gz')
 remote_file "/opt/#{postgres_package_name}.tar.gz" do
-    source  node['url']['postgresql']
-    owner 'root'
-    group 'root'
-    mode 00775
-    action :create_if_missing
+  source node['url']['postgresql']
+  owner 'root'
+  group 'root'
+  mode 00775
+  action :create_if_missing
 end
 
 bash 'Install postgres' do
-    user 'root'
-    cwd '/opt'
-    code <<-EOH
+  user 'root'
+  cwd '/opt'
+  code <<-EOH
     tar xvf #{postgres_package_name}.tar.gz
     cd #{postgres_package_name} && ./configure && make && make install
     PATH=/usr/local/pgsql/bin:$PATH
-	export PATH
-	adduser postgres
-	mkdir /usr/local/pgsql/data
-	chown postgres /usr/local/pgsql/data
+  export PATH
+  adduser postgres
+  mkdir /usr/local/pgsql/data
+  chown postgres /usr/local/pgsql/data
     EOH
-    only_if { node['postgres']['installpostgres'] }
-		not_if { File.exists?('/usr/local/pgsql/bin/psql') }
+  only_if { node['postgres']['installpostgres'] }
+  not_if { File.exist?('/usr/local/pgsql/bin/psql') }
 end
 
 bash 'Startup postgres' do
-	user 'postgres'
-	cwd '/tmp'
-	code <<-EOH
-	/usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data
-	echo "host all all 0.0.0.0/0 trust" >> /usr/local/pgsql/data/pg_hba.conf
-	echo "listen_addresses = '*'" >> /usr/local/pgsql/data/postgresql.conf
-	/usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l logfile start
-	sleep 5
-	/usr/local/pgsql/bin/createuser #{node['postgres']['user']}
-	EOH
-	only_if { node['postgres']['installpostgres'] }
-  	not_if { File.exists?('/usr/local/pgsql/data/postgresql.conf') }
+  user 'postgres'
+  cwd '/tmp'
+  code <<-EOH
+  /usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data
+  echo "host all all 0.0.0.0/0 trust" >> /usr/local/pgsql/data/pg_hba.conf
+  echo "listen_addresses = '*'" >> /usr/local/pgsql/data/postgresql.conf
+  /usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l logfile start
+  sleep 5
+  /usr/local/pgsql/bin/createuser #{node['postgres']['user']}
+  EOH
+  only_if { node['postgres']['installpostgres'] }
+  not_if { File.exist?('/usr/local/pgsql/data/postgresql.conf') }
 end
 
 bash 'create database' do
-	user 'postgres'
-	cwd '/usr/local/pgsql/bin'
-	code <<-EOH
-		./psql << EOF
-		create database #{node['postgres']['dbname']} with encoding='utf-8' template=template0 owner=#{node['postgres']['user']} connection limit=-1;
-		GRANT ALL PRIVILEGES ON DATABASE #{node['postgres']['dbname']} TO #{node['postgres']['user']};
-		\\q
-		EOF
-	EOH
-	only_if { node['postgres']['createdb'] }
-	not_if 'su - postgres -c \"/usr/local/pgsql/bin/psql -c \'\list\'\" | grep alfresco'
+  user 'postgres'
+  cwd '/usr/local/pgsql/bin'
+  code <<-EOH
+    ./psql << EOF
+    create database #{node['postgres']['dbname']} with encoding='utf-8' template=template0 owner=#{node['postgres']['user']} connection limit=-1;
+    GRANT ALL PRIVILEGES ON DATABASE #{node['postgres']['dbname']} TO #{node['postgres']['user']};
+    \\q
+    EOF
+  EOH
+  only_if { node['postgres']['createdb'] }
+  not_if 'su - postgres -c \"/usr/local/pgsql/bin/psql -c \'\list\'\" | grep alfresco'
 end
 
 bash 'drop database' do
-	user 'postgres'
-	cwd '/usr/local/pgsql/bin'
-	code <<-EOH
-		./psql << EOF
-		SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '#{node['postgres']['dbname']}';
-		drop database #{node['postgres']['dbname']};
-		\\q
-		EOF
-	EOH
-	only_if { node['postgres']['dropdb'] }
+  user 'postgres'
+  cwd '/usr/local/pgsql/bin'
+  code <<-EOH
+    ./psql << EOF
+    SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '#{node['postgres']['dbname']}';
+    drop database #{node['postgres']['dbname']};
+    \\q
+    EOF
+  EOH
+  only_if { node['postgres']['dropdb'] }
 end

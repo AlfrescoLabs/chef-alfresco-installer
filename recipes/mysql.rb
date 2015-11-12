@@ -15,65 +15,65 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
-#/
+# /
 bash 'Install package repos' do
-	user 'root'
-	cwd '/tmp'
-	code <<-EOH
-	rpm -Uvh #{node['mysql']['yum']['repository']}
-	EOH
+  user 'root'
+  cwd '/tmp'
+  code <<-EOH
+  rpm -Uvh #{node['mysql']['yum']['repository']}
+  EOH
 end
 
 bash 'setting repo for mysql55' do
-	user 'root'
-	cwd '/tmp'
-	code <<-EOH
-	yum-config-manager --disable mysql56-community
-	yum-config-manager --enable mysql55-community
-	EOH
+  user 'root'
+  cwd '/tmp'
+  code <<-EOH
+  yum-config-manager --disable mysql56-community
+  yum-config-manager --enable mysql55-community
+  EOH
   only_if { node['mysql']['yum']['version'].start_with?('5.5') }
 end
 
 package 'mysql-libs' do
-	action :remove
+  action :remove
 end
 
 package 'mysql-community-server' do
   action :install
   version node['mysql']['yum']['version']
 end
-#TODO Accomodate with mysql56
+# TODO: Accomodate with mysql56
 
 service 'mysqld' do
-	supports :status => true, :restart => true, :reload => true
-	action [ :start, :enable ]
+  supports status: true, restart: true, reload: true
+  action [:start, :enable]
 end
 
 bash 'Create new user' do
-	user 'root'
-	cwd '/tmp'
-	code <<-EOH
-	mysql -e "CREATE USER #{node['mysql']['user']}@'%' IDENTIFIED BY '#{node['mysql']['password']}';"
-	mysql -e "GRANT ALL PRIVILEGES ON *.* TO #{node['mysql']['user']}@'%' WITH GRANT OPTION;"
-	EOH
-	only_if { node['mysql']['createuser'] }
+  user 'root'
+  cwd '/tmp'
+  code <<-EOH
+  mysql -e "CREATE USER #{node['mysql']['user']}@'%' IDENTIFIED BY '#{node['mysql']['password']}';"
+  mysql -e "GRANT ALL PRIVILEGES ON *.* TO #{node['mysql']['user']}@'%' WITH GRANT OPTION;"
+  EOH
+  only_if { node['mysql']['createuser'] }
 end
 
 bash 'Create new db' do
-	user 'root'
-	cwd '/tmp'
-	code <<-EOH
-	mysql -e "create database #{node['mysql']['dbname']};"
-	EOH
-	only_if { node['mysql']['createdb'] }
-	not_if 'mysql -e "show databases;" | grep alfresco'
+  user 'root'
+  cwd '/tmp'
+  code <<-EOH
+  mysql -e "create database #{node['mysql']['dbname']};"
+  EOH
+  only_if { node['mysql']['createdb'] }
+  not_if 'mysql -e "show databases;" | grep alfresco'
 end
 
 bash 'Drop db' do
-	user 'root'
-	cwd '/tmp'
-	code <<-EOH
-	mysql -e "drop database #{node['mysql']['dbname']};"
-	EOH
-	only_if { node['mysql']['dropdb'] }
+  user 'root'
+  cwd '/tmp'
+  code <<-EOH
+  mysql -e "drop database #{node['mysql']['dbname']};"
+  EOH
+  only_if { node['mysql']['dropdb'] }
 end

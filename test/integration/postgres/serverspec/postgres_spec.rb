@@ -15,7 +15,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
-#/
+# /
 require 'spec_helper'
 
 describe 'When we check the status of postgres 5432 port it' do
@@ -31,33 +31,41 @@ describe 'When we run ps -u postgres -f | grep postgres: to check if postgres is
 end
 
 describe 'When we login as postgres user then whoami' do
-  it { expect(command("su - postgres -c 'whoami'").stdout).to match /postgres/ }
+  it { expect(command("su - postgres -c 'whoami'").stdout).to match(/postgres/) }
 end
 
 describe 'When we check if we can create a database the psql stdout' do
-	  it { expect(command("su - postgres -c /usr/local/pgsql/bin/psql << EOF
-		create database test;
-		\\q
-		EOF").stdout).to include("\nCREATE DATABASE\n") }
+  it do
+    expect(command("su - postgres -c /usr/local/pgsql/bin/psql << EOF
+     create database test;
+     \\q
+     EOF").stdout).to include("\nCREATE DATABASE\n")
+  end
 end
 
 describe 'When we check if we can drop a database the psql stdout' do
-	  it { expect(command("su - postgres -c /usr/local/pgsql/bin/psql << EOF
-		drop database test;
-		\\q
-		EOF").stdout).to include("\nDROP DATABASE\n") }	
+  it do
+    expect(command("su - postgres -c /usr/local/pgsql/bin/psql << EOF
+     drop database test;
+     \\q
+     EOF").stdout).to include("\nDROP DATABASE\n")
+  end
 end
 
 describe 'When we check the list of databases on the server it' do
-  it { expect(command("su - postgres -c /usr/local/pgsql/bin/psql << EOF
-		\\list
-		\\q 
-		EOF").stdout).to include('alfresco') }
+  it do
+    expect(command("su - postgres -c /usr/local/pgsql/bin/psql << EOF
+    \\list
+    \\q
+    EOF").stdout).to include('alfresco')
+  end
 end
 
 describe 'When we check the list of users on the server it' do
-  it { expect(command("su - postgres -c /usr/local/pgsql/bin/psql << EOF
-		\\du
-		\\q 
-		EOF").stdout).to include('alfresco') }
+  it do
+    expect(command("su - postgres -c /usr/local/pgsql/bin/psql << EOF
+    \\du
+    \\q
+    EOF").stdout).to include('alfresco')
+  end
 end

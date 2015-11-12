@@ -15,7 +15,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
-#/
+# /
 
 service_name = node['sql_server']['instance_name']
 if node['sql_server']['instance_name'] == 'SQLEXPRESS'
@@ -23,9 +23,9 @@ if node['sql_server']['instance_name'] == 'SQLEXPRESS'
 end
 
 static_tcp_reg_key = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SQL Server\\' + node['sql_server']['reg_version'] +
-  node['sql_server']['instance_name'] + '\MSSQLServer\SuperSocketNetLib\Tcp\IPAll'
+                     node['sql_server']['instance_name'] + '\MSSQLServer\SuperSocketNetLib\Tcp\IPAll'
 
-node.set_unless['sql_server']['server_sa_password'] = "Alfresco1"
+node.set_unless['sql_server']['server_sa_password'] = 'Alfresco1'
 
 node.save unless Chef::Config[:solo]
 
@@ -50,17 +50,17 @@ remote_file installer_file_path do
   rights :read, 'Administrator'
   rights :write, 'Administrator'
   rights :full_control, 'Administrator'
-  rights :full_control, 'Administrator', :applies_to_children => true
+  rights :full_control, 'Administrator', applies_to_children: true
   group 'Administrators'
 end
 
 if node['sql_server']['version'] == '2014'
 
   batch 'extract sqlserver Installation' do
-  code <<-EOH
+    code <<-EOH
     #{installer_file_path} /Q /X:C:\\sqlserver
     EOH
-  not_if { Registry.key_exists?('HKLM\SOFTWARE\Microsoft\Microsoft SQL Server\SQLEXPRESS') }
+    not_if { Registry.key_exists?('HKLM\SOFTWARE\Microsoft\Microsoft SQL Server\SQLEXPRESS') }
   end
 
   setup_file_path = 'C:\sqlserver\SETUP.exe'
@@ -92,7 +92,7 @@ batch 'Waiting for installation to finish ...' do
   retries 40
   retry_delay 10
   notifies :delete, "windows_task[Install #{node['sql_server']['server']['package_name']}]", :delayed
-  not_if { File.exists?("C:\\Program Files\\Microsoft SQL Server\\#{node['sql_server']['reg_version']}SQLEXPRESS\\MSSQL\\Log\\ERRORLOG") }
+  not_if { File.exist?("C:\\Program Files\\Microsoft SQL Server\\#{node['sql_server']['reg_version']}SQLEXPRESS\\MSSQL\\Log\\ERRORLOG") }
 end
 
 service service_name do
@@ -101,39 +101,36 @@ end
 
 # set the static tcp port
 registry_key static_tcp_reg_key do
-  values [{ :name => 'TcpPort', :type => :string, :data => node['sql_server']['port'].to_s },
-    { :name => 'TcpDynamicPorts', :type => :string, :data => '' }]
+  values [{ name: 'TcpPort', type: :string, data: node['sql_server']['port'].to_s },
+          { name: 'TcpDynamicPorts', type: :string, data: '' }]
   recursive true
   notifies :restart, "service[#{service_name}]", :immediately
 end
 
-#TODO Fix startup on sqlserver 2014
+# TODO: Fix startup on sqlserver 2014
 
-  %W( native_client
+%w( native_client
     command_line_utils
     clr_types
     smo
     ps_extensions ).each do |pkg|
-
-    windows_package node['sql_server'][pkg]['package_name'] do
-      source node['sql_server'][pkg]['url']
-      checksum node['sql_server'][pkg]['checksum']
-      installer_type :msi
-      options "IACCEPTSQLNCLILICENSETERMS=#{node['sql_server']['accept_eula'] ? 'YES' : 'NO'}"
-      action :install
-    end
-
+  windows_package node['sql_server'][pkg]['package_name'] do
+    source node['sql_server'][pkg]['url']
+    checksum node['sql_server'][pkg]['checksum']
+    installer_type :msi
+    options "IACCEPTSQLNCLILICENSETERMS=#{node['sql_server']['accept_eula'] ? 'YES' : 'NO'}"
+    action :install
   end
+end
 
 # update path
 windows_path 'C:\Program Files\Microsoft SQL Server\100\Tools\Binn' do
- action :add
+  action :add
 end
 
 # used by SQL Server providers for
 # database and database_user resources
-chef_gem "tiny_tds"
-
+chef_gem 'tiny_tds'
 
 # Creating the alfresco user and database
 batch 'Creating alfresco db' do
