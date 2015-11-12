@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/AlfrescoTestAutomation/chef-alfresco-installer.svg?branch=java-wrapper)](https://travis-ci.org/AlfrescoTestAutomation/chef-alfresco-installer)
 java-wrapper Cookbook
 ======================
 This is a wrapper cookbook for java modified to fit the alfresco internal testing process.
@@ -10,7 +11,7 @@ java cookbook 1.7.0 or higher
 
 Usage
 -----
-#### java-wrapper::java8 or java-wrapper::java7
+#### java-wrapper::java8 or java-wrapper::java7 or java-wrapper::java6
 
 e.g.
 Just include `java-wrapper` in your node's `run_list`:
