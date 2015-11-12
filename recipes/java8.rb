@@ -15,11 +15,10 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
-#/
+# /
 
 case node['platform']
 when 'windows'
-
 
   windows_package 'Java SE Development Kit 8 Update 25 (64-bit)' do
     source node['java_8_download_path']
@@ -37,9 +36,8 @@ when 'windows'
     action :add
   end
 
+when 'solaris', 'solaris2'
 
-when 'solaris','solaris2'
-  
   directory '/resources' do
     owner 'root'
     group 'root'
@@ -56,7 +54,7 @@ when 'solaris','solaris2'
     action :create
     sensitive true
   end
-  
+
   bash 'install_java' do
     user 'root'
     cwd '/resources'

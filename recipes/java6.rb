@@ -15,15 +15,15 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
-#/
+# /
 
 remote_file '/opt/jdk-7u75-linux-x64.tar.gz' do
-   source node['java_7_download_path']
-   checksum '460959219b534dc23e34d77abc306e180b364069b9fc2b2265d964fa2c281610'
-   owner 'root'
-   group 'root'
-   mode '644'
-   action :create
+  source node['java_7_download_path']
+  checksum '460959219b534dc23e34d77abc306e180b364069b9fc2b2265d964fa2c281610'
+  owner 'root'
+  group 'root'
+  mode '644'
+  action :create
 end
 
 node.set['java']['install_flavor'] = 'oracle'

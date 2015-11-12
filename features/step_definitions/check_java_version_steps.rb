@@ -15,7 +15,7 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
-#/
+# /
 
 require 'leibniz'
 
@@ -29,13 +29,13 @@ Given(/^I have run Chef$/) do
 end
 
 Given(/^a ssh connection to the installed machine$/) do
-  @connect_command='vagrant ssh'
+  @connect_command = 'vagrant ssh'
 end
 
 When(/^a user issues the command java \-version$/) do
-  @execute_command=''
+  @execute_command = ''
 end
 
-Then(/^the user should see "(.*?)"$/) do |arg1|
+Then(/^the user should see "(.*?)"$/) do |_arg1|
   pending # express the regexp above with the code you wish you had
 end
