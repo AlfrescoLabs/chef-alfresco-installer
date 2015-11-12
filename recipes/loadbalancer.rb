@@ -67,19 +67,19 @@ else
   end
 
   package 'Install Apache' do
-    case node['platform']
-    when 'redhat', 'centos'
+    case node['platform_family']
+    when 'rhel'
       package_name 'httpd'
-    when 'ubuntu', 'debian'
+    when 'debian'
       package_name 'apache2'
     end
   end
 
   execute 'backup configuration' do
-    case node['platform']
-    when 'redhat', 'centos'
+    case node['platform_family']
+    when 'rhel'
       command 'cp /etc/httpd/conf/httpd.conf /etc/httpd/conf/httpd.conf.original'
-    when 'ubuntu', 'debian'
+    when 'debian'
       command 'cp /etc/apache2/apache2.conf /etc/apache2/apache2.conf.original'
     end
     action :run
@@ -91,10 +91,10 @@ else
   end
 
   execute 'backup configuration' do
-    case node['platform']
-    when 'redhat', 'centos'
+    case node['platform_family']
+    when 'rhel'
       command 'cp /etc/httpd/conf/httpd.conf /etc/httpd/conf/httpd.conf.original'
-    when 'ubuntu', 'debian'
+    when 'debian'
       command 'cp /etc/apache2/apache2.conf /etc/apache2/apache2.conf.original'
     end
     action :run
