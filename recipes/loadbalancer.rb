@@ -67,7 +67,7 @@ else
   end
 
   package 'Install Apache' do
-    case node[:platform]
+    case node['platform']
     when 'redhat', 'centos'
       package_name 'httpd'
     when 'ubuntu', 'debian'
@@ -76,7 +76,7 @@ else
   end
 
   execute 'backup configuration' do
-    case node[:platform]
+    case node['platform']
     when 'redhat', 'centos'
       command 'cp /etc/httpd/conf/httpd.conf /etc/httpd/conf/httpd.conf.original'
     when 'ubuntu', 'debian'
@@ -87,11 +87,11 @@ else
 
   link '/etc/apache2/modules' do
     to '/usr/lib/apache2/modules'
-    only_if { node[:platform_family] == 'debian' }
+    only_if { node['platform_family'] == 'debian' }
   end
 
   execute 'backup configuration' do
-    case node[:platform]
+    case node['platform']
     when 'redhat', 'centos'
       command 'cp /etc/httpd/conf/httpd.conf /etc/httpd/conf/httpd.conf.original'
     when 'ubuntu', 'debian'
@@ -106,7 +106,7 @@ else
     else
       source 'loadBalancer/httpd.conf.erb'
     end
-    case node[:platform_family]
+    case node['platform_family']
     when 'rhel'
       path '/etc/httpd/conf/httpd.conf'
     when 'debian'
@@ -118,7 +118,7 @@ else
   end
 
   service 'loadbalancer' do
-    case node[:platform_family]
+    case node['platform_family']
     when 'rhel'
       service_name 'httpd'
     when 'debian'
