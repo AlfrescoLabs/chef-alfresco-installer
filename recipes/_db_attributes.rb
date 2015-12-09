@@ -96,7 +96,6 @@ when 'postgres'
   when '9.3.5'
     case node['platform_family']
     when 'solaris2'
-      # db prop
 
       node.default['db.username'] = 'alfresco'
       node.default['db.password'] = 'admin'

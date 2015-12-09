@@ -30,7 +30,7 @@ suites:
                 alfresco.cluster.enabled: false,
                 installer: {
                   disable-components: 'javaalfresco',
-                  enable-components: 'alfrescowcmqs',
+                  enable-components: 'alfrescowcmqs,alfrescosolr,alfrescosolr4,alfrescogoogledocs,libreofficecomponent',
                   downloadpath: '<%= ENV['DOWNLOAD_PATH'] %>'
                 },
                 sync.cloud.url: 'https://mmhfcloud40a.alfresco.me/alfresco/a/{network}/',

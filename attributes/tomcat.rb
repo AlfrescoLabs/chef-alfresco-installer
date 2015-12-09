@@ -17,23 +17,26 @@
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
 # /
 
+
 case node['platform_family']
 when 'windows'
-  default['installer']['directory'] = 'C:/alf-installation'
-  default['installer']['windirectory'] = 'C:\\\\alf-installation'
+  node.default['installer']['directory'] = 'C:/alf-installation'
+  node.default['installer']['windirectory'] = 'C:\\\\alf-installation'
 else
-  default['installer']['directory'] = '/opt/alf-installation'
+  node.default['installer']['directory'] = '/opt/alf-installation'
 end
 
-# tomcat
-default['tomcat']['download_url'] = 'ftp://172.29.103.222/tomcat/apache-tomcat-7.0.53.tar.gz'
-default['tomcat']['package_name'] = 'apache-tomcat-7.0.53'
 case node['platform_family']
 when 'windows'
-  default['alfresco']['local'] = 'C:\\alfresco.zip'
+  node.default['alfresco']['local'] = 'C:\\alfresco.zip'
 else
-  default['alfresco']['local'] = '/opt/alfresco.zip'
+  node.default['alfresco']['local'] = '/opt/alfresco.zip'
 end
+
+
+# tomcat
+default['tomcat']['download_url'] = 'ftp://172.29.101.56/tomcat/apache-tomcat-7.0.53.tar.gz'
+default['tomcat']['package_name'] = 'apache-tomcat-7.0.53'
 
 # alfresco zip
 
