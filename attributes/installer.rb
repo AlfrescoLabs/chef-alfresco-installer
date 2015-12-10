@@ -30,7 +30,7 @@ default['installer']['enable-components'] = 'alfrescowcmqs'
 default['installer']['disable-components'] = 'javaalfresco,postgres'
 default['installer']['jdbc_username'] = 'alfresco'
 default['installer']['jdbc_password'] = 'alfresco'
-default['certificates']['downloadpath'] = 'ftp://172.29.103.222/chef-resources/certificates'
+default['certificates']['downloadpath'] = 'ftp://172.29.101.56/chef-resources/certificates'
 
 # If you want to add your own AMPs:
 # default['amps']['alfresco']['my-amp'] = 'https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/alfresco-rm/2.3.c/alfresco-rm-2.3.c.amp'
@@ -39,7 +39,7 @@ default['certificates']['downloadpath'] = 'ftp://172.29.103.222/chef-resources/c
 case node['platform_family']
 when 'windows'
   default['installer']['local'] = 'C:/alfresco.exe'
-  default['installer']['downloadpath'] = 'ftp://172.29.103.222/chef-resources/alfresco-enterprise-5.0-installer-win-x64.exe'
+  default['installer']['downloadpath'] = 'ftp://172.29.101.56/chef-resources/alfresco-enterprise-5.0-installer-win-x64.exe'
   default['installer']['checksum'] = 'b635de4849eb9c3c508fcf7492ed1a286c6d231d88318abdfb97242581270d45'
   default['installer']['directory'] = 'C:/alf-installation'
   default['installer']['windirectory'] = 'C:\\\\alf-installation'
