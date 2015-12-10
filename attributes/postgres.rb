@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
 # /
-default['url']['postgresql'] = 'ftp://172.29.103.222/databases/postgresql-9.3.5.tar.gz'
+default['url']['postgresql'] = 'ftp://172.29.101.56/databases/postgresql-9.3.5.tar.gz'
 default['url']['package'] = 'postgresql-9.3.5'
 default['postgres']['installpostgres'] = true
 default['postgres']['dropdb'] = false

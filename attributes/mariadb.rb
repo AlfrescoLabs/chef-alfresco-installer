@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
 # /
-default['mariadb']['downloadpath'] = 'ftp://172.29.103.222/databases/mariadb-10.0.14-winx64.msi'
+default['mariadb']['downloadpath'] = 'ftp://172.29.101.56/databases/mariadb-10.0.14-winx64.msi'
 default['mariadb']['localpath'] = 'C:\\mariadb.msi'
 
 default['mariadb']['install'] = true
