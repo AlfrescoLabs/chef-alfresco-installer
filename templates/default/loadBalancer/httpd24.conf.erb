@@ -348,7 +348,7 @@ AddDefaultCharset UTF-8
 EnableSendfile on
 
 <IfModule mod_proxy.c>
-  ProxyRequests On
+  ProxyRequests Off
   ProxyPassReverse / balancer://alf/
 
   ProxyPass /balancer-manager !
