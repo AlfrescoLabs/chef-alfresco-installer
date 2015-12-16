@@ -1022,7 +1022,7 @@ BrowserMatch "^Dreamweaver-WebDAV-SCM1" redirect-carefully
 #</VirtualHost>
 
   <IfModule mod_proxy.c>
-    ProxyRequests On
+    ProxyRequests Off
     ProxyPassReverse / balancer://alf/
 
     ProxyPass /balancer-manager !
