@@ -527,7 +527,7 @@ Include conf/extra/httpd-vhosts.conf
 
 
   <IfModule mod_proxy.c>
-    ProxyRequests On
+    ProxyRequests Off
     ProxyPassReverse / balancer://alf/
 
     ProxyPass /balancer-manager !
