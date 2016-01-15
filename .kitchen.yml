@@ -24,7 +24,7 @@ platforms:
   driver_config:
     username: root
     password: alfresco
-    hostname: 172.29.101.52
+    hostname: 172.29.102.154
 - name:  suse111
   driver_config:
     username: root
@@ -57,7 +57,7 @@ platforms:
     hostname: 172.29.102.2
 - name:  win2012
   driver_config:
-    hostname: 172.29.102.7
+    hostname: 172.29.102.12
     port: 5985
     username: Administrator
     password: alfresco
@@ -99,13 +99,21 @@ suites:
                 alfresco.cluster.enabled: false,
                 installer: {
                   disable-components: 'javaalfresco',
-                  enable-components: 'alfrescowcmqs,alfrescosolr,alfrescosolr4,alfrescogoogledocs,libreofficecomponent',
-                  downloadpath: 'ftp://172.29.101.56/50N/5.0.2/b302/alfresco-enterprise-5.0.2-SNAPSHOT-installer-linux-x64.bin'
+                  enable-components: 'alfrescowcmqs,alfrescosolr,alfrescosolr4,alfrescogoogledocs,libreofficecomponent'
                 },
                 sync.cloud.url: 'https://mmhfcloud40a.alfresco.me/alfresco/a/{network}/',
                 outbound.mail.host: '172.29.100.164',
                 outbound.mail.username: 'qalabtest@alfness.com',
-                outbound.mail.password: 'Alf1234'
+                outbound.mail.password: 'Alf1234',
+                apply_amps: true,
+                amps: {
+                  alfresco: {
+                    rm: 'ftp://172.29.101.56/amps/alfresco-rm-server-2.3.0.1.amp'
+                    },
+                  share: {
+                    rm: 'ftp://172.29.101.56/amps/alfresco-rm-share-2.3.0.1.amp'
+                    }
+                  }
               }
 
 - name: installer41

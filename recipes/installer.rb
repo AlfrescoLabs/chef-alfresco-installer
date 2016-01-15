@@ -49,48 +49,12 @@ alfRemoteFile 'download alfresco build' do
   unix_group 'root'
 end
 
-%W(#{node['installer']['directory']}
-   #{node['installer']['directory']}/amps
-   #{node['installer']['directory']}/amps_share).each do |dir|
-  directory dir do
-    case node['platform_family']
-    when 'windows'
-      rights :read, 'Administrator'
-      rights :write, 'Administrator'
-      rights :full_control, 'Administrator'
-      rights :full_control, 'Administrator', applies_to_children: true
-      group 'Administrators'
-    else
-      owner 'root'
-      group 'root'
-      mode 00755
-      :top_level
-    end
-  end
-end
-
-if node['amps'] && node['amps']['alfresco'] && node['amps']['alfresco'].length > 0
-  node['amps']['alfresco'].each do |_ampName, url|
-    alfRemoteFile "#{node['installer']['directory']}/amps/#{::File.basename(url)}" do
-      source_url url
-      win_user win_user
-      win_group win_group
-      unix_user unix_user
-      unix_group unix_group
-    end
-  end
-end
-
-if node['amps'] && node['amps']['share'] && node['amps']['share'].length > 0
-  node['amps']['share'].each do |_ampName, url|
-    alfRemoteFile "#{node['installer']['directory']}/amps_share/#{::File.basename(url)}" do
-      source_url url
-      win_user win_user
-      win_group win_group
-      unix_user unix_user
-      unix_group unix_group
-    end
-  end
+alfTemplate node['installer']['optionfile'] do
+  source_url 'install_opts.erb'
+  win_user win_user
+  win_group win_group
+  unix_user unix_user
+  unix_group unix_group
 end
 
 case node['platform_family']
@@ -99,7 +63,7 @@ when 'windows'
   windows_task 'Install Alfresco' do
     user 'Administrator'
     password 'alfresco'
-    command "#{node['installer']['local']} --mode unattended --alfresco_admin_password #{node['installer']['alfresco_admin_password']} --enable-components #{node['installer']['enable-components']} --disable-components #{node['installer']['disable-components']} --jdbc_username #{node['installer']['jdbc_username']} --jdbc_password #{node['installer']['jdbc_password']} --prefix #{node['installer']['directory']}"
+    command "#{node['installer']['local']} --optionfile #{node['installer']['optionfile']}"
     run_level :highest
     frequency :monthly
     action [:create, :run]
@@ -142,7 +106,7 @@ else
   end
 
   execute 'Install alfresco' do
-    command "#{node['installer']['local']} --mode unattended --alfresco_admin_password #{node['installer']['alfresco_admin_password']} --enable-components #{node['installer']['enable-components']} --disable-components #{node['installer']['disable-components']} --jdbc_username #{node['installer']['jdbc_username']} --jdbc_password #{node['installer']['jdbc_password']} --prefix #{node['installer']['directory']}"
+    command "#{node['installer']['local']} --optionfile #{node['installer']['optionfile']}"
     not_if { File.exist?(node['paths']['uninstallFile']) }
   end
 
@@ -302,34 +266,66 @@ end
 case node['platform_family']
 when 'windows'
 
+  service 'alfrescoTomcat' do
+    action [:enable, :stop]
+    supports status: true, restart: true, stop: true, start: true
+  end
+
   service 'alfrescoPostgreSQL' do
-    if node['START_POSGRES']
-      action [:enable, :start]
-    else
-      action :enable
-    end
+    action [:enable, :stop]
     supports status: false, restart: true, stop: true, start: true
+  end
+
+  alfApplyAmps 'apply alfresco and share amps' do
+    bin_folder "#{node['installer']['directory']}/bin"
+    alfresco_webapps "#{node['installer']['directory']}/tomcat/webapps"
+    share_webapps "#{node['installer']['directory']}/tomcat/webapps"
+    amps_folder "#{node['installer']['directory']}/amps"
+    amps_share_folder "#{node['installer']['directory']}/amps_share"
+    tomcat_folder "#{node['installer']['directory']}/tomcat"
+    windowsUser win_user
+    windowsGroup win_group
+    unixUser unix_user
+    unixGroup unix_group
+    only_if { node['apply_amps'] }
+    only_if { node['amps'] }
+  end
+
+  service 'alfrescoPostgreSQL' do
+    action :restart
     only_if { node['START_POSGRES'] }
   end
 
   service 'alfrescoTomcat' do
-    if node['START_SERVICES']
-      action [:enable, :start]
-    else
-      action :enable
-    end
-    supports status: true, restart: true, stop: true, start: true
+    action :restart
     only_if { node['START_SERVICES'] }
   end
 
 else
+
   service 'alfresco' do
-    if node['START_SERVICES']
-      action [:enable, :restart]
-    else
-      action :enable
-    end
+    action [:enable, :stop]
     supports status: false, restart: true
+  end
+
+  alfApplyAmps 'apply alfresco and share amps' do
+    bin_folder "#{node['installer']['directory']}/bin"
+    alfresco_webapps "#{node['installer']['directory']}/tomcat/webapps"
+    share_webapps "#{node['installer']['directory']}/tomcat/webapps"
+    amps_folder "#{node['installer']['directory']}/amps"
+    amps_share_folder "#{node['installer']['directory']}/amps_share"
+    tomcat_folder "#{node['installer']['directory']}/tomcat"
+    windowsUser win_user
+    windowsGroup win_group
+    unixUser unix_user
+    unixGroup unix_group
+    only_if { node['apply_amps'] }
+    only_if { node['amps'] }
+  end
+
+  service 'alfresco' do
+    action :restart
+    only_if { node['START_SERVICES'] }
   end
 
   execute 'Waiting for tomcat to start' do

@@ -39,6 +39,7 @@ default['certificates']['downloadpath'] = 'ftp://172.29.101.56/chef-resources/ce
 case node['platform_family']
 when 'windows'
   default['installer']['local'] = 'C:/alfresco.exe'
+  default['installer']['optionfile'] = 'C:/install_opts'
   default['installer']['downloadpath'] = 'ftp://172.29.101.56/chef-resources/alfresco-enterprise-5.0-installer-win-x64.exe'
   default['installer']['checksum'] = 'b635de4849eb9c3c508fcf7492ed1a286c6d231d88318abdfb97242581270d45'
   default['installer']['directory'] = 'C:/alf-installation'
@@ -46,6 +47,7 @@ when 'windows'
   default['certificates']['directory'] = 'C:/certificates'
 else
   default['installer']['local'] = '/opt/alfresco.bin'
+  default['installer']['optionfile'] = '/opt/install_opts'
   default['installer']['downloadpath'] = 'ftp://172.29.101.56/50N/5.0.2/b302/alfresco-enterprise-5.0.2-SNAPSHOT-installer-linux-x64.bin'
   default['installer']['checksum'] = '90c61a7d7e73c03d5bfeb78de995d1c4b11959208e927e258b4b9e74b8ecfffa'
   default['installer']['directory'] = '/opt/alf-installation'

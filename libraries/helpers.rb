@@ -1,4 +1,5 @@
 module AlfrescoHelpers
+
   # Used for properly handling remote_file downloads on any os
   class AlfRemoteFile < Chef::Resource
     resource_name :alfRemoteFile
@@ -82,6 +83,122 @@ module AlfrescoHelpers
         action :delete
         only_if { node['install_solr4_war'] == false }
       end
+    end
+  end
+
+  # Used for applying amps on alfresco and share
+  class AlfApplyAmps < Chef::Resource
+    resource_name :alfApplyAmps
+
+    property :resource_title, String, name_property: true
+    property :amps_folder, String, required: true
+    property :amps_share_folder, String, required: true
+    property :installation_folder, String, default: lazy { node['installer']['directory'] }
+    property :share_amps, default: lazy { node['amps']['share'] }
+    property :alfresco_amps, default: lazy { node['amps']['alfresco'] }
+    property :bin_folder, String, required: true
+    property :alfresco_webapps, String, required: true
+    property :share_webapps, String, required: true
+    property :tomcat_folder, String, required: true
+    property :windowsUser, String
+    property :windowsGroup, String
+    property :unixUser, String
+    property :unixGroup, String
+
+    action :create do
+
+        directory amps_folder do
+          case node['platform_family']
+          when 'windows'
+            rights :read, 'Administrator'
+            rights :write, 'Administrator'
+            rights :full_control, 'Administrator'
+            rights :full_control, 'Administrator', applies_to_children: true
+            group 'Administrators'
+          else
+            owner 'root'
+            group 'root'
+            mode 00755
+            recursive true
+            :top_level
+          end
+        end
+
+        directory amps_share_folder do
+          case node['platform_family']
+          when 'windows'
+            rights :read, 'Administrator'
+            rights :write, 'Administrator'
+            rights :full_control, 'Administrator'
+            rights :full_control, 'Administrator', applies_to_children: true
+            group 'Administrators'
+          else
+            owner 'root'
+            group 'root'
+            mode 00755
+            recursive true
+            :top_level
+          end
+        end
+
+      if alfresco_amps && alfresco_amps.length > 0
+        alfresco_amps.each do |_ampName, url|
+          alfRemoteFile "#{amps_folder}/#{::File.basename(url)}" do
+            source_url url
+            win_user windowsUser
+            win_group windowsGroup
+            unix_user unixUser
+            unix_group unixGroup
+          end
+        end
+      end
+
+      if share_amps && share_amps.length > 0
+        share_amps.each do |_ampName, url|
+          alfRemoteFile "#{amps_share_folder}/#{::File.basename(url)}" do
+            source_url url
+            win_user windowsUser
+            win_group windowsGroup
+            unix_user unixUser
+            unix_group unixGroup
+          end
+        end
+      end
+
+      execute "apply alfresco amps" do
+        command "java -jar alfresco-mmt.jar install #{amps_folder} #{alfresco_webapps}/alfresco.war -nobackup -directory -force"
+        cwd         bin_folder
+        if node['platform_family'] != 'windows'
+          user unixUser
+        end
+        only_if {alfresco_amps}
+      end
+
+      execute "apply share amps" do
+        command "java -jar alfresco-mmt.jar install #{amps_share_folder} #{share_webapps}/share.war -nobackup -directory -force"
+        cwd         bin_folder
+        if node['platform_family'] != 'windows'
+          user unixUser
+        end
+        only_if {share_amps}
+      end
+
+      execute "Cleanup share/alfresco webapps and temporary files" do
+        command "rm -rf #{alfresco_webapps}/alfresco; rm -rf #{share_webapps}/share"
+        cwd         bin_folder
+        if node['platform_family'] != 'windows'
+          user unixUser
+        end
+      end
+
+      execute "Cleanup tomcat temporary files" do
+        command "rm -rf #{tomcat_folder}/logs/*; rm -rf #{tomcat_folder}/temp/*; rm -rf #{tomcat_folder}/work/*"
+        cwd         bin_folder
+        if node['platform_family'] != 'windows'
+          user unixUser
+        end
+      end
+
     end
   end
 
