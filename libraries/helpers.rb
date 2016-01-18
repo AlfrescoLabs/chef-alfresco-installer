@@ -165,6 +165,13 @@ module AlfrescoHelpers
         end
       end
 
+      # TODO: find a way to modify per shell winrm memory to more than 300MB, in the current session
+      # powershell_script 'modify shell memory for winrm' do
+      #   guard_interpreter :powershell_script
+      #   code 'set-item wsman:localhost\Shell\MaxMemoryPerShellMB 2048'
+      #   only_if { node['platform_family'] == 'windows' }
+      # end
+
       execute "apply alfresco amps" do
         command "java -jar alfresco-mmt.jar install #{amps_folder} #{alfresco_webapps}/alfresco.war -nobackup -directory -force"
         cwd         bin_folder
