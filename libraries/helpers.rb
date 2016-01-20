@@ -193,17 +193,29 @@ module AlfrescoHelpers
       execute "Cleanup share/alfresco webapps and temporary files" do
         command "rm -rf #{alfresco_webapps}/alfresco; rm -rf #{share_webapps}/share"
         cwd         bin_folder
-        if node['platform_family'] != 'windows'
-          user unixUser
-        end
+        user unixUser
+        only_if { node['platform_family'] != 'windows' }
       end
 
       execute "Cleanup tomcat temporary files" do
         command "rm -rf #{tomcat_folder}/logs/*; rm -rf #{tomcat_folder}/temp/*; rm -rf #{tomcat_folder}/work/*"
         cwd         bin_folder
-        if node['platform_family'] != 'windows'
-          user unixUser
-        end
+        user unixUser
+        only_if { node['platform_family'] != 'windows' }
+      end
+
+      batch 'Cleanup webapps and temporary files' do
+        code <<-EOH
+          rmdir /q /s "#{alfresco_webapps}/alfresco"
+          rmdir /q /s "#{share_webapps}/share"
+          rmdir /q /s "#{tomcat_folder}/logs"
+          md "#{tomcat_folder}/logs"
+          rmdir /q /s "#{tomcat_folder}/temp"
+          md "#{tomcat_folder}/temp"
+          rmdir /q /s "#{tomcat_folder}/work"
+          md "#{tomcat_folder}/work"
+          EOH
+        only_if { node['platform_family'] == 'windows' }
       end
 
     end

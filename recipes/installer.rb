@@ -269,13 +269,13 @@ when 'windows'
   windows_service 'alfrescoTomcat' do
     action [:enable, :stop]
     supports status: true, restart: true, stop: true, start: true
-    timeout 300
+    timeout 400
   end
 
   windows_service 'alfrescoPostgreSQL' do
     action [:enable, :stop]
     supports status: false, restart: true, stop: true, start: true
-    timeout 300
+    timeout 400
   end
 
   alfApplyAmps 'apply alfresco and share amps' do
