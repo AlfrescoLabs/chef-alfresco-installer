@@ -20,6 +20,11 @@ platforms:
     hostname: 172.29.101.64
     username: root
     password: alfresco1
+- name:  suse113
+  driver_config:
+    hostname: 172.29.102.169
+    username: root
+    password: alfresco
 - name:  win2012
   driver_config:
     hostname: 172.29.102.12
@@ -38,6 +43,7 @@ suites:
   excludes:
     - solaris112
     - win2012
+    - suse113
   run_list:
   - recipe[alfresco-dbwrapper::postgres]
   attributes: {
@@ -51,6 +57,7 @@ suites:
   excludes:
     - solaris112
     - win2012
+    - suse113
   run_list:
   - recipe[alfresco-dbwrapper::mysql]
 
@@ -58,6 +65,7 @@ suites:
   excludes:
     - solaris112
     - win2012
+    - suse113
   run_list:
   - recipe[alfresco-dbwrapper::mysql]
   attributes: {
@@ -73,12 +81,14 @@ suites:
 - name: oracle
   excludes:
     - win2012
+    - suse113
   run_list:
   - recipe[alfresco-dbwrapper::oracle]
 - name: mariadb
   excludes:
     - redhat65
     - solaris112
+    - suse113
   run_list:
   - recipe[alfresco-dbwrapper::mariadb]
 - name: sqlserver
@@ -86,6 +96,7 @@ suites:
     - redhat61
     - redhat65
     - solaris112
+    - suse113
   run_list:
   - recipe[alfresco-dbwrapper::sqlserver]
   attributes: {
@@ -93,3 +104,11 @@ suites:
                   version: '2014'
                 }
               }
+- name: db2
+  excludes:
+    - redhat61
+    - redhat65
+    - solaris112
+    - win2012
+  run_list:
+  - recipe[alfresco-dbwrapper::db2]
