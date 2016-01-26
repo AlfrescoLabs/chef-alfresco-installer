@@ -40,6 +40,9 @@ suites:
 - name: oracle
   run_list:
   - recipe[alfresco-dbwrapper::oracle]
+- name: db2
+  run_list:
+  - recipe[alfresco-dbwrapper::db2]
 - name: mariadb
   run_list:
   - recipe[alfresco-dbwrapper::mariadb]
