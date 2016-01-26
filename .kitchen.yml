@@ -114,6 +114,7 @@ suites:
   - recipe[alfresco-dbwrapper::db2]
   attributes: {
                 db2: {
-                  create_database: true
+                  create_database: true,
+                  version: '10.5'
                 }
               }

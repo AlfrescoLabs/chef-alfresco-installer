@@ -43,6 +43,12 @@ suites:
 - name: db2
   run_list:
   - recipe[alfresco-dbwrapper::db2]
+  attributes: {
+                db2: {
+                  create_database: true,
+                  version: '<%= ENV['DB2serverVersion'] %>'
+                }
+              }
 - name: mariadb
   run_list:
   - recipe[alfresco-dbwrapper::mariadb]

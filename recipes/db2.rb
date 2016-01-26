@@ -44,8 +44,15 @@ useradd -g dasadm1 -G db2grp1 -m  #{node['db2']['user']} -p  $(openssl passwd -c
   not_if 'cat /etc/passwd | grep db2inst1'
 end
 
+case node['db2']['version']
+when '10.1'
+  server_edition = 'ENTERPRISE_SERVER_EDITION'
+when '10.5'
+  server_edition = 'DB2_SERVER_EDITION'
+end
+
 file '/opt/responsefile.rsp' do
-  content "PROD                      = ENTERPRISE_SERVER_EDITION
+  content "PROD                      = #{server_edition}
 FILE                      = #{node['db2']['install_location']}
 LIC_AGREEMENT             = ACCEPT
 INSTALL_TYPE              = TYPICAL"
@@ -55,7 +62,12 @@ end
 
 execute 'install server' do
   command './db2setup -r /opt/responsefile.rsp'
-  cwd '/opt/universal'
+  case node['db2']['version']
+  when '10.1'
+    cwd '/opt/universal'
+  when '10.5'
+    cwd '/opt/server_t'
+  end
   not_if { File.exist?("#{node['db2']['install_location']}/instance") }
 end
 
