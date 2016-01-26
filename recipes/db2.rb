@@ -29,8 +29,6 @@ execute 'unpack db2 installer' do
   cwd '/opt'
 end
 
-
-
 bash 'create users and groups' do
   user 'root'
   cwd '/tmp'
@@ -38,19 +36,21 @@ bash 'create users and groups' do
 groupadd db2grp1
 groupadd dasadm1
 groupadd db2fgrp1
-useradd -g db2grp1 -G dasadm1 -m db2inst1 -p db2inst1
-useradd -g dasadm1 -G db2grp1 -m dasusr1 -p dasusr1
-useradd -g db2fgrp1 -m db2fenc1 -p db2fenc1
+useradd -g db2grp1 -G dasadm1 -m db2inst1 -p $(openssl passwd -crypt #{node['db2']['password']})
+useradd -g dasadm1 -G db2grp1 -m dasusr1 -p  $(openssl passwd -crypt #{node['db2']['password']})
+useradd -g db2fgrp1 -m db2fenc1 -p  $(openssl passwd -crypt #{node['db2']['password']})
+useradd -g dasadm1 -G db2grp1 -m  #{node['db2']['user']} -p  $(openssl passwd -crypt #{node['db2']['password']})
   EOH
-  not_if { File.exist?("#{node['db2']['install_location']}/instance") }
+  not_if 'cat /etc/passwd | grep db2inst1'
 end
 
-template "/opt/responsefile.rsp" do
-  source 'db2/responsefile.erb'
-  owner 'root'
-  group 'root'
-  mode '0744'
-  variables(install_path: node['db2']['install_location'])
+file '/opt/responsefile.rsp' do
+  content "PROD                      = ENTERPRISE_SERVER_EDITION
+FILE                      = #{node['db2']['install_location']}
+LIC_AGREEMENT             = ACCEPT
+INSTALL_TYPE              = TYPICAL"
+  mode '0755'
+  owner 'db2inst1'
 end
 
 execute 'install server' do
@@ -59,27 +59,29 @@ execute 'install server' do
   not_if { File.exist?("#{node['db2']['install_location']}/instance") }
 end
 
-bash 'additional config and server start' do
+bash 'additional config' do
   cwd "#{node['db2']['install_location']}/instance"
   code <<-EOH
 ./dascrt -u dasusr1
 ./db2icrt -u db2fenc1 db2inst1
-su - db2inst1
-db2set DB2COMM=tcpip
-db2 update dbm cfg using SVCENAME 50000
-db2start
   EOH
-  not_if { File.exist?("#{node['db2']['install_location']}/instance") }
 end
 
-bash 'create database' do
-  cwd "#{node['db2']['install_location']}/instance"
-  code <<-EOH
-db2
-ATTACH TO db2inst1
-CREATE DATABASE alfresco USING CODESET UTF-8 TERRITORY US PAGESIZE 32 K
-CONNECT TO alfresco USER alfresco USING alfresco
-CREATE BUFFERPOOL alfresco_buffer PAGESIZE 32 K
-CREATE REGULAR TABLESPACE alfresco_data PAGESIZE 32 K MANAGED BY DATABASE USING (file '#{node['db2']['install_location']}/alfresco_TBS' 19200) EXTENTSIZE 16 OVERHEAD 10.5 PREFETCHSIZE 16 TRANSFERRATE 0.33 BUFFERPOOL alfresco_buffer DROPPED TABLE RECOVERY ON
-  EOH
+execute 'enable tcpi and server start' do
+  command "su - db2inst1 -c 'db2set DB2COMM=tcpip; db2 update dbm cfg using SVCENAME #{node['db2']['port']}; db2start'"
+  cwd "/opt"
+end
+
+file '/opt/create_database.sql' do
+  content "ATTACH TO db2inst1;
+CREATE DATABASE #{node['db2']['dbname']} USING CODESET UTF-8 TERRITORY US PAGESIZE 32 K;
+CONNECT TO #{node['db2']['dbname']} USER #{node['db2']['user']} USING #{node['db2']['password']};"
+  mode '0755'
+  owner 'db2inst1'
+  only_if { node['db2']['create_database'] }
+end
+
+execute 'create database' do
+  command "su - db2inst1 -c 'db2 -tvmf /opt/create_database.sql'"
+  only_if { node['db2']['create_database'] }
 end
