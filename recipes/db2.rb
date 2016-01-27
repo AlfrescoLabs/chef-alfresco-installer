@@ -47,8 +47,10 @@ end
 case node['db2']['version']
 when '10.1'
   server_edition = 'ENTERPRISE_SERVER_EDITION'
+  unzip_folder = '/opt/universal'
 when '10.5'
   server_edition = 'DB2_SERVER_EDITION'
+  unzip_folder = '/opt/server_t'
 end
 
 file '/opt/responsefile.rsp' do
@@ -63,11 +65,7 @@ end
 execute 'install server' do
   command './db2setup -r /opt/responsefile.rsp'
   case node['db2']['version']
-  when '10.1'
-    cwd '/opt/universal'
-  when '10.5'
-    cwd '/opt/server_t'
-  end
+  cwd unzip_folder
   not_if { File.exist?("#{node['db2']['install_location']}/instance") }
 end
 
@@ -96,4 +94,15 @@ end
 execute 'create database' do
   command "su - db2inst1 -c 'db2 -tvmf /opt/create_database.sql'"
   only_if { node['db2']['create_database'] }
+end
+
+bash 'cleanup installation artifacts' do
+  cwd "/opt"
+  code <<-EOH
+rm -rf db2.tar
+rm -rf #{unzip_folder}
+rm -rf /opt/responsefile.rsp
+rm -rf /opt/create_database.sql
+  EOH
+  only_if { File.exist?(unzip_folder) }
 end

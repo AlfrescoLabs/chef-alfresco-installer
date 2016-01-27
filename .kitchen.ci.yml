@@ -46,7 +46,8 @@ suites:
   attributes: {
                 db2: {
                   create_database: true,
-                  version: '<%= ENV['DB2serverVersion'] %>'
+                  version: '<%= ENV['DB2serverVersion'] %>',
+                  install_location: '<%= ENV['DB2installLocation'] %>'
                 }
               }
 - name: mariadb
