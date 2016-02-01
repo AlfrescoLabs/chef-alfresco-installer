@@ -1,5 +1,4 @@
 module AlfrescoHelpers
-
   # Used for properly handling remote_file downloads on any os
   class AlfRemoteFile < Chef::Resource
     resource_name :alfRemoteFile

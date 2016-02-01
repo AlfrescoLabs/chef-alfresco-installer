@@ -16,6 +16,8 @@
   property :unixUser, String
   property :unixGroup, String
 
+  default_action :create
+
   action :create do
     directory amps_folder do
       case node['platform_family']
@@ -89,21 +91,8 @@
       only_if { share_amps }
     end
 
-    execute 'Cleanup share/alfresco webapps and temporary files' do
-      command "rm -rf #{alfresco_webapps}/alfresco; rm -rf #{share_webapps}/share"
-      cwd bin_folder
-      user unixUser
-      only_if { node['platform_family'] != 'windows' }
-    end
-
-    execute 'Cleanup tomcat temporary files' do
-      command "rm -rf #{tomcat_folder}/logs/*; rm -rf #{tomcat_folder}/temp/*; rm -rf #{tomcat_folder}/work/*"
-      cwd bin_folder
-      user unixUser
-      only_if { node['platform_family'] != 'windows' }
-    end
-
-    if node['platform_family'] == 'windows'
+    case node['platform_family']
+    when 'windows'
       batch 'Cleanup webapps and temporary files' do
         code <<-EOH
           rmdir /q /s "#{alfresco_webapps}/alfresco"
@@ -115,6 +104,20 @@
           rmdir /q /s "#{tomcat_folder}/work"
           md "#{tomcat_folder}/work"
           EOH
+      end
+    else
+      execute 'Cleanup share/alfresco webapps and temporary files' do
+        command "rm -rf #{alfresco_webapps}/alfresco; rm -rf #{share_webapps}/share"
+        cwd bin_folder
+        user unixUser
+        only_if { node['platform_family'] != 'windows' }
+      end
+
+      execute 'Cleanup tomcat temporary files' do
+        command "rm -rf #{tomcat_folder}/logs/*; rm -rf #{tomcat_folder}/temp/*; rm -rf #{tomcat_folder}/work/*"
+        cwd bin_folder
+        user unixUser
+        only_if { node['platform_family'] != 'windows' }
       end
     end
   end

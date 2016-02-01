@@ -17,7 +17,6 @@
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
 # /
 
-
 case node['platform_family']
 when 'windows'
   node.default['installer']['directory'] = 'C:/alf-installation'
@@ -32,7 +31,6 @@ when 'windows'
 else
   node.default['alfresco']['local'] = '/opt/alfresco.zip'
 end
-
 
 # tomcat
 default['tomcat']['download_url'] = 'ftp://172.29.101.56/tomcat/apache-tomcat-7.0.53.tar.gz'
