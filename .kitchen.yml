@@ -84,6 +84,7 @@ suites:
   attributes: { localPath: false }
 
 - name: installer5
+  data_bags_path: "test/integration/data_bags"
   excludes:
     - redhat61
     - redhat64
@@ -108,12 +109,24 @@ suites:
                 apply_amps: true,
                 amps: {
                   alfresco: {
-                    rm: 'ftp://172.29.101.56/amps/alfresco-rm-server-2.3.0.1.amp'
+                    rm_server: {
+                      enabled: true,
+                      groupId: 'org.alfresco',
+                      artifactId: 'alfresco-rm',
+                      version: '2.3.0.1',
+                      type: 'amp'
+                      }
                     },
                   share: {
-                    rm: 'ftp://172.29.101.56/amps/alfresco-rm-share-2.3.0.1.amp'
+                    rm_share: {
+                      enabled: true,
+                      groupId: 'org.alfresco',
+                      artifactId: 'alfresco-rm-share',
+                      version: '2.3.0.1',
+                      type: 'amp'
+                      }
                     }
-                  }
+                }
               }
 
 - name: installer41

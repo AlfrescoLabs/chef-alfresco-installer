@@ -278,20 +278,34 @@ when 'windows'
     timeout 400
   end
 
-  alfApplyAmps 'apply alfresco and share amps' do
-    bin_folder "#{node['installer']['directory']}/bin"
-    alfresco_webapps "#{node['installer']['directory']}/tomcat/webapps"
-    share_webapps "#{node['installer']['directory']}/tomcat/webapps"
-    amps_folder "#{node['installer']['directory']}/amps"
-    amps_share_folder "#{node['installer']['directory']}/amps_share"
-    tomcat_folder "#{node['installer']['directory']}/tomcat"
-    windowsUser win_user
-    windowsGroup win_group
-    unixUser unix_user
-    unixGroup unix_group
-    only_if { node['apply_amps'] }
-    only_if { node['amps'] }
+else
+
+  service 'alfresco' do
+    action [:enable, :stop]
+    supports status: false, restart: true
   end
+
+end
+
+alf_apply_amps 'apply alfresco and share amps' do
+  bin_folder "#{node['installer']['directory']}/bin"
+  alfresco_webapps "#{node['installer']['directory']}/tomcat/webapps"
+  share_webapps "#{node['installer']['directory']}/tomcat/webapps"
+  amps_folder "#{node['installer']['directory']}/amps"
+  amps_share_folder "#{node['installer']['directory']}/amps_share"
+  tomcat_folder "#{node['installer']['directory']}/tomcat"
+  share_amps node['amps']['share']
+  alfresco_amps node['amps']['alfresco']
+  windowsUser win_user
+  windowsGroup win_group
+  unixUser unix_user
+  unixGroup unix_group
+  only_if { node['apply_amps'] }
+  only_if { node['amps'] }
+end
+
+case node['platform_family']
+when 'windows'
 
   service 'alfrescoPostgreSQL' do
     action :restart
@@ -304,26 +318,6 @@ when 'windows'
   end
 
 else
-
-  service 'alfresco' do
-    action [:enable, :stop]
-    supports status: false, restart: true
-  end
-
-  alfApplyAmps 'apply alfresco and share amps' do
-    bin_folder "#{node['installer']['directory']}/bin"
-    alfresco_webapps "#{node['installer']['directory']}/tomcat/webapps"
-    share_webapps "#{node['installer']['directory']}/tomcat/webapps"
-    amps_folder "#{node['installer']['directory']}/amps"
-    amps_share_folder "#{node['installer']['directory']}/amps_share"
-    tomcat_folder "#{node['installer']['directory']}/tomcat"
-    windowsUser win_user
-    windowsGroup win_group
-    unixUser unix_user
-    unixGroup unix_group
-    only_if { node['apply_amps'] }
-    only_if { node['amps'] }
-  end
 
   service 'alfresco' do
     action :restart
