@@ -64,7 +64,6 @@ end
 
 execute 'install server' do
   command './db2setup -r /opt/responsefile.rsp'
-  case node['db2']['version']
   cwd unzip_folder
   not_if { File.exist?("#{node['db2']['install_location']}/instance") }
 end
