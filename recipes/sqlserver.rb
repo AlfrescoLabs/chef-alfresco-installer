@@ -97,6 +97,8 @@ end
 
 service service_name do
   action :nothing
+  retries 20
+  retry_delay 10
 end
 
 # set the static tcp port
@@ -136,7 +138,7 @@ chef_gem 'tiny_tds'
 batch 'Creating alfresco db' do
   code <<-EOH
   sqlcmd -E -S localhost -Q "create database alfresco"
-  sqlcmd -E -S localhost -d alfresco -Q "create login alfresco with password alfresco"
+  sqlcmd -E -S localhost -d alfresco -Q "create login alfresco with password = 'alfresco'"
   sqlcmd -E -S localhost -d alfresco -Q "create user alfresco for login alfresco"
   sqlcmd -E -S localhost -d alfresco -Q "grant alter to alfresco"
   sqlcmd -E -S localhost -d alfresco -Q "grant control to alfresco"
