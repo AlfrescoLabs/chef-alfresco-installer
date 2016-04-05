@@ -315,6 +315,8 @@ when 'rhel'
     not_if { ::File.directory?(node['oracle']['downloaddir']) }
   end
 
+  rhel_version = node['platform_version']
+
   bash 'get oracle repo' do
     user 'root'
     cwd '/etc/yum.repos.d'
@@ -322,6 +324,17 @@ when 'rhel'
     wget http://public-yum.oracle.com/public-yum-ol6.repo
     wget http://public-yum.oracle.com/RPM-GPG-KEY-oracle-ol6 -O /etc/pki/rpm-gpg/RPM-GPG-KEY-oracle
     EOH
+    only_if { rhel_version.start_with?('6') }
+  end
+
+  bash 'get oracle repo' do
+    user 'root'
+    cwd '/etc/yum.repos.d'
+    code <<-EOH
+    wget http://public-yum.oracle.com/public-yum-ol7.repo
+    wget http://public-yum.oracle.com/RPM-GPG-KEY-oracle-ol7 -O /etc/pki/rpm-gpg/RPM-GPG-KEY-oracle
+    EOH
+    only_if { rhel_version.start_with?('7') }
   end
 
   yum_package ['oracle-rdbms-server-12cR1-preinstall', 'expect']
