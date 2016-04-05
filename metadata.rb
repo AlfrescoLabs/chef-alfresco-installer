@@ -6,8 +6,8 @@ description 'Installs/Configures databases for alfresco'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version '0.2.1'
 
-depends 'line', '~> 0.6.2'
+depends 'line', '0.6.3'
 supports 'windows'
-depends 'openssl'
-depends 'windows', '>= 1.2.6'
-depends 'yum'
+depends 'openssl', '4.4.0'
+depends 'windows', '1.39.2'
+depends 'yum', '3.10.0'
