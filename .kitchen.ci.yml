@@ -10,6 +10,7 @@ platforms:
     username: '<%= ENV['Target_VM_Username'] %>'
     password: '<%= ENV['Target_VM_Password'] %>'
     hostname: '<%= ENV['Target_VM_IP'] %>'
+    port: '<%= ENV['Target_VM_Port'] %>'
 
 suites:
 - name: postgres
