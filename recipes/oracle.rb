@@ -55,41 +55,76 @@ when 'solaris2'
     action :install
   end
 
-  file '/opt/setOraclePass.sh' do
-    owner 'root'
-    group 'root'
-    mode '0644'
-    content "
-    set prompt1 oracle1
-    set prompt2 oracle1
-    spawn passwd -r files oracle
-    expect \"New Password:\"
-    send \"$prompt1\\r\"
-    expect \"Re-enter new Password:\"
-    send \"$prompt2\\r\"
-    expect \"successfully\"
-    "
+  #
+  # file '/opt/setOraclePass.sh' do
+  #   owner 'root'
+  #   group 'root'
+  #   mode '0644'
+  #   content "
+  #   set prompt1 oracle1
+  #   set prompt2 oracle1
+  #   spawn passwd -r files oracle
+  #   expect \"New Password:\"
+  #   send \"$prompt1\\r\"
+  #   expect \"Re-enter new Password:\"
+  #   send \"$prompt2\\r\"
+  #   expect \"successfully\"
+  #   "
+  # end
+
+  # bash 'Setup Oracle Groups and Users' do
+  #   user 'root'
+  #   cwd '/opt'
+  #   code <<-EOH
+  #  groupadd oinstall
+  #  groupadd dba
+  #  groupadd oper
+  #  groupadd backupdba
+  #  useradd -d /export/home/oracle -m -s /bin/bash -g dba -G dba,oper,backupdba,oinstall oracle
+  #  expect setOraclePass.sh
+  # EOH
+  # end
+  #
+  #
+  # bash 'set oracle pass' do
+  #   user 'root'
+  #   cwd '/opt'
+  #   code <<-EOH
+  #   expect setOraclePass.sh
+  #   EOH
+  # end
+
+  group 'oinstall'
+  group 'dba'
+  group 'oper'
+  group 'backupdba'
+
+  user 'oracle' do
+    comment 'default Oracle user'
+    group 'dba'
+    home '/export/home/oracle'
+    shell '/usr/bin/bash'
+    password 'alfresco'
   end
 
-  bash 'Setup Oracle Groups and Users' do
-    user 'root'
-    cwd '/opt'
-    code <<-EOH
-   groupadd oinstall
-   groupadd dba
-   groupadd oper
-   groupadd backupdba
-   useradd -d /export/home/oracle -m -s /bin/bash -g dba -G dba,oper,backupdba,oinstall oracle
-   expect setOraclePass.sh
-  EOH
+  group 'oinstall' do
+      members ['oracle']
+      append true
   end
 
-  bash 'set oracle pass' do
-    user 'root'
-    cwd '/opt'
-    code <<-EOH
-    expect setOraclePass.sh
-    EOH
+  group 'dba' do
+      members ['oracle']
+      append true
+  end
+
+  group 'oper' do
+      members ['oracle']
+      append true
+  end
+
+  group 'backupdba' do
+      members ['oracle']
+      append true
   end
 
   directory node['oracle']['home'] do
@@ -117,6 +152,7 @@ when 'solaris2'
   swap -a /dev/zvol/dsk/rpool/swap
   projadd -U oracle -K "project.max-shm-memory=(priv,4G,deny);project.max-sem-ids=(priv,256,deny)" user.oracle
   usermod -K project=user.oracle oracle
+  chown -R oracle:dba #{node['oracle']['home']}/../../../../../app
   chown -R oracle:dba #{node['oracle']['installdir']}
   chmod -R 775 #{node['oracle']['installdir']}
   chown -R oracle:dba #{node['oracle']['downloaddir']}

@@ -17,7 +17,7 @@ platforms:
     hostname: 172.29.102.3
 - name:  solaris112
   driver_config:
-    hostname: 172.29.101.64
+    hostname: 172.29.100.225
     username: root
     password: alfresco1
 - name:  suse113
@@ -27,7 +27,7 @@ platforms:
     password: alfresco
 - name:  win2012
   driver_config:
-    hostname: 172.29.102.12
+    hostname: 172.29.100.197
     port: 5985
     username: 'Administrator'
     password: 'alfresco'
