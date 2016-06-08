@@ -25,6 +25,51 @@ when 'solaris2'
                         'ORACLE_SID' => 'alfresco',
                         'PATH' => "#{node['oracle']['home']}/bin:#{ENV['PATH']}" }
 
+  group 'oinstall' do
+    gid '201'
+  end
+
+  user 'oracle' do
+    uid '201'
+    gid '201'
+    shell '/usr/bin/bash'
+    supports :manage_home => true
+    not_if do
+      'cat /etc/passwd | grep oracle'
+    end
+  end
+
+  groups = {'dba' => 202, 'backupdba' => 203, 'oper' => 204}
+  groups.each do |grpname, grpid|
+    group grpname do
+      gid grpid
+    end
+  end
+
+  execute 'Add oracle to db groups' do
+    command "usermod -G +#{groups['dba']},#{groups['backupdba']},#{groups['oper']} oracle"
+  end
+
+  package 'pkg://solaris/x11/diagnostic/x11-info-clients' do
+    action :install
+  end
+
+  directory node['oracle']['home'] do
+    owner 'oracle'
+    group 'oinstall'
+    mode '0775'
+    action :create
+    recursive true
+  end
+
+  directory node['oracle']['inventory'] do
+    owner 'oracle'
+    group 'oinstall'
+    mode '0775'
+    action :create
+    recursive true
+  end
+
   remote_file '/opt/oracle1.zip' do
     owner 'root'
     group 'root'
@@ -55,94 +100,6 @@ when 'solaris2'
     action :install
   end
 
-  #
-  # file '/opt/setOraclePass.sh' do
-  #   owner 'root'
-  #   group 'root'
-  #   mode '0644'
-  #   content "
-  #   set prompt1 oracle1
-  #   set prompt2 oracle1
-  #   spawn passwd -r files oracle
-  #   expect \"New Password:\"
-  #   send \"$prompt1\\r\"
-  #   expect \"Re-enter new Password:\"
-  #   send \"$prompt2\\r\"
-  #   expect \"successfully\"
-  #   "
-  # end
-
-  # bash 'Setup Oracle Groups and Users' do
-  #   user 'root'
-  #   cwd '/opt'
-  #   code <<-EOH
-  #  groupadd oinstall
-  #  groupadd dba
-  #  groupadd oper
-  #  groupadd backupdba
-  #  useradd -d /export/home/oracle -m -s /bin/bash -g dba -G dba,oper,backupdba,oinstall oracle
-  #  expect setOraclePass.sh
-  # EOH
-  # end
-  #
-  #
-  # bash 'set oracle pass' do
-  #   user 'root'
-  #   cwd '/opt'
-  #   code <<-EOH
-  #   expect setOraclePass.sh
-  #   EOH
-  # end
-
-  group 'oinstall'
-  group 'dba'
-  group 'oper'
-  group 'backupdba'
-
-  user 'oracle' do
-    comment 'default Oracle user'
-    group 'dba'
-    home '/export/home/oracle'
-    shell '/usr/bin/bash'
-    password 'alfresco'
-  end
-
-  group 'oinstall' do
-      members ['oracle']
-      append true
-  end
-
-  group 'dba' do
-      members ['oracle']
-      append true
-  end
-
-  group 'oper' do
-      members ['oracle']
-      append true
-  end
-
-  group 'backupdba' do
-      members ['oracle']
-      append true
-  end
-
-  directory node['oracle']['home'] do
-    owner 'oracle'
-    group 'dba'
-    mode '0775'
-    action :create
-    recursive true
-  end
-
-  directory node['oracle']['inventory'] do
-    owner 'oracle'
-    group 'dba'
-    mode '0775'
-    action :create
-    recursive true
-  end
-
   bash 'Set project, swap, folder and network settings' do
     user 'root'
     cwd '/tmp'
@@ -152,10 +109,10 @@ when 'solaris2'
   swap -a /dev/zvol/dsk/rpool/swap
   projadd -U oracle -K "project.max-shm-memory=(priv,4G,deny);project.max-sem-ids=(priv,256,deny)" user.oracle
   usermod -K project=user.oracle oracle
-  chown -R oracle:dba #{node['oracle']['home']}/../../../../../app
-  chown -R oracle:dba #{node['oracle']['installdir']}
+  chown -R oracle:oinstall #{node['oracle']['home']}/../../../../../app
+  chown -R oracle:oinstall #{node['oracle']['installdir']}
   chmod -R 775 #{node['oracle']['installdir']}
-  chown -R oracle:dba #{node['oracle']['downloaddir']}
+  chown -R oracle:oinstall #{node['oracle']['downloaddir']}
   chmod -R 775 #{node['oracle']['downloaddir']}
   ipadm set-prop -p smallest_anon_port=9000 tcp
   ipadm set-prop -p largest_anon_port=65500 tcp
