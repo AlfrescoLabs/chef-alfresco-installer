@@ -17,6 +17,9 @@
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
 # /
 
+default['sql_server']['user']  = 'Administrator'
+default['sql_server']['password']  = 'alfresco'
+
 default['sql_server']['accept_eula'] = true
 default['sql_server']['product_key'] = nil
 default['sql_server']['version'] = '2008R2'

@@ -47,10 +47,10 @@ end
 
 remote_file installer_file_path do
   source node['sql_server']['server']['url']
-  rights :read, 'Administrator'
-  rights :write, 'Administrator'
-  rights :full_control, 'Administrator'
-  rights :full_control, 'Administrator', applies_to_children: true
+  rights :read, node['sql_server']['user']
+  rights :write, node['sql_server']['user']
+  rights :full_control, node['sql_server']['user']
+  rights :full_control, node['sql_server']['user'], applies_to_children: true
   group 'Administrators'
 end
 
@@ -70,8 +70,8 @@ else
 end
 
 windows_task "Install #{node['sql_server']['server']['package_name']}" do
-  user 'Administrator'
-  password 'alfresco'
+  user node['sql_server']['user']
+  password node['sql_server']['password']
   command "#{setup_file_path} /q /ConfigurationFile=#{config_file_path}"
   run_level :highest
   frequency :monthly
