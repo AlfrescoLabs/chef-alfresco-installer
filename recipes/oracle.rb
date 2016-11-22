@@ -398,10 +398,10 @@ export ORACLE_HOME=#{node['oracle']['home']}
 export ORACLE_SID=#{node['oracle']['SID']}
 
 export PATH=/usr/sbin:$PATH
-export PATH=/home/oracle/app/oracle/product/12.1.0.2/db_1/bin:$PATH
+export PATH=#{node['oracle']['home']}/bin:$PATH
 
-export LD_LIBRARY_PATH=/home/oracle/app/oracle/product/12.1.0.2/db_1/lib:/lib:/usr/lib
-export CLASSPATH=/home/oracle/app/oracle/product/12.1.0.2/db_1/jlib:/home/oracle/app/oracle/product/12.1.0.2/db_1/rdbms/jlib" >> root/.bash_profile
+export LD_LIBRARY_PATH=#{node['oracle']['home']}/lib:/lib:/usr/lib
+export CLASSPATH=#{node['oracle']['home']}/jlib:#{node['oracle']['home']}/rdbms/jlib" >> root/.bash_profile
     EOS
     not_if 'grep -q /jlib /home/oracle/.bash_profile'
     not_if 'grep -q /jlib root/.bash_profile'
