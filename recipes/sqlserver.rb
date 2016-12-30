@@ -137,6 +137,10 @@ chef_gem 'tiny_tds'
 # Creating the alfresco user and database
 batch 'Creating alfresco db' do
   code <<-EOH
+  secedit /export /cfg c:\secpol.cfg
+  (gc C:\secpol.cfg).replace("PasswordComplexity = 1", "PasswordComplexity = 0") | Out-File C:\secpol.cfg
+  secedit /configure /db c:\windows\security\local.sdb /cfg c:\secpol.cfg /areas SECURITYPOLICY
+  rm -force c:\secpol.cfg -confirm:$false  
   sqlcmd -E -S localhost -Q "create database alfresco"
   sqlcmd -E -S localhost -d alfresco -Q "create login alfresco with password = 'alfresco'"
   sqlcmd -E -S localhost -d alfresco -Q "create user alfresco for login alfresco"
