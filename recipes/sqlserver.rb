@@ -134,6 +134,17 @@ end
 # database and database_user resources
 chef_gem 'tiny_tds'
 
+# Cleaning up
+batch 'Cleanup' do
+  code <<-EOH
+  rmdir /s /q #{setup_file_path}
+  del /s /q #{setup_file_path}  
+  del /s /q #{config_file_path}
+  del /s /q #{installer_file_path}  
+  EOH
+  action :run
+end
+
 # Creating the alfresco user and database
 batch 'Creating alfresco db' do
   code <<-EOH
@@ -142,6 +153,7 @@ batch 'Creating alfresco db' do
   secedit /configure /db c:\windows\security\local.sdb /cfg c:\secpol.cfg /areas SECURITYPOLICY
   rm -force c:\secpol.cfg -confirm:$false  
   sqlcmd -E -S localhost -Q "create database alfresco"
+  sqlcmd -E -S localhost -Q "ALTER DATABASE alfresco SET ALLOW_SNAPSHOT_ISOLATION ON;"
   sqlcmd -E -S localhost -d alfresco -Q "create login alfresco with password = 'alfresco'"
   sqlcmd -E -S localhost -d alfresco -Q "create user alfresco for login alfresco"
   sqlcmd -E -S localhost -d alfresco -Q "grant alter to alfresco"
