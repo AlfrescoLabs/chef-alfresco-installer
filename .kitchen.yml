@@ -84,6 +84,9 @@ suites:
     - suse113
   run_list:
   - recipe[alfresco-dbwrapper::oracle]
+  attributes: {
+                oracle_version: '12'
+              }
 - name: mariadb
   excludes:
     - redhat65

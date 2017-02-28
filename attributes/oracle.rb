@@ -16,8 +16,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
 # /
-default['url']['oracle1'] = 'ftp://172.29.101.56/databases/solaris.x64_12102_database_1of2.zip'
-default['url']['oracle2'] = 'ftp://172.29.101.56/databases/solaris.x64_12102_database_2of2.zip'
+
 default['oracle']['installoracle'] = true
 default['oracle']['base'] = '/opt/oracle/app/oracle'
 default['oracle']['home'] = '/export/home/oracle/app/oracle/product/12.1.0.2/db_1'
@@ -38,3 +37,5 @@ default['oracle']['schema']['password'] = 'alfresco'
 
 default['url']['oracle_on_rhel1'] = 'ftp://172.29.101.56/databases/linuxamd64_12102_database_1of2.zip'
 default['url']['oracle_on_rhel2'] = 'ftp://172.29.101.56/databases/linuxamd64_12102_database_2of2.zip'
+
+
