@@ -79,7 +79,7 @@ windows_task "Install #{node['sql_server']['server']['package_name']}" do
   not_if { Registry.key_exists?('HKLM\SOFTWARE\Microsoft\Microsoft SQL Server\SQLEXPRESS') }
 end
 
-windows_task "Install #{node['sql_server']['server']['package_name']}" do
+windows_task "Run #{node['sql_server']['server']['package_name']}" do
   action :run
   not_if { Registry.key_exists?('HKLM\SOFTWARE\Microsoft\Microsoft SQL Server\SQLEXPRESS') }
 end
