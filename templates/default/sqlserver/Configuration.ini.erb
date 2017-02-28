@@ -120,23 +120,23 @@ ASCOLLATION="Latin1_General_CI_AS"
 
 ; The location for the Analysis Services data files.
 
-ASDATADIR="C:\Program Files\Microsoft SQL Server\<%= node['sql_server']['reg_version'] %>SQLEXPRESS\MSSQL\DATA\Data"
+ASDATADIR="<%= node['sql_server']['install_dir'] %>\<%= node['sql_server']['reg_version'] %>SQLEXPRESS\MSSQL\DATA\Data"
 
 ; The location for the Analysis Services log files.
 
-ASLOGDIR="C:\Program Files\Microsoft SQL Server\<%= node['sql_server']['reg_version'] %>SQLEXPRESS\MSSQL\DATA\Log"
+ASLOGDIR="<%= node['sql_server']['install_dir'] %>\<%= node['sql_server']['reg_version'] %>SQLEXPRESS\MSSQL\DATA\Log"
 
 ; The location for the Analysis Services backup files.
 
-ASBACKUPDIR="C:\Program Files\Microsoft SQL Server\<%= node['sql_server']['reg_version'] %>SQLEXPRESS\MSSQL\DATA\Backup"
+ASBACKUPDIR="<%= node['sql_server']['install_dir'] %>\<%= node['sql_server']['reg_version'] %>SQLEXPRESS\MSSQL\DATA\Backup"
 
 ; The location for the Analysis Services temporary files.
 
-ASTEMPDIR="C:\Program Files\Microsoft SQL Server\<%= node['sql_server']['reg_version'] %>SQLEXPRESS\MSSQL\DATA\Temp"
+ASTEMPDIR="<%= node['sql_server']['install_dir'] %>\<%= node['sql_server']['reg_version'] %>SQLEXPRESS\MSSQL\DATA\Temp"
 
 ; The location for the Analysis Services configuration files.
 
-ASCONFIGDIR="C:\Program Files\Microsoft SQL Server\<%= node['sql_server']['reg_version'] %>SQLEXPRESS\MSSQL\DATA\Config"
+ASCONFIGDIR="<%= node['sql_server']['install_dir'] %>\<%= node['sql_server']['reg_version'] %>SQLEXPRESS\MSSQL\DATA\Config"
 
 ; Specifies whether or not the MSOLAP provider is allowed to run in process.
 
